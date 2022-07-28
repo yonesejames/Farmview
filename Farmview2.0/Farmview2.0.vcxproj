@@ -153,6 +153,8 @@
     <ClInclude Include="src\Collision.h" />
     <ClInclude Include="src\Components.h" />
     <ClInclude Include="src\ECS.h" />
+    <ClInclude Include="src\InventoryComponent.h" />
+    <ClInclude Include="src\ItemComponent.h" />
     <ClInclude Include="src\KeyboardController.h" />
     <ClInclude Include="src\LoadScreen.h" />
     <ClInclude Include="src\Map.h" />

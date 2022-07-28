@@ -13,7 +13,7 @@
     entities with data only components, and processing logic separately in systems.
 */
 
-// Forward declarations of component and entity classes:
+// Forward declarations of component, entity, and manager classes:
 class Component;
 class Entity;
 class Manager;
