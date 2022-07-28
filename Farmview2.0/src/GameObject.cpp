@@ -1,6 +1,12 @@
 #include "GameObject.h"
 #include "TextureManager.h"
 
+GameObject::~GameObject()
+{
+
+}
+
+
 GameObject::GameObject(const char* textureSheet, int x, int y)
 /* Creates game objects out of textures */
 {

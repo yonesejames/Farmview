@@ -15,36 +15,49 @@ public:
     SDL_Rect destinationRect;
     Vector position;
 
-    TileComponent() = default;
-
-
     ~TileComponent()
+    /* Destructor that destroys the tile */
     {
         SDL_DestroyTexture(texture);
     }
 
+    // Default constructor:
+    TileComponent() = default;
+
+    // Overloaded constructor: 
     TileComponent(int sourceX, int sourceY, int xpos, int ypos, int tileSize, int tileScale, const char* filePath)
+    /*
+        Constructor that takes 
+    */
     {
         texture = TextureManager::loadTexture(filePath);
 
+        // Set Vector position to the x and y position arguments:
         position.x = xpos;
         position.y = ypos;
 
+        // Set the SDL_Rect source rectangle to the sourcex and source y arguments:
         sourceRect.x = sourceX;
         sourceRect.y = sourceY;
-        // 16 px:
+
+        // Set rectangle's width and height to tileSize (16px):
         sourceRect.w = tileSize;
         sourceRect.h = tileSize;
 
+        // Set rectangle's destination x and y to xpos and ypos arguments:
         destinationRect.x = xpos;
         destinationRect.y = ypos;
-        // 32 px:
+
+        // Set rectangle's width and height to tileSize * tileScale to get scaled size:
         destinationRect.w = tileSize * tileScale;
         destinationRect.h = tileSize * tileScale;
 
     }
 
     void update() override
+    /*
+        Function that overrides the "update" function by
+    */
     {
         destinationRect.x = position.x - Game::camera.x;
         destinationRect.y = position.y - Game::camera.y;
@@ -52,6 +65,9 @@ public:
     }
 
     void draw() override
+    /*
+        Function that overrides the "draw" function by
+    */
     {
         TextureManager::draw(texture, sourceRect, destinationRect, SDL_FLIP_NONE);
     }

@@ -1,6 +1,7 @@
 #ifndef ECS_H
 #define ECS_H
 
+
 #include <iostream>
 #include <vector>
 #include <memory>
@@ -22,19 +23,25 @@ class Manager;
 using ComponentID = std::size_t;
 using Group = std::size_t;
 
-// Function that returns returns static variable, last component id
-// Everytime we call this function, the value of lastID increase and returns that value.
 inline ComponentID getNewComponentTypeID ()
+/*
+    Function that returns returns static variable, last component id
+    Everytime we call this function, 
+    the value of lastID increases and returns that value.
+*/
 {
     static ComponentID lastID = 0u;
     return lastID++;
 }
 
-// Attaches ComponentID by creating a template function that takes the component as a type
-// creates a specific id for the component depending on the type and will always return the
-// same value. "noexcept" - No exception if it crashes
 template<typename T>
 inline ComponentID getComponentTypeID() noexcept
+/*
+    Attaches ComponentID by creating a template function that takes the 
+    component as a type creates a specific id for the component 
+    depending on the type and will always return the same value. 
+    "noexcept" - No exception if it crashes.
+*/
 {
     static ComponentID typeID = getNewComponentTypeID();
     return typeID;
@@ -77,13 +84,18 @@ class Entity
  */
 {
 public:
-    // Function that updates and draw each component in components:
     void update()
+    /*
+        Function that updates each component in components:
+    */
     {
         for (auto& c : components) c->update();
     }
 
     void draw()
+    /*
+        Function that draws each component in components:
+    */
     {
         for (auto& c : components) c->draw();
     }
@@ -92,18 +104,33 @@ public:
     bool isActive() { return active; }
     void destroy() { active = false; }
 
-    // Check if entity has components and return true or false if the component is attached:
     template <typename T> 
     bool hasComponent() const
+    /*
+        Template function that checks if entity has components and 
+        return true or false if the component is attached.
+    */
     {
         return componentBitSet[getComponentTypeID<T>()];
     }
 
-    // Add components to our entity: 
-    // "T" is the component type. 
-    // "TArgs" is a parameter pack of types used to contruct the component
     template <typename T, typename... TArgs>
     T& addComponent(TArgs&&...mArgs)
+    /*
+        Template function that add components to our entity by declaration of 
+        a function template. T and TArgs are template arguments, 
+        both of which must be types.TArgs is a variadic argument (can hold 0 or more types)
+        "TArgs" is a parameter pack of types used to contruct the component
+
+        TArgs&&... are called forwarding references because && inside a template declaration 
+        has an effect of preserving the value category (lvalue/rvalue) of the argument(s).
+
+        std::forward is a helper utility that works together with TArgs&& and 
+        when needed passes rvalue references through to the call. 
+        When browsing code you can ignore it and read new T(std::forward<TArgs>(args)...) as new T(args...)
+        Now that is a variadic pack expansion syntax; here the arguments args from the template 
+        are simply passed to new().    
+    */
     {
         // Allocating component of type "T" on the heap by forwarding 
         // the passed argumrnets to its constructor: 
@@ -135,13 +162,14 @@ public:
 
     template<typename T>
     T& getComponent() const
+    /* Template function that get component associated with the entity. */
     {
         auto ptr(componentArray[getComponentTypeID<T>()]);
         return *static_cast<T*>(ptr);
     }
 
-    // Check if the entity is in a group and returns true or false:
     bool hasGroup(Group mGroup)
+    /* Function that checks if the entity is in a group and returns true or false: */
     {
         return groupBitSet[mGroup];
     }
@@ -149,8 +177,8 @@ public:
     // Add entity to a group:
     void addGroup(Group mGroup);
 
-    // Delete entity from a group:
     void deleteGroup(Group mGroup)
+    /* Function that deletes an entity from a group: */
     {
         groupBitSet[mGroup] = false;
     }
@@ -179,10 +207,8 @@ class Manager
 /* Aggregate of entities. */
 {
 public:
-    // Updates by first cleaning up "dead" entities then loop through 
-    // the "alive" entities and update them:
-    // (memory will be freed because they are wrapped in unique_ptrs)
     void update()
+    /* Function that updates each entity */
     {
         entities.erase(
             std::remove_if(std::begin(entities),
@@ -195,14 +221,15 @@ public:
         for (auto& e : entities) e->update();
     }
 
-    // Draw alive entities:
     void draw()
+    /* function that draws alive entities */
     {
         for (auto& e : entities) e->draw();
     }
 
-    // Removes dead entities and dead entities from groups:
+    
     void refresh()
+    /* Function that removes dead entities and dead entities from groups */
     {
         // Removes entity from group:
         for (auto i(0u); i < maxGroups; i++)
@@ -226,24 +253,24 @@ public:
             std::end(entities));
     }
 
-    // Add entity to group:
     void addToGroup(Entity* mEntity, Group mGroup)
+    /* Function that adds an entity to group */
     {
         groupedEntities[mGroup].emplace_back(mEntity);
     }
 
-    // Get a list of entities inside of a group:
     std::vector<Entity*>& getGroup(Group mGroup)
+    /* Function tha gets a list of entities inside of a group: */
     {
         return groupedEntities[mGroup];
     }
 
-    // Add entity:
-    // First allocate new memory in the heap
-    // Then wraps entity in an unique pointer
-    // Lastly, places the entity is back into the entity storage
-    // Finally, returns entity 
     Entity& addEntity()
+    /*        
+        Function that adds an entity by first allocating new memory in the heap; 
+        then wraps entity in an unique pointer; finally, places the entity is 
+        back into the entity storage and lastly, returns entity.
+    */
     {
         Entity* e = new Entity(*this);
         std::unique_ptr<Entity> uPtr{ e };
@@ -260,5 +287,6 @@ private:
     std::array<std::vector<Entity*>, maxGroups> groupedEntities;
 
 };
+
 
 #endif

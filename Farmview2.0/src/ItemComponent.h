@@ -11,4 +11,18 @@ Added this component and inventory component and must decide if one will stay or
 
 */
 
+class Item : public Component
+{
+public:
+    std::string Name;
+    const int id;
+    const int type;
+
+    const char* getType();    
+
+private:
+    static int tick;
+
+};
+
 #endif

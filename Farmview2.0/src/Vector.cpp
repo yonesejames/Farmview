@@ -11,6 +11,8 @@ Vector::Vector()
 // Vector floats:
 Vector::Vector(float x, float y)
 {
+    // When local variable’s name is same as member’s name we use 
+    // "this" pointer to reference the member's name:
     this->x = x;
     this->y = y;
 }
@@ -52,6 +54,9 @@ Vector& Vector::Divide(const Vector& vector)
 // Vector operators:
 Vector& operator+(Vector& vector1, const Vector& vector2)
 {
+    // When returning reference to the calling object we use 
+    // "this" pointer -- When a reference to a local object is returned, 
+    // the returned reference can be used to chain function calls on a single object.
     return vector1.Add(vector2);
 }
 

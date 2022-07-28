@@ -89,7 +89,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
     map->loadMap("assets/farmviewStartingMapTileMap.map", 100, 55);
 
     player.addComponent<TransformComponent>();
-    player.addComponent<SpriteComponent>("assets/farmer_animations2.png", true);
+    player.addComponent<SpriteComponent>("assets/farmer_animations2.png", true, 64, 64);
     player.addComponent<KeyboardController>();
     player.addComponent<ColliderComponent>("player");
     player.addGroup(groupPlayers);

@@ -1,20 +1,22 @@
 #ifndef MAP_H
 #define MAP_H
 
-#include <iostream>
-#include <string>
 
 class Map
+/* Map creates a tiled system for game */
 {
 public:
-    // Constructor that takes in -
-    // mFP = map file path
-    // mS = map scale
-    // tSize = tile size:
-    Map(const char* mFP, int mS, int tSize);
+    // Destructor destroys map:
     ~Map();
 
+    // Constructor creates the map:
+    Map(const char* mFP, int mS, int tSize);
+
+    // Load map by taking in file path and how many tiles on the x and y axis:
     void loadMap(std::string filePath, int sizeX, int sizeY);
+
+    // Add tiles on map by taking in the source of the tiles and positioning 
+    // them on the x and y axis:
     void addTile(int sourceX, int sourceY, int xpos, int ypos);
 
 private:
@@ -23,5 +25,6 @@ private:
     int tileSize;
     int scaledSize;
 };
+
 
 #endif
