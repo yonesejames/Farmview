@@ -1,6 +1,11 @@
 #include "loadScreen.h"
 
 int* LoadScreen::loadScreen(const char* filePath, int time)
+/* 
+    Function that takes in a filePath to create a texture and render 
+    to the screen and a time to allow an amout of milliseconds 
+    to delay the texture on screen.
+*/
 {
 
     SDL_Surface* mainScreen = SDL_LoadBMP(filePath);
@@ -11,13 +16,14 @@ int* LoadScreen::loadScreen(const char* filePath, int time)
 
     SDL_RenderPresent(Game::renderer);
 
-    // Delay for three seconds:
     SDL_Delay(time);
 
     return 0;
 
 }
 
+
+// Old way of loading screen:
 /*
 int* LoadScreen::loadScreen(const char* filePath, SDL_Window* window, int time)
 {
@@ -39,3 +45,4 @@ int* LoadScreen::loadScreen(const char* filePath, SDL_Window* window, int time)
 
 }
 */
+

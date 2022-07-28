@@ -1,12 +1,12 @@
 #ifndef SPRITECOMPONENT_H
 #define SPRITECOMPONENT_H
 
+
 #include <SDL.h>
 #include "Components.h"
 #include "TextureManager.h"
 #include "Animation.h"
 #include <map>
-#include <iostream>
 
 class SpriteComponent : public Component
 /* Sprites are images that represent game assets. */
@@ -27,7 +27,7 @@ public:
     int sizeHeight;
 
     ~SpriteComponent()
-    /* Deconstructor that destroys the sprite */
+    /* Destructor that destroys the sprite */
     {
         SDL_DestroyTexture(texture);
     }
@@ -35,18 +35,18 @@ public:
     // Default constructor:
     SpriteComponent() = default;
 
-    //Overloaded Constructors:
+    // Overloaded constructors:
     SpriteComponent(const char* filePath)
-    /*
-        Constructor that takes in 
-    */
+    /* Constructor that takes in in a filepath to render the sprite on screen */
     {
         setTexture(filePath);
     }
 
     SpriteComponent(const char* filePath, bool isAnimated, int sizeW, int sizeH)
     /*
-        Constructor that takes in 
+        Constructor that takes in a filepath to render the sprite on screen, 
+        isAnimated will allow the sprite to animate, int sizeW and sizeH for size of the
+        sprite.
     */
     {
         animated = isAnimated;
@@ -71,34 +71,32 @@ public:
         animations.emplace("walkRight", walkRight);
         animations.emplace("walkLeft", walkLeft);
 
+        // When game starts the sprite will show up like this:
         Play("idleForward");
 
         setTexture(filePath);
 
         sizeWidth = sizeW;
         sizeHeight = sizeH;
-
     }
 
     void setTexture(const char* filePath)
-    /*
-        Function that 
-    */
+    /* Function that creates a texture from filePath */
     {
         texture = TextureManager::loadTexture(filePath);
     }
 
-
     void init() override
     /*
-        Function that overrides the "init" function by 
+        Function that overrides the "init" function by creating a transform object, 
+        initializing the source's size and position of the sprite and the size of 
+        the destination.
     */
     {
-        // Position references the entity that this component belongs to 
-        // and uses PositionComponent: 
+        // Transform assigns a referenced entity to the TransformComponent:
         transform = &entity->getComponent<TransformComponent>();
     
-        // Initializing source size and positon:
+        // Initializing source size:
         sourceRectangle.x = 0;
         sourceRectangle.y = 0;
         sourceRectangle.w = transform->width;
@@ -108,14 +106,12 @@ public:
         destinationRectangle.w = sizeWidth;
         destinationRectangle.h = sizeHeight;
 
-        std::cout << sizeWidth << ", " << sizeHeight << std::endl;
-        std::cout << destinationRectangle.w << ", " << destinationRectangle.h << std::endl;
-
     }
 
     void update() override
     /*
-        Function that overrides the "update" function by 
+        Function that overrides the "update" function by animating sprite if animated is
+        true and updated sprite by movement using transform.
     */
     {
 
@@ -134,16 +130,14 @@ public:
 
     void draw() override
     /*
-        Function that overrides the "draw" function by 
+        Function that overrides the "draw" function by drawing sprite from texture.
     */
     {
         TextureManager::draw(texture, sourceRectangle, destinationRectangle, spriteFlip);
     }
 
     void Play(const char* animationName)
-    /*
-        Function that 
-    */
+    /* Function that plays the animation based on frames, index, and speed */
     {
         frames = animations[animationName].frames;
         animationIndex = animations[animationName].index;
@@ -151,7 +145,7 @@ public:
     }
 
 private:
-    //
+    // Creates "TransformComponent" object:
     TransformComponent* transform;
     SDL_Texture* texture;
     SDL_Rect sourceRectangle, destinationRectangle;
@@ -164,3 +158,4 @@ private:
 
 
 #endif
+

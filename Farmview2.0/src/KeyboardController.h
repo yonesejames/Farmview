@@ -6,19 +6,33 @@
 #include "Components.h"
 
 class KeyboardController : public Component
+/* 
+    KeyboardController has inherited Component class public parts and 
+    controls what happens when a key is selected on keyboard. 
+*/
 {
 public:
+    // Creates "TransformComponent" object:
     TransformComponent* transform;
     SpriteComponent* sprite;
 
     void init() override
+    /*
+        Function that overrides "init" function by grabbing the entity components 
+        from both transform and sprite. 
+    */
     {
         transform = &entity->getComponent<TransformComponent>();
         sprite = &entity->getComponent<SpriteComponent>();
     }
 
     void update() override
-    {
+    /*
+        Function that overrides the "update" function by transforming sprite to 
+        a direction by changing velocity when selecting a key and 
+        showing an image to the screen based on position.
+    */
+    {   // When key is pressed:
         if (Game::event.type == SDL_KEYDOWN)
         {
             switch (Game::event.key.keysym.sym)
@@ -46,9 +60,9 @@ public:
             default:
                 break;
             }
-
         }
 
+        // When key is not pressed:
         if (Game::event.type == SDL_KEYUP)
         {
             switch (Game::event.key.keysym.sym)
@@ -79,10 +93,7 @@ public:
                 break;
             }
         }
-        
-
-    }
-
+     }
 };
 
 

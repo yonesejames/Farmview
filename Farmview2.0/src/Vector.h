@@ -1,6 +1,7 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
+
 #include <iostream>
 
 class Vector
@@ -41,6 +42,7 @@ public:
     friend std::ostream& operator << (std::ostream& stream, const Vector& vector);
     
 };
+
 
 #endif VECTOR_H
 

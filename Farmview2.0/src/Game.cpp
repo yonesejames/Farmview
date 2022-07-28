@@ -7,6 +7,7 @@
 #include "Vector.h"
 #include "Collision.h"
 
+
 Map* map;
 Manager manager;
 
@@ -19,17 +20,20 @@ auto& player(manager.addEntity());
 
 bool Game::isRunning = false;
 
+
+Game::~Game()
+/* Destructor that destroys the game */
+{
+
+}
+
+
 Game::Game()
-/* Game constructor: Creates Game */
+/* Constructor that creates the game */
 {
     
 }
 
-Game::~Game()
-/* Game destructor: Destroys Game */
-{
-
-}
 
 void Game::init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen)
 /* 
@@ -45,6 +49,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
     }
 
     if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
+    /* If SDL initializes without any issues then goes through the series of if/else statements */
     {
         std::cout << "Subsystem Initialized" << std::endl;
 
@@ -96,13 +101,15 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 
 }
 
+
+// Grop creation for tiles, colliders, and players:
 auto& tiles(manager.getGroup(Game::groupMap));
 auto& colliders(manager.getGroup(Game::groupColliders));
 auto& players(manager.getGroup(Game::groupPlayers));
 
 
 void Game::handleEvents()
-/* Function that handle keyboard events */
+/* Function that handles keyboard and mouse events */
 {
     
     SDL_PollEvent(&event);
@@ -119,7 +126,8 @@ void Game::handleEvents()
     default:
         break;
     }
-    
+
+    // Old way of looping through poll events:
     /*
     // While loop that handles events in the queue, so if there are events in queue:
     while (SDL_PollEvent(&event) != 0)
@@ -135,10 +143,11 @@ void Game::handleEvents()
     */
 }
 
-void Game::update()
-/* Function that updates */
-{
 
+void Game::update()
+/* Function that updates based on any changes (updates continously) */
+{
+    // Retrives components for player:
     SDL_Rect playerCollider = player.getComponent<ColliderComponent>().collider;
     Vector playerPosition = player.getComponent<TransformComponent>().position;
 
@@ -147,6 +156,7 @@ void Game::update()
     manager.update();
 
     for (auto& c : colliders)
+    /* Checks if colliders and player has collision and if so then player gets blocked */
     {
         SDL_Rect cCol = c->getComponent<ColliderComponent>().collider;
         if (Collision::AABB(cCol, playerCollider))
@@ -155,9 +165,11 @@ void Game::update()
         }
     }
 
+    // Camera that moves with player based on half the map size:
     camera.x = player.getComponent<TransformComponent>().position.x - 800;
     camera.y = player.getComponent<TransformComponent>().position.y - 440;
 
+    // If statements to ensure that camera does not keep moving outside of the map:
     if (camera.x < 0)
     {
         camera.x = 0;
@@ -177,6 +189,7 @@ void Game::update()
 
 }
 
+
 void Game::render()
 /* Function that renders objects on the screen */
 {
@@ -184,16 +197,19 @@ void Game::render()
     SDL_RenderClear(renderer);
 
     for (auto& tile : tiles)
+    /* Loops through tiles and draw each tile on screen first */
     {
         tile->draw();
     }
 
     for (auto& collider : colliders)
+    /* Loops through colliders and draw each collider on screen next */
     {
         collider->draw();
     }
 
     for (auto& player : players)
+    /* Loops through player and draw each player on screen last */
     {
         player->draw();
     }
@@ -202,6 +218,7 @@ void Game::render()
     SDL_RenderPresent(renderer);
 }
 
+
 void Game::close()
 /* Function that cleans up any pointers by returning it to memory and quits game */
 {
@@ -209,6 +226,7 @@ void Game::close()
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
 
+    // Game exits:
     SDL_Quit();
 
     std::cout << "Game has been cleaned and closed!" << std::endl;

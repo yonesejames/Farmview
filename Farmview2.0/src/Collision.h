@@ -10,7 +10,7 @@ class ColliderComponent;
 
 class Collision
 /* 
-    Collision creates a detection to block an objects path using rectangles and
+    Collision creates a detection system to block an objects path using rectangles and
     "ColliderComponent" component colliders.
 */
 {

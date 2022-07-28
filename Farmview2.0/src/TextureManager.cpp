@@ -1,5 +1,6 @@
 #include "TextureManager.h"
 
+
 SDL_Texture* TextureManager::loadTexture(const char* filePath)
 /* Function that returns a texture when given a filepath. */
 {
@@ -20,3 +21,4 @@ void TextureManager::draw(SDL_Texture* texture, SDL_Rect source, SDL_Rect destin
 {
     SDL_RenderCopyEx(Game::renderer, texture, &source, &destination, NULL, NULL, flip);
 }
+

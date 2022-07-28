@@ -1,5 +1,6 @@
 #include "Vector.h"
 
+
 // Start vectors x and y at 0:
 Vector::Vector()
 {
@@ -17,6 +18,7 @@ Vector::Vector(float x, float y)
     this->y = y;
 }
 
+
 // Vector arithmetic:
 Vector& Vector::Add(const Vector& vector)
 {
@@ -26,6 +28,7 @@ Vector& Vector::Add(const Vector& vector)
     return *this;
 }
 
+
 Vector& Vector::Subtract(const Vector& vector)
 {
     this->x -= vector.x;
@@ -34,6 +37,7 @@ Vector& Vector::Subtract(const Vector& vector)
     return *this;
 }
 
+
 Vector& Vector::Multiply(const Vector& vector)
 {
     this->x *= vector.x;
@@ -41,6 +45,7 @@ Vector& Vector::Multiply(const Vector& vector)
 
     return *this;
 }
+
 
 Vector& Vector::Divide(const Vector& vector)
 {
@@ -60,15 +65,18 @@ Vector& operator+(Vector& vector1, const Vector& vector2)
     return vector1.Add(vector2);
 }
 
+
 Vector& operator-(Vector& vector1, const Vector& vector2)
 {
     return vector1.Subtract(vector2);
 }
 
+
 Vector& operator*(Vector& vector1, const Vector& vector2)
 {
     return vector1.Multiply(vector2);
 }
+
 
 Vector& operator/(Vector& vector1, const Vector& vector2)
 {
@@ -82,15 +90,18 @@ Vector& Vector::operator+=(const Vector& vector)
     return this->Add(vector);
 }
 
+
 Vector& Vector::operator-=(const Vector& vector)
 {
     return this->Subtract(vector);
 }
 
+
 Vector& Vector::operator*=(const Vector& vector)
 {
     return this->Multiply(vector);
 }
+
 
 Vector& Vector::operator/=(const Vector& vector)
 {
@@ -106,6 +117,7 @@ Vector& Vector::operator*(const int& i)
     return *this;
 }
 
+
 Vector& Vector::Zero()
 {
     this->x *= 0;
@@ -120,3 +132,4 @@ std::ostream& operator << (std::ostream& stream, const Vector& vector)
     stream << "Vector: (" << vector.x << ", " << vector.y << ")";
     return stream;
 }
+

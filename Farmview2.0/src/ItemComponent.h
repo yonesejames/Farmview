@@ -12,6 +12,7 @@ Added this component and inventory component and must decide if one will stay or
 */
 
 class Item : public Component
+/* Item has inherited Component class public parts and creates . . . */
 {
 public:
     std::string Name;

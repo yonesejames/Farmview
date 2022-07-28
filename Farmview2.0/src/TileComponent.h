@@ -1,12 +1,17 @@
 #ifndef TILECOMPONENT_H
 #define TILECOMPONENT_H
 
+
 #include "ECS.h"
 #include "TransformComponent.h"
 #include "SpriteComponent.h"
 #include <SDL.h>
 
 class TileComponent : public Component
+/*
+    TileComponent has inherited Component class public parts and creates 
+    tiles for the map.
+*/
 {
 public:
 
@@ -27,7 +32,9 @@ public:
     // Overloaded constructor: 
     TileComponent(int sourceX, int sourceY, int xpos, int ypos, int tileSize, int tileScale, const char* filePath)
     /*
-        Constructor that takes 
+        Constructor that takes in x and y axis for rectangle source of the component, 
+        x and y position for the position of the tile, tile size and scale of the tile to 
+        also get destination of the tile.
     */
     {
         texture = TextureManager::loadTexture(filePath);
@@ -55,9 +62,7 @@ public:
     }
 
     void update() override
-    /*
-        Function that overrides the "update" function by
-    */
+    /* Function that overrides the "update" function by updatin based on camera view */
     {
         destinationRect.x = position.x - Game::camera.x;
         destinationRect.y = position.y - Game::camera.y;
@@ -65,9 +70,7 @@ public:
     }
 
     void draw() override
-    /*
-        Function that overrides the "draw" function by
-    */
+    /* Function that overrides the "draw" function by drawing through TextureManager */
     {
         TextureManager::draw(texture, sourceRect, destinationRect, SDL_FLIP_NONE);
     }
