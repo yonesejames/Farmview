@@ -22,16 +22,20 @@ public:
     void render();
     void close();
 
-    static void addTile(int id, int x, int y);
-
     static SDL_Renderer* renderer;
     static SDL_Event event;
+    static bool isRunning;
+    static SDL_Rect camera;
 
-    static std::vector<ColliderComponent*> colliders;
+    enum groupLabels : std::size_t
+    {
+        groupMap,
+        groupPlayers,
+        groupVillagers,
+        groupColliders
+    };
 
 private:
-    int count = 0;
-    bool isRunning;
     SDL_Window* window;
 };
 

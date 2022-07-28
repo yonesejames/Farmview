@@ -11,9 +11,9 @@ public:
     Vector velocity;
     
     int speed = 3;
-
-    int height = 100;
-    int width = 100;
+    // Player:
+    int height = 64;
+    int width = 64;
     int scale = 1;
 
     TransformComponent()

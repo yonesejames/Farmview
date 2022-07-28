@@ -77,8 +77,8 @@ public:
         sourceRectangle.h = transform->height;
 
         // Initializing destination size for the source:
-        destinationRectangle.w = 100;
-        destinationRectangle.h = 100;
+        destinationRectangle.w = 64;
+        destinationRectangle.h = 64;
     }
 
     void update() override
@@ -91,8 +91,8 @@ public:
 
         sourceRectangle.y = animationIndex * transform->height;
 
-        destinationRectangle.x = static_cast<int>(transform->position.x);
-        destinationRectangle.y = static_cast<int>(transform->position.y);
+        destinationRectangle.x = static_cast<int>(transform->position.x) - Game::camera.x;
+        destinationRectangle.y = static_cast<int>(transform->position.y) - Game::camera.y;
         destinationRectangle.w = transform->width * transform->scale;
         destinationRectangle.h = transform->height * transform->scale;
     }

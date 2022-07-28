@@ -19,8 +19,8 @@ void GameObject::update()
     xpos++;
     ypos++;
 
-    sourceRect.h = 100;
-    sourceRect.w = 100;
+    sourceRect.h = 16;
+    sourceRect.w = 16;
     sourceRect.x = 0;
     sourceRect.y = 0;
 

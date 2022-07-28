@@ -13,18 +13,11 @@ Manager manager;
 SDL_Renderer* Game::renderer = { nullptr };
 SDL_Event Game::event;
 
-std::vector<ColliderComponent*> Game::colliders;
+SDL_Rect Game::camera = { 0, 0, 1600, 880 };
 
 auto& player(manager.addEntity());
-auto& wall(manager.addEntity());
 
-enum groupLabels : std::size_t
-{
-    groupMap,
-    groupPlayers,
-    groupVillagers,
-    groupColliders
-};
+bool Game::isRunning = false;
 
 Game::Game()
 /* Game constructor: Creates Game */
@@ -37,7 +30,6 @@ Game::~Game()
 {
 
 }
-
 
 void Game::init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen)
 /* 
@@ -60,8 +52,6 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
         window = SDL_CreateWindow(title, xpos, ypos, width, height, flag);
         if (window)
         {
-            //LoadScreen::loadScreen("assets/farmviewOpen.bmp", 3000);
-
             std::cout << "Window has been created!" << std::endl;
         } 
         else
@@ -73,8 +63,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
         renderer = SDL_CreateRenderer(window, -1, 0);
         if (renderer)
         {
-
-            LoadScreen::loadScreen("assets/farmview.bmp", 3000);
+            LoadScreen::loadScreen("assets/farmviewOpen.bmp", 3000);
             std::cout << "Renderer has been created!" << std::endl;
         }
         else
@@ -84,8 +73,6 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 
         // If SDL initializes correctly then isRunning is set to true:
         isRunning = true;
-
-
     } 
     else
     {
@@ -96,21 +83,23 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
         
     }
 
+    map = new Map("assets/farmviewStartingMapTileSet.png", 2, 16);
+
     //ECS Implementation:
-    Map::loadMap("assets/farmviewMap_2000x1000.map", 20, 10);
+    map->loadMap("assets/farmviewStartingMapTileMap.map", 100, 55);
 
     player.addComponent<TransformComponent>();
-    player.addComponent<SpriteComponent>("assets/farmer_animations.png", true);
+    player.addComponent<SpriteComponent>("assets/farmer_animations2.png", true);
     player.addComponent<KeyboardController>();
     player.addComponent<ColliderComponent>("player");
     player.addGroup(groupPlayers);
 
-    wall.addComponent<TransformComponent>(500.0f, 500.0f, 300, 20, 1);
-    wall.addComponent<SpriteComponent>("assets/dirt.png");
-    wall.addComponent<ColliderComponent>("wall");
-    wall.addGroup(groupMap);
-
 }
+
+auto& tiles(manager.getGroup(Game::groupMap));
+auto& colliders(manager.getGroup(Game::groupColliders));
+auto& players(manager.getGroup(Game::groupPlayers));
+
 
 void Game::handleEvents()
 /* Function that handle keyboard events */
@@ -131,7 +120,6 @@ void Game::handleEvents()
         break;
     }
     
-   
     /*
     // While loop that handles events in the queue, so if there are events in queue:
     while (SDL_PollEvent(&event) != 0)
@@ -145,26 +133,49 @@ void Game::handleEvents()
         }
     }
     */
-    
 }
 
 void Game::update()
 /* Function that updates */
 {
+
+    SDL_Rect playerCollider = player.getComponent<ColliderComponent>().collider;
+    Vector playerPosition = player.getComponent<TransformComponent>().position;
+
     // ECS delete dead entities and updates them:
     manager.refresh();
     manager.update();
 
-    for (auto collider : colliders) 
+    for (auto& c : colliders)
     {
-        Collision::AABB(player.getComponent<ColliderComponent>(), *collider);
+        SDL_Rect cCol = c->getComponent<ColliderComponent>().collider;
+        if (Collision::AABB(cCol, playerCollider))
+        {
+            player.getComponent<TransformComponent>().position = playerPosition;
+        }
+    }
+
+    camera.x = player.getComponent<TransformComponent>().position.x - 800;
+    camera.y = player.getComponent<TransformComponent>().position.y - 440;
+
+    if (camera.x < 0)
+    {
+        camera.x = 0;
+    }
+    if (camera.y < 0)
+    {
+        camera.y = 0;
+    }
+    if (camera.x > camera.w)
+    {
+        camera.x = camera.w;
+    }
+    if (camera.y > camera.h)
+    {
+        camera.y = camera.h;
     }
 
 }
-
-auto& tiles(manager.getGroup(groupMap));
-auto& players(manager.getGroup(groupPlayers));
-auto& villagers(manager.getGroup(groupVillagers));
 
 void Game::render()
 /* Function that renders objects on the screen */
@@ -177,16 +188,15 @@ void Game::render()
         tile->draw();
     }
 
+    for (auto& collider : colliders)
+    {
+        collider->draw();
+    }
+
     for (auto& player : players)
     {
         player->draw();
     }
-
-    for (auto& villager : villagers)
-    {
-        villager->draw();
-    }
-
 
     // Add items to render:
     SDL_RenderPresent(renderer);
@@ -204,10 +214,3 @@ void Game::close()
     std::cout << "Game has been cleaned and closed!" << std::endl;
 }
 
-
-void Game::addTile(int id, int x, int y)
-{
-    auto& tile(manager.addEntity());
-    tile.addComponent<TileComponent>(x, y, 100, 100, id);
-    tile.addGroup(groupMap);
-}

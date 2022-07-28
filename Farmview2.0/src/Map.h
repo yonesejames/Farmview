@@ -7,11 +7,21 @@
 class Map
 {
 public:
-    Map();
+    // Constructor that takes in -
+    // mFP = map file path
+    // mS = map scale
+    // tSize = tile size:
+    Map(const char* mFP, int mS, int tSize);
     ~Map();
 
-    static void loadMap(std::string filePath, int sizeX, int sizeY);
+    void loadMap(std::string filePath, int sizeX, int sizeY);
+    void addTile(int sourceX, int sourceY, int xpos, int ypos);
 
+private:
+    const char* mapFilePath;
+    int mapScale;
+    int tileSize;
+    int scaledSize;
 };
 
 #endif

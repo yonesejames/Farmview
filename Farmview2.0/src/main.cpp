@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
     
     game = new Game();
 
-    game->init("Farmview", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 2000, 1000, false);
+    game->init("Farmview", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1600, 880, false);
 
     while (game->running())
     {

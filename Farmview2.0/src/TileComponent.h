@@ -9,57 +9,53 @@
 class TileComponent : public Component
 {
 public:
-    TransformComponent* transform;
-    SpriteComponent* sprite;
 
-    SDL_Rect tileRectangle;
-    int tileID;
-    const char* filePath;
+    SDL_Texture* texture;
+    SDL_Rect sourceRect;
+    SDL_Rect destinationRect;
+    Vector position;
 
     TileComponent() = default;
 
-    TileComponent(int x, int y, int w, int h, int id)
-    {
-        tileRectangle.x = x;
-        tileRectangle.y = y;
-        tileRectangle.w = w;
-        tileRectangle.h = h;
-        tileID = id;
 
-        switch (tileID)
-        {
-        case 0:
-            filePath = "assets/grass.png";
-            break;
-        case 1:
-            filePath = "assets/dirt.png";
-            break;
-        case 2:
-            filePath = "assets/water.png";
-            break;
-        case 3:
-            filePath = "assets/tree1.png";
-            break;
-        case 4:
-            filePath = "assets/tree2.png";
-            break;
-        case 5:
-            filePath = "assets/tree3.png";
-            break;
-        default:
-            break;
-        }
+    ~TileComponent()
+    {
+        SDL_DestroyTexture(texture);
+    }
+
+    TileComponent(int sourceX, int sourceY, int xpos, int ypos, int tileSize, int tileScale, const char* filePath)
+    {
+        texture = TextureManager::loadTexture(filePath);
+
+        position.x = xpos;
+        position.y = ypos;
+
+        sourceRect.x = sourceX;
+        sourceRect.y = sourceY;
+        // 16 px:
+        sourceRect.w = tileSize;
+        sourceRect.h = tileSize;
+
+        destinationRect.x = xpos;
+        destinationRect.y = ypos;
+        // 32 px:
+        destinationRect.w = tileSize * tileScale;
+        destinationRect.h = tileSize * tileScale;
 
     }
 
-    void init() override
+    void update() override
     {
-        entity->addComponent<TransformComponent>(static_cast<float>(tileRectangle.x), static_cast<float>(tileRectangle.y), tileRectangle.w, tileRectangle.h, 1);
-        transform = &entity->getComponent<TransformComponent>();
+        destinationRect.x = position.x - Game::camera.x;
+        destinationRect.y = position.y - Game::camera.y;
 
-        entity->addComponent<SpriteComponent>(filePath);
-        sprite = &entity->getComponent<SpriteComponent>();
     }
+
+    void draw() override
+    {
+        TextureManager::draw(texture, sourceRect, destinationRect, SDL_FLIP_NONE);
+    }
+
 };
 
 
