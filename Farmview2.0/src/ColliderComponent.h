@@ -42,7 +42,7 @@ public:
 
         transform = &entity->getComponent<TransformComponent>();
 
-        texture = TextureManager::loadTexture("assets/collisionTexture.png");
+        texture = TextureManager::loadTexture("assets/collisionTexture2.png");
         sourceRect = { 0, 0, 16, 16 };
         destinationRect = { collider.x, collider.y, collider.w, collider.h };
 
