@@ -266,11 +266,11 @@ public:
     }
 
     Entity& addEntity()
-    /*        
-        Function that adds an entity by first allocating new memory in the heap; 
-        then wraps entity in an unique pointer; finally, places the entity is 
-        back into the entity storage and lastly, returns entity.
-    */
+        /*
+            Function that adds an entity by first allocating new memory in the heap;
+            then wraps entity in an unique pointer; finally, places the entity is
+            back into the entity storage and lastly, returns entity.
+        */
     {
         Entity* e = new Entity(*this);
         std::unique_ptr<Entity> uPtr{ e };

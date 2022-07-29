@@ -46,7 +46,7 @@ public:
     {
         groupMap,
         groupPlayers,
-        groupVillagers,
+        groupItems,
         groupColliders
     };
 

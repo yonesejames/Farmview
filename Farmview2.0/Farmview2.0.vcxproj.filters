@@ -92,7 +92,7 @@
     <ClInclude Include="src\InventoryComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ItemComponent.h">
+    <ClInclude Include="src\InformationComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

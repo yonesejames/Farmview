@@ -42,6 +42,14 @@ public:
         setTexture(filePath);
     }
 
+    SpriteComponent(const char* filePath, int x, int y)
+    /* Constructor that takes in in a filepath to render the sprite on screen */
+    {
+        setTexture(filePath);
+        xpos = x;
+        ypos = y;
+    }
+
     SpriteComponent(const char* filePath, bool isAnimated, int sizeW, int sizeH)
     /*
         Constructor that takes in a filepath to render the sprite on screen, 
@@ -154,6 +162,9 @@ private:
     int frames = 0;
     // Delay between frames in milliseconds:
     int speed = 100;
+
+    int xpos;
+    int ypos;
 };
 
 

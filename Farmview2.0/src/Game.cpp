@@ -7,7 +7,6 @@
 #include "Vector.h"
 #include "Collision.h"
 
-
 Map* map;
 Manager manager;
 
@@ -17,6 +16,7 @@ SDL_Event Game::event;
 SDL_Rect Game::camera = { 0, 0, 1600, 880 };
 
 auto& player(manager.addEntity());
+auto& item(manager.addEntity());
 
 bool Game::isRunning = false;
 
@@ -99,6 +99,10 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
     player.addComponent<ColliderComponent>("player");
     player.addGroup(groupPlayers);
 
+
+    item.addComponent<TransformComponent>(100, 100, 16, 16, 1);
+    item.addComponent<SpriteComponent>("assets/seed1.png");
+    item.addGroup(groupItems);   
 }
 
 
@@ -106,6 +110,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 auto& tiles(manager.getGroup(Game::groupMap));
 auto& colliders(manager.getGroup(Game::groupColliders));
 auto& players(manager.getGroup(Game::groupPlayers));
+auto& items(manager.getGroup(Game::groupItems));
 
 
 void Game::handleEvents()
@@ -150,6 +155,7 @@ void Game::update()
     // Retrives components for player:
     SDL_Rect playerCollider = player.getComponent<ColliderComponent>().collider;
     Vector playerPosition = player.getComponent<TransformComponent>().position;
+    Vector itemPosition = item.getComponent<TransformComponent>().position;
 
     // ECS delete dead entities and updates them:
     manager.refresh();
@@ -206,6 +212,12 @@ void Game::render()
     /* Loops through colliders and draw each collider on screen next */
     {
         collider->draw();
+    }
+
+    for (auto& item : items)
+    /* Loops through player and draw each player on screen last */
+    {
+        item->draw();
     }
 
     for (auto& player : players)

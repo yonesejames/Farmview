@@ -98,9 +98,7 @@ public:
     }
 
     void draw() override
-    /*
-        Function that overrides the "draw" function by drawing texture of colliders.
-    */
+    /* Function that overrides the "draw" function by drawing texture of colliders */
     {
         TextureManager::draw(texture, sourceRect, destinationRect, SDL_FLIP_NONE);
     }
