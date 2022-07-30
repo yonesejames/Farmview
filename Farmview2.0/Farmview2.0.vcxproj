@@ -141,9 +141,12 @@
     <ClCompile Include="src\ECS.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\GameObject.cpp" />
+    <ClCompile Include="src\Item.cpp" />
     <ClCompile Include="src\LoadScreen.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Map.cpp" />
+    <ClCompile Include="src\Pointwell.cpp" />
+    <ClCompile Include="src\Statblock.cpp" />
     <ClCompile Include="src\TextureManager.cpp" />
     <ClCompile Include="src\Vector.cpp" />
   </ItemGroup>
@@ -152,14 +155,19 @@
     <ClInclude Include="src\ColliderComponent.h" />
     <ClInclude Include="src\Collision.h" />
     <ClInclude Include="src\Components.h" />
+    <ClInclude Include="src\DataTypes.h" />
     <ClInclude Include="src\ECS.h" />
     <ClInclude Include="src\InformationComponent.h" />
     <ClInclude Include="src\InventoryComponent.h" />
+    <ClInclude Include="src\Item.h" />
+    <ClInclude Include="src\ItemManager.h" />
     <ClInclude Include="src\KeyboardController.h" />
     <ClInclude Include="src\LoadScreen.h" />
     <ClInclude Include="src\Map.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\GameObject.h" />
+    <ClInclude Include="src\Pointwell.h" />
+    <ClInclude Include="src\Statblock.h" />
     <ClInclude Include="src\TileComponent.h" />
     <ClInclude Include="src\TransformComponent.h" />
     <ClInclude Include="src\SpriteComponent.h" />
