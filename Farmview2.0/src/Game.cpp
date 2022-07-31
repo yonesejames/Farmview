@@ -124,20 +124,6 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
     ItemManager::equip(hoe, &player);
     ItemManager::equip(upgradedWateringcan, &player);
 
-
-    Item* Turnip = ItemManager::createCrop("Turnip", 3);
-    std::cout << ItemManager::use(Turnip, &player) << std::endl;
-
-    ItemManager::moveToBackpack(Turnip, &player);
-    auto inventory = player.getComponent<PlayerComponent>().getInventory();
-    
-    auto inven = player.getComponent<PlayerComponent>().getInventory();
-    std::cout << "Inventory: ";
-    for (auto i : inven)
-    {
-        std::cout << i->getData()->name << std::endl;
-    }
-
     std::cout << "Tool: " << std::endl;
     for (int i = 0; i < (int)ToolSlot::NUM_SLOTS; i++)
     {
@@ -147,6 +133,21 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
             std::cout << tmp->name << std::endl;
         }
     }
+
+    Item* Turnip = ItemManager::createCrop("Turnip", 3);
+    std::cout << ItemManager::use(Turnip, &player) << std::endl;
+
+    ItemManager::moveToInventory(Turnip, &player);
+    auto inventory = player.getComponent<PlayerComponent>().getInventory();
+    
+    auto inven = player.getComponent<PlayerComponent>().getInventory();
+    std::cout << "Inventory: ";
+    for (auto i : inven)
+    {
+        std::cout << i->getData()->name << std::endl;
+    }
+
+
 
     //ItemManager::moveToBackpack(ItemManager::createTool("Axe", ToolSlot::RIGHTHAND);
    

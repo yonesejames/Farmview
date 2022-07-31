@@ -62,15 +62,15 @@ public:
         if (tool)
         {
             unsigned long long slotNum = (unsigned long long)tool->Slot;
-            if (player->addComponent<PlayerComponent>().EquippedTools[slotNum])
+            if (player->getComponent<PlayerComponent>().EquippedTools[slotNum])
             {
                 // Move old item to backpack:
-                moveToBackpack(player->addComponent<PlayerComponent>().EquippedTools[slotNum], player);
-                player->addComponent<PlayerComponent>().EquippedTools[slotNum] = itemToEquip;
+                moveToInventory(player->getComponent<PlayerComponent>().EquippedTools[slotNum], player);
+                player->getComponent<PlayerComponent>().EquippedTools[slotNum] = itemToEquip;
             }
             else
             {
-                player->addComponent<PlayerComponent>().EquippedTools[slotNum] = itemToEquip;
+                player->getComponent<PlayerComponent>().EquippedTools[slotNum] = itemToEquip;
             }
 
             return true;
@@ -127,7 +127,7 @@ public:
             if (crop->quantity == 0)
             {
                 itemToUse->markedForDeletion = true;
-                player->addComponent<PlayerComponent>().cleanupInventory();
+                player->getComponent<PlayerComponent>().cleanupInventory();
             }
 
             return true;
@@ -150,14 +150,14 @@ public:
         return true;
     }
 
-    static bool moveToBackpack(Item* itemToMove, Entity* player)
+    static bool moveToInventory(Item* itemToMove, Entity* player)
     {
         if (!itemToMove->getData() || !itemToMove || !player)
         {
             return false;
         }
 
-        player->addComponent<PlayerComponent>().Inventory.push_back(itemToMove);
+        player->getComponent<PlayerComponent>().Inventory.push_back(itemToMove);
         return true;
     }
 
