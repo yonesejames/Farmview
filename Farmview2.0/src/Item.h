@@ -8,12 +8,20 @@
 #include "datatypes.h"
 #include "Vector.h"
 #include "TextureManager.h"
+#include <vector>
+#include <memory>
+#include <algorithm>
+#include <bitset>
+#include <array>
+
+class Item;
 
 class ItemDelegate
 {
 public:
     std::string name;
     virtual const char* getType() = 0;
+    ItemDelegate(){}
 
 protected:
     ItemDelegate(std::string n) : name(n) {};
@@ -23,6 +31,7 @@ protected:
 class Crop : public ItemDelegate
 {
 public:
+    using Group = std::size_t;
     Vector position;
     Vector velocity;
     int height = 16;
@@ -30,31 +39,54 @@ public:
     int scale = 1;
     int16 quantity;
     const char* getType() override;
+
+    int xpos;
+    int ypos;
+  
+
     ~Crop() 
     {
-        SDL_DestroyTexture(texture);
+
     }
 
-    void setTexture(const char* filePath)
-        /* Function that creates a texture from filePath */
+
+    Crop(){}
+
+    Crop(std::string n, int x, int y, const char* filePath, int16 q = 1) : ItemDelegate(name), quantity(q)
     {
-        texture = TextureManager::loadTexture(filePath);
+        itemTexture = TextureManager::loadTexture(filePath);
+
+        name = n;
+
+        xpos = x;
+        ypos = y;
+    }
+
+    void update()
+    {
+        sourceRect.h = 16;
+        sourceRect.w = 16;
+        sourceRect.x = 0;
+        sourceRect.y = 0;
+
+        destinationRect.h = sourceRect.h;
+        destinationRect.w = sourceRect.w;
+        destinationRect.x = xpos;
+        destinationRect.y = ypos;
+
+    }
+
+    void render()
+    {
+        SDL_RenderCopy(Game::renderer, itemTexture, &sourceRect, &destinationRect);
     }
 
 private:
-    Crop(std::string name, float x, float y, int w, int h, int s, const char* filePath, int16 q = 1) : ItemDelegate(name), quantity(q)
-    {
-        position.x = x;
-        position.y = y;
-        height = h;
-        width = w;
-        scale = s;
-
-        velocity.Zero();
-    }
     friend class ItemManager;
     friend class PlayerComponent;
-    SDL_Texture* texture;
+
+    SDL_Texture* itemTexture;
+    SDL_Rect sourceRect, destinationRect;
 };
 
 
@@ -96,16 +128,53 @@ public:
     const ItemDelegate* getData() { return data; }
     ~Item();
     bool getMarkedForDeletion() const;
-
-private:
     ItemDelegate* data;
     Item(ItemDelegate* item) : data(item) {};
+    int xpos;
+    int ypos;
+    std::string name;
 
+    Item() {}
+
+    Item(std::string n, int x, int y, const char* filePath, int16 q = 1) 
+    {
+        itemTexture = TextureManager::loadTexture(filePath);
+
+        name = n;
+
+        xpos = x;
+        ypos = y;
+    }
+
+
+    void update()
+    {
+        sourceRect.h = 16;
+        sourceRect.w = 16;
+        sourceRect.x = 0;
+        sourceRect.y = 0;
+
+        destinationRect.h = sourceRect.h;
+        destinationRect.w = sourceRect.w;
+        destinationRect.x = xpos;
+        destinationRect.y = ypos;
+
+    }
+
+    void render()
+    {
+        SDL_RenderCopy(Game::renderer, itemTexture, &sourceRect, &destinationRect);
+    }
+
+private:
     friend class ItemManager;
     friend class PlayerCharacter;
     friend class PlayerComponent;
 
     bool markedForDeletion = false;
+
+    SDL_Texture* itemTexture;
+    SDL_Rect sourceRect, destinationRect;
 };
 
 #endif

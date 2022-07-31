@@ -24,6 +24,7 @@ Item::~Item()
     {
         delete data;
         data = { nullptr };
+
     }
 }
 

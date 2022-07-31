@@ -22,9 +22,6 @@ void GameObject::update()
     destination on screen and the source (the object itself)
 */
 {
-    xpos++;
-    ypos++;
-
     sourceRect.h = 16;
     sourceRect.w = 16;
     sourceRect.x = 0;

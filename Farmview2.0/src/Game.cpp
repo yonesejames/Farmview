@@ -11,6 +11,7 @@
 #include <iostream>
 #include "PlayerCharacter.h"
 #include "PlayerComponent.h"
+#include "Item.h"
 
 
 Map* map;
@@ -26,6 +27,7 @@ auto& item(manager.addEntity());
 
 bool Game::isRunning = false;
 
+Item* seed;
 
 Game::~Game()
 /* Destructor that destroys the game */
@@ -106,8 +108,8 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
     player.addGroup(groupPlayers);
     player.addComponent<PlayerComponent>();
 
-    //item.addComponent<TransformComponent>(100, 100, 16, 16, 1);
-    //item.addComponent<SpriteComponent>("assets/seed1.png");
+    item.addComponent<TransformComponent>(100, 100, 16, 16, 1);
+    item.addComponent<SpriteComponent>("assets/seed1.png");
     //item.addGroup(groupItems);  
 
     player.addComponent<ItemManager>();
@@ -132,74 +134,20 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
         }
     }
 
-    Item* Turnip = ItemManager::createCrop("Turnip", 100, 100, 16, 16, 1, "assets/seed1.png",  3);
-    std::cout << ItemManager::use(Turnip, &player) << std::endl;
+    seed = new Item("Seed", 100, 100, "assets/seed1.png");
 
+    seed = ItemManager::createCrop("Seed", 0, 0, "assets/seed1.png");
+ 
+    ItemManager::moveToInventory(seed, &player);
 
-
-    /*
-    ItemManager::moveToInventory(Turnip, &player);
     auto inventory = player.getComponent<PlayerComponent>().getInventory();
-    
-    auto inven = player.getComponent<PlayerComponent>().getInventory();
-    std::cout << "Inventory: ";
-    for (auto i : inven)
-    {
-        std::cout << i->getData()->name << std::endl;
-    }
-    */
 
-
-    //ItemManager::moveToBackpack(ItemManager::createTool("Axe", ToolSlot::RIGHTHAND);
-   
-    /*
-    Item* wateringcan = ItemManager::createTool("Watering Can", ToolSlot::RIGHTHAND);
-    Item* hoe = ItemManager::createTool("Hoe", ToolSlot::LEFTHAND);
-    Item* upgradedWateringcan = ItemManager::createTool("Upgrade Watering Can", ToolSlot::RIGHTHAND);
-
-    ItemManager::equip(wateringcan, &farmer1);
-    ItemManager::equip(hoe, &farmer1);
-    ItemManager::equip(upgradedWateringcan, &farmer1);
-
-    for (int i = 0; i < 2; i++)
-    {
-        std::cout << "Farmer\n" << std::endl;
-        std::cout << "Max HP: " << farmer1.getMaxHP() << std::endl;
-        std::cout << "Current HP: " << farmer1.getCurrentHP() << std::endl;
-        std::cout << "Strength: " << farmer1.getStrength() << std::endl;
-        std::cout << "Level: " << farmer1.getLevel() << std::endl;
-        std::cout << "EXP: " << farmer1.getCurrentEXP() << "/" << farmer1.getEXPToNextLevel() << std::endl;
-        farmer1.gainEXP(100u);
-    }
-    std::cout << "Tool: " << std::endl;
-    for (int i = 0; i < (int)ToolSlot::NUM_SLOTS; i++)
-    {
-        const Tool* tmp = dynamic_cast<Tool*>(farmer1.getEquippedToolAt(i));
-        if (tmp)
-        {
-            std::cout << tmp->name << std::endl;
-        }
-    }
-
-    Item* CarrotCrop = ItemManager::createCrop("Carrot", 3);
-    if (CarrotCrop)
-    {
-        std::cout << CarrotCrop->getData()->name << std::endl;
-    }
-
-    std::cout << ItemManager::use(CarrotCrop, &farmer1) << std::endl;
-
-    ItemManager::moveToBackpack(CarrotCrop, &farmer1);
-
-    ItemManager::moveToBackpack(ItemManager::createTool("Axe", ToolSlot::RIGHTHAND), &farmer1);
-
-    auto inventory = farmer1.getBackpackList();
     std::cout << "Inventory: ";
     for (auto i : inventory)
     {
         std::cout << i->getData()->name << std::endl;
     }
-    */
+
 }
 
 
@@ -208,6 +156,8 @@ auto& tiles(manager.getGroup(Game::groupMap));
 auto& colliders(manager.getGroup(Game::groupColliders));
 auto& players(manager.getGroup(Game::groupPlayers));
 auto& items(manager.getGroup(Game::groupItems));
+
+
 
 
 void Game::handleEvents()
@@ -290,6 +240,7 @@ void Game::update()
         camera.y = camera.h;
     }
 
+    seed->update();
 }
 
 
@@ -311,12 +262,13 @@ void Game::render()
         collider->draw();
     }
 
-
-    //for (auto& item : items)
+    for (auto& item : items)
     /* Loops through player and draw each player on screen last */
-    //{
-    //    item->draw();
-    //}
+    {
+        item->draw();
+    }
+
+    seed->render();
 
     for (auto& player : players)
     /* Loops through player and draw each player on screen last */

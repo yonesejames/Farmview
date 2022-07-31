@@ -50,6 +50,11 @@ public:
         groupColliders
     };
 
+    enum groupItemLabels : std::size_t
+    {
+        groupCrops,
+    };
+
 private:
     SDL_Window* window;
 };

@@ -5,20 +5,23 @@
 #include "Item.h"
 #include "PlayerCharacter.h"
 #include "PlayerComponent.h"
+#include <SDL.h>
+#include <string>
 
 
 class ItemManager : public Component
 {
 public:
+
     static Item* createTool(std::string name, ToolSlot slot)
     {
         Item* tempItem = new Item(new Tool(name, slot));
         return tempItem;
     };
 
-    static Item* createCrop(std::string name, float x, float y, int w, int h, int s, const char* filePath, int16 quantity = 1u)
+    static Item* createCrop(std::string n, int x, int y, const char* filePath, int16 quantity = 1u)
     {
-        Item* tempItem = new Item(new Crop(name, x, y, w, h, s, filePath, (quantity == 0) ? 1 : quantity));
+        Item* tempItem = new Item(new Crop(n, x, y, filePath, (quantity == 0) ? 1 : quantity));
         return tempItem;
     }
 
@@ -161,6 +164,8 @@ public:
         player->getComponent<PlayerComponent>().Inventory.push_back(itemToMove);
         return true;
     }
+
+
 };
 
 

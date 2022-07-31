@@ -12,7 +12,6 @@ SDL_Texture* TextureManager::loadTexture(const char* filePath)
     return texture;
 }
 
-
 void TextureManager::draw(SDL_Texture* texture, SDL_Rect source, SDL_Rect destination, SDL_RendererFlip flip)
 /*
     Function that copies a portion of the texture to the current rendering, 
