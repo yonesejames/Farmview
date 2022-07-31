@@ -6,6 +6,12 @@
 #include "LoadScreen.h"
 #include "Vector.h"
 #include "Collision.h"
+#include <iostream>
+#include "ItemManager.h"
+#include <iostream>
+#include "PlayerCharacter.h"
+#include "PlayerComponent.h"
+
 
 Map* map;
 Manager manager;
@@ -102,7 +108,96 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 
     item.addComponent<TransformComponent>(100, 100, 16, 16, 1);
     item.addComponent<SpriteComponent>("assets/seed1.png");
-    item.addGroup(groupItems);   
+    item.addGroup(groupItems);  
+
+
+    auto& player(manager.addEntity());
+    player.addComponent<PlayerComponent>();
+
+    std::cout << "Player: " << std::endl;
+
+    Item* wateringcan = ItemManager::createTool("Watering Can", ToolSlot::RIGHTHAND);
+    Item* hoe = ItemManager::createTool("Hoe", ToolSlot::LEFTHAND);
+    Item* upgradedWateringcan = ItemManager::createTool("Upgrade Watering Can", ToolSlot::RIGHTHAND);
+
+    ItemManager::equip(wateringcan, &player);
+    ItemManager::equip(hoe, &player);
+    ItemManager::equip(upgradedWateringcan, &player);
+
+
+    Item* Turnip = ItemManager::createCrop("Turnip", 3);
+    std::cout << ItemManager::use(Turnip, &player) << std::endl;
+
+    ItemManager::moveToBackpack(Turnip, &player);
+    auto inventory = player.getComponent<PlayerComponent>().getInventory();
+    
+    auto inven = player.getComponent<PlayerComponent>().getInventory();
+    std::cout << "Inventory: ";
+    for (auto i : inven)
+    {
+        std::cout << i->getData()->name << std::endl;
+    }
+
+    std::cout << "Tool: " << std::endl;
+    for (int i = 0; i < (int)ToolSlot::NUM_SLOTS; i++)
+    {
+        const Tool* tmp = dynamic_cast<Tool*>(player.getComponent<PlayerComponent>().getEquippedTool(i));
+        if (tmp)
+        {
+            std::cout << tmp->name << std::endl;
+        }
+    }
+
+    //ItemManager::moveToBackpack(ItemManager::createTool("Axe", ToolSlot::RIGHTHAND);
+   
+    /*
+    Item* wateringcan = ItemManager::createTool("Watering Can", ToolSlot::RIGHTHAND);
+    Item* hoe = ItemManager::createTool("Hoe", ToolSlot::LEFTHAND);
+    Item* upgradedWateringcan = ItemManager::createTool("Upgrade Watering Can", ToolSlot::RIGHTHAND);
+
+    ItemManager::equip(wateringcan, &farmer1);
+    ItemManager::equip(hoe, &farmer1);
+    ItemManager::equip(upgradedWateringcan, &farmer1);
+
+    for (int i = 0; i < 2; i++)
+    {
+        std::cout << "Farmer\n" << std::endl;
+        std::cout << "Max HP: " << farmer1.getMaxHP() << std::endl;
+        std::cout << "Current HP: " << farmer1.getCurrentHP() << std::endl;
+        std::cout << "Strength: " << farmer1.getStrength() << std::endl;
+        std::cout << "Level: " << farmer1.getLevel() << std::endl;
+        std::cout << "EXP: " << farmer1.getCurrentEXP() << "/" << farmer1.getEXPToNextLevel() << std::endl;
+        farmer1.gainEXP(100u);
+    }
+    std::cout << "Tool: " << std::endl;
+    for (int i = 0; i < (int)ToolSlot::NUM_SLOTS; i++)
+    {
+        const Tool* tmp = dynamic_cast<Tool*>(farmer1.getEquippedToolAt(i));
+        if (tmp)
+        {
+            std::cout << tmp->name << std::endl;
+        }
+    }
+
+    Item* CarrotCrop = ItemManager::createCrop("Carrot", 3);
+    if (CarrotCrop)
+    {
+        std::cout << CarrotCrop->getData()->name << std::endl;
+    }
+
+    std::cout << ItemManager::use(CarrotCrop, &farmer1) << std::endl;
+
+    ItemManager::moveToBackpack(CarrotCrop, &farmer1);
+
+    ItemManager::moveToBackpack(ItemManager::createTool("Axe", ToolSlot::RIGHTHAND), &farmer1);
+
+    auto inventory = farmer1.getBackpackList();
+    std::cout << "Inventory: ";
+    for (auto i : inventory)
+    {
+        std::cout << i->getData()->name << std::endl;
+    }
+    */
 }
 
 

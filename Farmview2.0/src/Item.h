@@ -27,6 +27,7 @@ public:
 private:
     Crop(std::string name, int16 q = 1) : ItemDelegate(name), quantity(q) {}
     friend class ItemManager;
+    friend class PlayerComponent;
 };
 
 
@@ -59,6 +60,7 @@ private:
     Tool(std::string name, ToolSlot slot) : EquipmentDelegate(name), Slot(slot) {}
 
     friend class ItemManager;
+    friend class PlayerComponent;
 };
 
 class Item
@@ -74,6 +76,7 @@ private:
 
     friend class ItemManager;
     friend class PlayerCharacter;
+    friend class PlayerComponent;
 
     bool markedForDeletion = false;
 };

@@ -1,4 +1,4 @@
-#include "statblock.h"
+#include "Statblock.h"
 
 StatBlock::StatBlock()
 /* Default constructor that sets strength to 1 */

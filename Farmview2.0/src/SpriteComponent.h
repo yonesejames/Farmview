@@ -86,6 +86,7 @@ public:
 
         sizeWidth = sizeW;
         sizeHeight = sizeH;
+
     }
 
     void setTexture(const char* filePath)

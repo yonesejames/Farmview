@@ -2,7 +2,7 @@
 #define STATBLOCK_H
 
 
-#include "datatypes.h"
+#include "Datatypes.h"
 
 class StatBlock
 {

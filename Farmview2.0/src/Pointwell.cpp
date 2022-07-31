@@ -1,4 +1,4 @@
-#include "pointwell.h"
+#include "Pointwell.h"
 
 
 PointWell::PointWell()

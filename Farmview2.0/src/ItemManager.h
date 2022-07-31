@@ -2,8 +2,9 @@
 #define ITEMMANAGER_H
 
 
-#include "item.h"
-#include "playercharacter.h"
+#include "Item.h"
+#include "PlayerCharacter.h"
+#include "PlayerComponent.h"
 
 class ItemManager
 {
@@ -49,6 +50,36 @@ public:
         return false;
     }
 
+    static bool equip(Item* itemToEquip, Entity* player)
+    {
+        if (!itemToEquip->getData() || !itemToEquip || !player)
+        {
+            return false;
+        }
+
+        Tool* tool = dynamic_cast<Tool*>(itemToEquip->data);
+
+        if (tool)
+        {
+            unsigned long long slotNum = (unsigned long long)tool->Slot;
+            if (player->addComponent<PlayerComponent>().EquippedTools[slotNum])
+            {
+                // Move old item to backpack:
+                moveToBackpack(player->addComponent<PlayerComponent>().EquippedTools[slotNum], player);
+                player->addComponent<PlayerComponent>().EquippedTools[slotNum] = itemToEquip;
+            }
+            else
+            {
+                player->addComponent<PlayerComponent>().EquippedTools[slotNum] = itemToEquip;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+
     static bool use(Item* itemToUse, PlayerCharacter* pCharacter)
     {
         if (!itemToUse->getData() || !itemToUse || !pCharacter)
@@ -78,6 +109,36 @@ public:
 
     }
 
+    static bool use(Item* itemToUse, Entity* player)
+    {
+        if (!itemToUse->getData() || !itemToUse || !player)
+        {
+            return false;
+        }
+
+        Crop* crop = dynamic_cast<Crop*>(itemToUse->data);
+        if (crop)
+        {
+            // Plant crop first then decrease quantity:
+            crop->quantity--;
+
+            std::cout << "Plant crop: " << crop->name << std::endl;
+
+            if (crop->quantity == 0)
+            {
+                itemToUse->markedForDeletion = true;
+                player->addComponent<PlayerComponent>().cleanupInventory();
+            }
+
+            return true;
+        }
+
+
+        return false;
+
+    }
+
+
     static bool moveToBackpack(Item* itemToMove, PlayerCharacter* pCharacter)
     {
         if (!itemToMove->getData() || !itemToMove || !pCharacter)
@@ -88,6 +149,19 @@ public:
         pCharacter->Backpack.push_back(itemToMove);
         return true;
     }
+
+    static bool moveToBackpack(Item* itemToMove, Entity* player)
+    {
+        if (!itemToMove->getData() || !itemToMove || !player)
+        {
+            return false;
+        }
+
+        player->addComponent<PlayerComponent>().Inventory.push_back(itemToMove);
+        return true;
+    }
+
+
 };
 
 

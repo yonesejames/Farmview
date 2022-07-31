@@ -1,7 +1,7 @@
 #ifndef HP_H
 #define HP_H
 
-#include "datatypes.h"
+#include "Datatypes.h"
 
 class PointWell
 {
