@@ -7,6 +7,7 @@
 #include "TextureManager.h"
 #include "Animation.h"
 #include <map>
+#include <string>
 
 class SpriteComponent : public Component
 /* Sprites are images that represent game assets. */
@@ -25,6 +26,8 @@ public:
 
     int sizeWidth;
     int sizeHeight;
+
+    std::string name;
 
     ~SpriteComponent()
     /* Destructor that destroys the sprite */
@@ -50,7 +53,7 @@ public:
         ypos = y;
     }
 
-    SpriteComponent(const char* filePath, bool isAnimated, int sizeW, int sizeH)
+    SpriteComponent(const char* filePath, bool isAnimated, int sizeW, int sizeH, std::string n)
     /*
         Constructor that takes in a filepath to render the sprite on screen, 
         isAnimated will allow the sprite to animate, int sizeW and sizeH for size of the
@@ -86,6 +89,8 @@ public:
 
         sizeWidth = sizeW;
         sizeHeight = sizeH;
+
+        name = n;
 
     }
 
@@ -151,6 +156,11 @@ public:
         frames = animations[animationName].frames;
         animationIndex = animations[animationName].index;
         speed = animations[animationName].speed;
+    }
+
+    std::string getName()
+    {
+        return name;
     }
 
 private:

@@ -6,7 +6,8 @@
 #include "PlayerCharacter.h"
 #include "PlayerComponent.h"
 
-class ItemManager
+
+class ItemManager : public Component
 {
 public:
     static Item* createTool(std::string name, ToolSlot slot)
@@ -15,9 +16,9 @@ public:
         return tempItem;
     };
 
-    static Item* createCrop(std::string name, int16 quantity = 1u)
+    static Item* createCrop(std::string name, float x, float y, int w, int h, int s, const char* filePath, int16 quantity = 1u)
     {
-        Item* tempItem = new Item(new Crop(name, (quantity == 0) ? 1 : quantity));
+        Item* tempItem = new Item(new Crop(name, x, y, w, h, s, filePath, (quantity == 0) ? 1 : quantity));
         return tempItem;
     }
 
@@ -160,8 +161,6 @@ public:
         player->getComponent<PlayerComponent>().Inventory.push_back(itemToMove);
         return true;
     }
-
-
 };
 
 

@@ -2,9 +2,12 @@
 #define ITEM_H
 
 
+#include <SDL.h>
 #include <string>
 #include <typeinfo>
 #include "datatypes.h"
+#include "Vector.h"
+#include "TextureManager.h"
 
 class ItemDelegate
 {
@@ -17,17 +20,41 @@ protected:
 };
 
 
-class Crop final : public ItemDelegate
+class Crop : public ItemDelegate
 {
 public:
+    Vector position;
+    Vector velocity;
+    int height = 16;
+    int width = 16;
+    int scale = 1;
     int16 quantity;
     const char* getType() override;
-    ~Crop() {}
+    ~Crop() 
+    {
+        SDL_DestroyTexture(texture);
+    }
+
+    void setTexture(const char* filePath)
+        /* Function that creates a texture from filePath */
+    {
+        texture = TextureManager::loadTexture(filePath);
+    }
 
 private:
-    Crop(std::string name, int16 q = 1) : ItemDelegate(name), quantity(q) {}
+    Crop(std::string name, float x, float y, int w, int h, int s, const char* filePath, int16 q = 1) : ItemDelegate(name), quantity(q)
+    {
+        position.x = x;
+        position.y = y;
+        height = h;
+        width = w;
+        scale = s;
+
+        velocity.Zero();
+    }
     friend class ItemManager;
     friend class PlayerComponent;
+    SDL_Texture* texture;
 };
 
 
@@ -45,7 +72,7 @@ private:
 
 // NUM_SLOTS for making arrays of tool slots
 enum class ToolSlot { RIGHTHAND, LEFTHAND, NUM_SLOTS };
-class Tool final : public EquipmentDelegate
+class Tool : public EquipmentDelegate
 {
 public:
     ToolSlot Slot;

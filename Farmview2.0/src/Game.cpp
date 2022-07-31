@@ -100,19 +100,17 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
     map->loadMap("assets/farmviewStartingMapTileMap.map", 100, 55);
 
     player.addComponent<TransformComponent>();
-    player.addComponent<SpriteComponent>("assets/farmer_animations2.png", true, 64, 64);
+    player.addComponent<SpriteComponent>("assets/farmer_animations2.png", true, 64, 64, "Farmer");
     player.addComponent<KeyboardController>();
     player.addComponent<ColliderComponent>("player");
     player.addGroup(groupPlayers);
-
-
-    item.addComponent<TransformComponent>(100, 100, 16, 16, 1);
-    item.addComponent<SpriteComponent>("assets/seed1.png");
-    item.addGroup(groupItems);  
-
-
-    auto& player(manager.addEntity());
     player.addComponent<PlayerComponent>();
+
+    //item.addComponent<TransformComponent>(100, 100, 16, 16, 1);
+    //item.addComponent<SpriteComponent>("assets/seed1.png");
+    //item.addGroup(groupItems);  
+
+    player.addComponent<ItemManager>();
 
     std::cout << "Player: " << std::endl;
 
@@ -134,9 +132,12 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
         }
     }
 
-    Item* Turnip = ItemManager::createCrop("Turnip", 3);
+    Item* Turnip = ItemManager::createCrop("Turnip", 100, 100, 16, 16, 1, "assets/seed1.png",  3);
     std::cout << ItemManager::use(Turnip, &player) << std::endl;
 
+
+
+    /*
     ItemManager::moveToInventory(Turnip, &player);
     auto inventory = player.getComponent<PlayerComponent>().getInventory();
     
@@ -146,7 +147,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
     {
         std::cout << i->getData()->name << std::endl;
     }
-
+    */
 
 
     //ItemManager::moveToBackpack(ItemManager::createTool("Axe", ToolSlot::RIGHTHAND);
@@ -251,7 +252,7 @@ void Game::update()
     // Retrives components for player:
     SDL_Rect playerCollider = player.getComponent<ColliderComponent>().collider;
     Vector playerPosition = player.getComponent<TransformComponent>().position;
-    Vector itemPosition = item.getComponent<TransformComponent>().position;
+    //Vector itemPosition = item.getComponent<TransformComponent>().position;
 
     // ECS delete dead entities and updates them:
     manager.refresh();
@@ -310,11 +311,12 @@ void Game::render()
         collider->draw();
     }
 
-    for (auto& item : items)
+
+    //for (auto& item : items)
     /* Loops through player and draw each player on screen last */
-    {
-        item->draw();
-    }
+    //{
+    //    item->draw();
+    //}
 
     for (auto& player : players)
     /* Loops through player and draw each player on screen last */
