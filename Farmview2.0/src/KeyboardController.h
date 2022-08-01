@@ -4,6 +4,9 @@
 #include "Game.h"
 #include "ECS.h"
 #include "Components.h"
+#include "Item.h"
+
+class Inventory;
 
 class KeyboardController : public Component
 /* 
@@ -32,7 +35,11 @@ public:
         a direction by changing velocity when selecting a key and 
         showing an image to the screen based on position.
     */
-    {   // When key is pressed:
+    {   
+        Inventory* inventory;
+        inventory = new Inventory("assets/farmviewInventory.png");
+        
+        // When key is pressed:
         if (Game::event.type == SDL_KEYDOWN)
         {
             switch (Game::event.key.keysym.sym)
@@ -56,6 +63,12 @@ public:
                 sprite->Play("walkRight");
                 // Optional if you have one image facing one way, you can flip the image:
                 //sprite->spriteFlip = SDL_FLIP_HORIZONTAL;
+                break;
+            case SDLK_i:
+                while (SDLK_i)
+                {
+                    inventory->all();
+                }
                 break;
             default:
                 break;
@@ -88,6 +101,9 @@ public:
                 // Optional if you have one image facing one way, you can reset the 
                 // flipped the image:
                 //sprite->spriteFlip = SDL_FLIP_NONE;
+                break;
+            case SDLK_i:
+                inventory->all();
                 break;
             default:
                 break;

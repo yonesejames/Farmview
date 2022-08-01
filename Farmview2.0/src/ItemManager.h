@@ -8,10 +8,10 @@
 #include <SDL.h>
 #include <string>
 
-
 class ItemManager : public Component
 {
 public:
+
 
     static Item* createTool(std::string name, ToolSlot slot)
     {
@@ -156,12 +156,15 @@ public:
 
     static bool moveToInventory(Item* itemToMove, Entity* player)
     {
+
         if (!itemToMove->getData() || !itemToMove || !player)
         {
             return false;
         }
 
         player->getComponent<PlayerComponent>().Inventory.push_back(itemToMove);
+
+
         return true;
     }
 

@@ -29,6 +29,8 @@ bool Game::isRunning = false;
 
 Item* seed;
 
+//Inventory* object;
+
 Game::~Game()
 /* Destructor that destroys the game */
 {
@@ -134,9 +136,8 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
         }
     }
 
-    seed = new Item("Seed", 100, 100, "assets/seed1.png");
-
     seed = ItemManager::createCrop("Seed", 0, 0, "assets/seed1.png");
+
  
     ItemManager::moveToInventory(seed, &player);
 
@@ -174,7 +175,6 @@ void Game::handleEvents()
         LoadScreen::loadScreen("assets/farmviewExit.bmp", 1000);
         isRunning = false;
         break;
-
     default:
         break;
     }
@@ -240,7 +240,10 @@ void Game::update()
         camera.y = camera.h;
     }
 
+    seed = new Item("Seed", 100, 100, "assets/seed1.png");
     seed->update();
+
+
 }
 
 
@@ -268,7 +271,7 @@ void Game::render()
         item->draw();
     }
 
-    seed->render();
+
 
     for (auto& player : players)
     /* Loops through player and draw each player on screen last */
@@ -276,8 +279,53 @@ void Game::render()
         player->draw();
     }
 
+    seed->render();
+
     // Add items to render:
     SDL_RenderPresent(renderer);
+
+    //object = new Inventory("assets/farmviewInventory.png");
+
+    /*
+    const Uint8* state = SDL_GetKeyboardState(NULL);
+    if (state[SDL_SCANCODE_I])
+    {
+        object->all();
+    }
+    else
+    {
+
+    }
+    */
+    
+    /*
+    if (event.type == SDL_KEYDOWN)
+    {
+        switch (event.key.keysym.sym)
+        {
+        case SDLK_i:
+            object->all();
+            break;
+        default:
+            break;
+        }
+    }
+
+    if (event.type == SDL_KEYUP)
+    {
+        switch (event.key.keysym.sym)
+        {
+        case SDLK_i:
+            //object->update();
+            //object->render();
+            //SDL_RenderPresent(renderer);
+            break;
+        default:
+            break;
+        }
+    }
+    */
+
 }
 
 

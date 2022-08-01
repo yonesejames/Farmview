@@ -177,5 +177,61 @@ private:
     SDL_Rect sourceRect, destinationRect;
 };
 
+class Inventory
+{
+public:
+    int screenWidth = 800;
+    int screenHeight = 440;
+
+    ~Inventory(){}
+
+    //Inventory(){}
+
+    Inventory(const char* texture)
+    {
+        inventoryTexture = TextureManager::loadTexture(texture);
+    }
+
+    void update()
+    {
+        sourceRect.h = 100;
+        sourceRect.w = 100;
+        sourceRect.x = 0;
+        sourceRect.y = 0;
+
+        destinationRect.w = screenWidth / 2;
+        destinationRect.h = screenHeight / 2;
+        destinationRect.x = 0;
+        destinationRect.y = 0;
+    }
+
+    void render()
+    {
+        SDL_RenderCopy(Game::renderer, inventoryTexture, &sourceRect, &destinationRect);
+    }
+
+    void all()
+    {
+        sourceRect.h = 100;
+        sourceRect.w = 100;
+        sourceRect.x = 0;
+        sourceRect.y = 0;
+
+        destinationRect.w = screenWidth / 2;
+        destinationRect.h = screenHeight / 2;
+        destinationRect.x = 0;
+        destinationRect.y = 0;
+
+        SDL_RenderCopy(Game::renderer, inventoryTexture, &sourceRect, &destinationRect);
+
+        SDL_RenderPresent(Game::renderer);
+    }
+
+private:
+    SDL_Texture* inventoryTexture;
+    SDL_Rect inventoryViewport;
+    SDL_Rect sourceRect, destinationRect;
+};
+
 #endif
 
