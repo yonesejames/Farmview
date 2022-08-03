@@ -129,13 +129,21 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
         }
     }
 
-    //seed = ItemManager::createCrop("Seed", 0, 0, "assets/seed1.png");
+    seed = ItemManager::createCrop("Seed", 0, 0, "assets/seed1.png");
 
-    seed = ItemManager::createItem("Seed", 0, 0, "assets/seed1.png");
+    //seed = ItemManager::createItem("Seed", 0, 0, "assets/seed1.png");
 
  
     ItemManager::moveToInventory(seed, &player);
+    //ItemManager::moveToInventory(ItemManager::createItem("Seed", 0, 0, "assets/seed1.png"), &player);
 
+    
+    auto playerInventory = player.getComponent<PlayerComponent>().getInventory();;
+    std::cout << "Inventory: ";
+    for (auto i : playerInventory)
+    {
+        std::cout << i->getData()->name << std::endl;
+    }
 
 }
 
@@ -241,6 +249,46 @@ void Game::update()
     inventory = new Inventory(0, 660,"assets/farmviewInventory.png");
     inventory->update();
 
+    for (auto& tile : tiles)
+        /* Loops through tiles and draw each tile on screen first */
+    {
+
+        auto plant = tile->getComponent<TileComponent>().destinationRect;
+
+        auto plantSource = tile->getComponent<TileComponent>().sourceRect;
+
+        switch (event.type)
+        {
+            int x;
+            int y;
+
+        case SDL_MOUSEBUTTONDOWN:
+            x = event.button.x;
+            y = event.button.y;
+            if (x > plant.x && x < plant.x + plant.w && y > plant.y && plant.y + plant.h)
+            {
+                std::cout << "Button Clicked" << std::endl;
+
+
+                seed = new Item("Seed", plant.x, plant.y, "assets/seed1.png");
+                seed->update();
+                seed->draw();
+
+
+                //auto Tile = tile->getComponent<TileComponent>();
+                //Tile = TileComponent(plantSource.x, plantSource.y, plant.x, plant.y, 16, 2, "assets/seed1.png");
+                //Tile.update();
+                //Tile.draw();
+
+
+            }
+            break;
+        default:
+            break;
+        }
+
+    }
+
 }
 
 
@@ -255,31 +303,7 @@ void Game::render()
     {
         tile->draw();   
 
-
-        auto plant = tile->getComponent<TileComponent>().destinationRect;
-
-        switch (event.type)
-        {
-            int x;
-            int y;
-
-        case SDL_MOUSEBUTTONDOWN:
-            x = event.button.x;
-            y = event.button.y;
-            if (x > plant.x && x < plant.x + plant.w && y > plant.y && plant.y + plant.h)
-            {
-                std::cout << "Button Clicked" << std::endl;
-                seed->all("Seed", plant.x, plant.y, "assets/seed1.png");
-            }
-            break;
-        default:
-            break;
-        }
-
-
     }
-
-
 
     for (auto& collider : colliders)
     /* Loops through colliders and draw each collider on screen next */
