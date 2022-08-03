@@ -12,10 +12,12 @@
 #include "PlayerCharacter.h"
 #include "PlayerComponent.h"
 #include "Item.h"
-
+#include <SDL_mixer.h>
 
 Map* map;
 Manager manager;
+Inventory* inventory;
+Item* seed;
 
 SDL_Renderer* Game::renderer = { nullptr };
 SDL_Event Game::event;
@@ -25,11 +27,8 @@ SDL_Rect Game::camera = { 0, 0, 1600, 880 };
 auto& player(manager.addEntity());
 auto& item(manager.addEntity());
 
-bool Game::isRunning = false;
+bool Game::isRunning = true;
 
-Item* seed;
-
-//Inventory* object;
 
 Game::~Game()
 /* Destructor that destroys the game */
@@ -85,9 +84,6 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
         {
             std::cout << "Renderer could not be created due to: " << SDL_GetError() << std::endl;
         }
-
-        // If SDL initializes correctly then isRunning is set to true:
-        isRunning = true;
     } 
     else
     {
@@ -103,16 +99,13 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
     //ECS Implementation:
     map->loadMap("assets/farmviewStartingMapTileMap.map", 100, 55);
 
+
     player.addComponent<TransformComponent>();
     player.addComponent<SpriteComponent>("assets/farmer_animations2.png", true, 64, 64, "Farmer");
     player.addComponent<KeyboardController>();
     player.addComponent<ColliderComponent>("player");
     player.addGroup(groupPlayers);
-    player.addComponent<PlayerComponent>();
-
-    item.addComponent<TransformComponent>(100, 100, 16, 16, 1);
-    item.addComponent<SpriteComponent>("assets/seed1.png");
-    //item.addGroup(groupItems);  
+    player.addComponent<PlayerComponent>(); 
 
     player.addComponent<ItemManager>();
 
@@ -136,29 +129,22 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
         }
     }
 
-    seed = ItemManager::createCrop("Seed", 0, 0, "assets/seed1.png");
+    //seed = ItemManager::createCrop("Seed", 0, 0, "assets/seed1.png");
+
+    seed = ItemManager::createItem("Seed", 0, 0, "assets/seed1.png");
 
  
     ItemManager::moveToInventory(seed, &player);
 
-    auto inventory = player.getComponent<PlayerComponent>().getInventory();
-
-    std::cout << "Inventory: ";
-    for (auto i : inventory)
-    {
-        std::cout << i->getData()->name << std::endl;
-    }
 
 }
+
 
 
 // Grop creation for tiles, colliders, and players:
 auto& tiles(manager.getGroup(Game::groupMap));
 auto& colliders(manager.getGroup(Game::groupColliders));
 auto& players(manager.getGroup(Game::groupPlayers));
-auto& items(manager.getGroup(Game::groupItems));
-
-
 
 
 void Game::handleEvents()
@@ -179,20 +165,27 @@ void Game::handleEvents()
         break;
     }
 
-    // Old way of looping through poll events:
+
     /*
     // While loop that handles events in the queue, so if there are events in queue:
-    while (SDL_PollEvent(&event) != 0)
+    while (isRunning)
     {
-        // User requests to quit:
-        if (event.type == SDL_QUIT)
-        {
-            LoadScreen::loadScreen("assets/farmviewExit.bmp", window, 1000);
 
+        switch (event.type)
+        {
+        // User requests to quit:
+        case SDL_QUIT:
+            LoadScreen::loadScreen("assets/farmviewExit.bmp", 1000);
             isRunning = false;
+            break;
+        default:
+            break;
         }
+
     }
     */
+
+
 }
 
 
@@ -222,6 +215,8 @@ void Game::update()
     camera.x = player.getComponent<TransformComponent>().position.x - 800;
     camera.y = player.getComponent<TransformComponent>().position.y - 440;
 
+
+
     // If statements to ensure that camera does not keep moving outside of the map:
     if (camera.x < 0)
     {
@@ -243,6 +238,8 @@ void Game::update()
     seed = new Item("Seed", 100, 100, "assets/seed1.png");
     seed->update();
 
+    inventory = new Inventory(0, 660,"assets/farmviewInventory.png");
+    inventory->update();
 
 }
 
@@ -256,8 +253,33 @@ void Game::render()
     for (auto& tile : tiles)
     /* Loops through tiles and draw each tile on screen first */
     {
-        tile->draw();
+        tile->draw();   
+
+
+        auto plant = tile->getComponent<TileComponent>().destinationRect;
+
+        switch (event.type)
+        {
+            int x;
+            int y;
+
+        case SDL_MOUSEBUTTONDOWN:
+            x = event.button.x;
+            y = event.button.y;
+            if (x > plant.x && x < plant.x + plant.w && y > plant.y && plant.y + plant.h)
+            {
+                std::cout << "Button Clicked" << std::endl;
+                seed->all("Seed", plant.x, plant.y, "assets/seed1.png");
+            }
+            break;
+        default:
+            break;
+        }
+
+
     }
+
+
 
     for (auto& collider : colliders)
     /* Loops through colliders and draw each collider on screen next */
@@ -265,13 +287,9 @@ void Game::render()
         collider->draw();
     }
 
-    for (auto& item : items)
-    /* Loops through player and draw each player on screen last */
-    {
-        item->draw();
-    }
+    seed->draw();
 
-
+    inventory->draw();
 
     for (auto& player : players)
     /* Loops through player and draw each player on screen last */
@@ -279,53 +297,8 @@ void Game::render()
         player->draw();
     }
 
-    seed->render();
-
     // Add items to render:
     SDL_RenderPresent(renderer);
-
-    //object = new Inventory("assets/farmviewInventory.png");
-
-    /*
-    const Uint8* state = SDL_GetKeyboardState(NULL);
-    if (state[SDL_SCANCODE_I])
-    {
-        object->all();
-    }
-    else
-    {
-
-    }
-    */
-    
-    /*
-    if (event.type == SDL_KEYDOWN)
-    {
-        switch (event.key.keysym.sym)
-        {
-        case SDLK_i:
-            object->all();
-            break;
-        default:
-            break;
-        }
-    }
-
-    if (event.type == SDL_KEYUP)
-    {
-        switch (event.key.keysym.sym)
-        {
-        case SDLK_i:
-            //object->update();
-            //object->render();
-            //SDL_RenderPresent(renderer);
-            break;
-        default:
-            break;
-        }
-    }
-    */
-
 }
 
 

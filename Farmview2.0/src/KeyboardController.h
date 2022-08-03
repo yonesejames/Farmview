@@ -6,8 +6,6 @@
 #include "Components.h"
 #include "Item.h"
 
-class Inventory;
-
 class KeyboardController : public Component
 /* 
     KeyboardController has inherited Component class public parts and 
@@ -32,13 +30,11 @@ public:
     void update() override
     /*
         Function that overrides the "update" function by transforming sprite to 
-        a direction by changing velocity when selecting a key and 
+        a direction by changing velocity when selecting az key and 
         showing an image to the screen based on position.
     */
-    {   
-        Inventory* inventory;
-        inventory = new Inventory("assets/farmviewInventory.png");
-        
+    { 
+        int selectedItemNumber = 0;
         // When key is pressed:
         if (Game::event.type == SDL_KEYDOWN)
         {
@@ -63,12 +59,6 @@ public:
                 sprite->Play("walkRight");
                 // Optional if you have one image facing one way, you can flip the image:
                 //sprite->spriteFlip = SDL_FLIP_HORIZONTAL;
-                break;
-            case SDLK_i:
-                while (SDLK_i)
-                {
-                    inventory->all();
-                }
                 break;
             default:
                 break;
@@ -101,9 +91,6 @@ public:
                 // Optional if you have one image facing one way, you can reset the 
                 // flipped the image:
                 //sprite->spriteFlip = SDL_FLIP_NONE;
-                break;
-            case SDLK_i:
-                inventory->all();
                 break;
             default:
                 break;

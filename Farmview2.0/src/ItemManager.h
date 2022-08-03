@@ -8,6 +8,10 @@
 #include <SDL.h>
 #include <string>
 
+class Inventory;
+
+Inventory itemInventory;
+
 class ItemManager : public Component
 {
 public:
@@ -24,6 +28,13 @@ public:
         Item* tempItem = new Item(new Crop(n, x, y, filePath, (quantity == 0) ? 1 : quantity));
         return tempItem;
     }
+
+    static Item* createItem(std::string n, int x, int y, const char* filePath)
+    {
+        Item* tempItem = new Item(n, x, y, filePath);
+        return tempItem;
+    }
+
 
     static bool equip(Item* itemToEquip, PlayerCharacter* pCharacter)
     {
@@ -165,9 +176,13 @@ public:
         player->getComponent<PlayerComponent>().Inventory.push_back(itemToMove);
 
 
+        //SDL_Texture* texture = TextureManager::loadTexture("assets/seed1.png");
+
+        //itemInventory.movedToInventory(itemToMove, texture);
+
+
         return true;
     }
-
 
 };
 

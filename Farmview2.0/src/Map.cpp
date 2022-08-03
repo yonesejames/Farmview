@@ -5,6 +5,7 @@
 #include "Game.h"
 #include "ECS.h"
 #include "Components.h"
+#include "KeyboardController.h"
 
 
 // Manager object that is defined elsewhere:
@@ -58,7 +59,9 @@ void Map::loadMap(std::string filePath, int sizeX, int sizeY)
 
             // Calls the addTile function: 
             addTile(sourceX, sourceY, x * scaledSize, y * scaledSize);
-            mapFile.ignore();
+            mapFile.ignore();         
+            
+
         }
     }
 

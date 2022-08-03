@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <bitset>
 #include <array>
+#include "Vector.h"
 
 class Item;
 
@@ -130,9 +131,9 @@ public:
     bool getMarkedForDeletion() const;
     ItemDelegate* data;
     Item(ItemDelegate* item) : data(item) {};
-    int xpos;
-    int ypos;
     std::string name;
+    Vector position;
+
 
     Item() {}
 
@@ -142,13 +143,9 @@ public:
 
         name = n;
 
-        xpos = x;
-        ypos = y;
-    }
+        position.x = x;
+        position.y = y;
 
-
-    void update()
-    {
         sourceRect.h = 16;
         sourceRect.w = 16;
         sourceRect.x = 0;
@@ -156,14 +153,53 @@ public:
 
         destinationRect.h = sourceRect.h;
         destinationRect.w = sourceRect.w;
-        destinationRect.x = xpos;
-        destinationRect.y = ypos;
+        destinationRect.x = x;
+        destinationRect.y = y;
+    }
+
+
+    void update()
+    {
+
+        destinationRect.x = position.x - Game::camera.x;
+        destinationRect.y = position.y - Game::camera.y;
 
     }
 
-    void render()
+
+    void draw()
     {
-        SDL_RenderCopy(Game::renderer, itemTexture, &sourceRect, &destinationRect);
+        TextureManager::draw(itemTexture, sourceRect, destinationRect, SDL_FLIP_NONE);
+        //SDL_RenderCopy(Game::renderer, itemTexture, &sourceRect, &destinationRect);
+    }
+
+    void all(std::string n, int x, int y, const char* filePath)
+    {
+        itemTexture = TextureManager::loadTexture(filePath);
+
+        name = n;
+
+        position.x = x;
+        position.y = y;
+
+        sourceRect.h = 16;
+        sourceRect.w = 16;
+        sourceRect.x = 0;
+        sourceRect.y = 0;
+
+        destinationRect.h = sourceRect.h;
+        destinationRect.w = sourceRect.w;
+        destinationRect.x = x;
+        destinationRect.y = y;
+
+        destinationRect.x = position.x - Game::camera.x;
+        destinationRect.y = position.y - Game::camera.y;
+
+
+        TextureManager::draw(itemTexture, sourceRect, destinationRect, SDL_FLIP_NONE);
+
+        SDL_RenderPresent(Game::renderer);
+
     }
 
 private:
@@ -180,57 +216,68 @@ private:
 class Inventory
 {
 public:
-    int screenWidth = 800;
-    int screenHeight = 440;
+    int screenWidth = 1600;
+    int screenHeight = 880;
+    int xpos;
+    int ypos;
 
-    ~Inventory(){}
+    ~Inventory()
+    {
+        SDL_DestroyTexture(inventoryTexture);
+    }
 
-    //Inventory(){}
+    Inventory(){}
 
-    Inventory(const char* texture)
+    Inventory(int x, int y, const char* texture)
     {
         inventoryTexture = TextureManager::loadTexture(texture);
+
+        xpos = x;
+        ypos = y;
     }
 
     void update()
     {
-        sourceRect.h = 100;
-        sourceRect.w = 100;
+        sourceRect.h = 80;
+        sourceRect.w = 80;
         sourceRect.x = 0;
         sourceRect.y = 0;
 
-        destinationRect.w = screenWidth / 2;
-        destinationRect.h = screenHeight / 2;
-        destinationRect.x = 0;
-        destinationRect.y = 0;
+        destinationRect.w = screenWidth;
+        destinationRect.h = screenHeight / 4;
+        destinationRect.x = xpos;
+        destinationRect.y = ypos;
+
+        itemDestinationRect.x = 500;
+        itemDestinationRect.y = 500;
     }
 
-    void render()
+    void draw()
     {
-        SDL_RenderCopy(Game::renderer, inventoryTexture, &sourceRect, &destinationRect);
+        TextureManager::draw(inventoryTexture, sourceRect, destinationRect, SDL_FLIP_NONE);
+        SDL_RenderCopy(Game::renderer, itemTexture, NULL, &itemDestinationRect);
+        //SDL_RenderCopy(Game::renderer, inventoryTexture, &sourceRect, &destinationRect);
     }
 
-    void all()
+    void movedToInventory(Item* itemToMove, const char* texture)
     {
-        sourceRect.h = 100;
-        sourceRect.w = 100;
-        sourceRect.x = 0;
-        sourceRect.y = 0;
+        itemTexture = TextureManager::loadTexture(texture);
 
-        destinationRect.w = screenWidth / 2;
-        destinationRect.h = screenHeight / 2;
-        destinationRect.x = 0;
-        destinationRect.y = 0;
+        itemDestinationRect.x = 500;
+        itemDestinationRect.y = 500;
 
-        SDL_RenderCopy(Game::renderer, inventoryTexture, &sourceRect, &destinationRect);
+        SDL_RenderCopy(Game::renderer, itemTexture, NULL, &itemDestinationRect);
 
         SDL_RenderPresent(Game::renderer);
     }
 
 private:
     SDL_Texture* inventoryTexture;
+    SDL_Texture* itemTexture;
     SDL_Rect inventoryViewport;
     SDL_Rect sourceRect, destinationRect;
+    SDL_Rect itemDestinationRect;
+
 };
 
 #endif
