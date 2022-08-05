@@ -28,7 +28,7 @@ public:
     PlayerComponent();
     ~PlayerComponent();
 
-
+    std::string name;
 
     void init() override
     {
@@ -43,6 +43,16 @@ public:
     void draw() override
     {
 
+    }
+
+    void setName(std::string n)
+    {
+        name = n;
+    }
+
+    std::string getName()
+    {
+        return name;
     }
 
 

@@ -13,6 +13,9 @@
 #include "PlayerComponent.h"
 #include "Item.h"
 #include <SDL_mixer.h>
+#include <SDL_image.h>
+#include <SDL_ttf.h>
+#include <cstdlib>
 
 Map* map;
 Manager manager;
@@ -25,7 +28,7 @@ SDL_Event Game::event;
 SDL_Rect Game::camera = { 0, 0, 1600, 880 };
 
 auto& player(manager.addEntity());
-auto& item(manager.addEntity());
+auto& seeds(manager.addEntity());
 
 bool Game::isRunning = true;
 
@@ -62,6 +65,30 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
     {
         std::cout << "Subsystem Initialized" << std::endl;
 
+        // Image allows you to deal with other image types other than BMP:
+        if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG)
+        {
+            std::cout << "SDL Image Initialization Error: " << IMG_GetError() << std::endl;
+            SDL_Quit();
+            system("pause");
+        }
+
+        // TTF allows you to place text to font for rendering on screen:
+        if (TTF_Init() != 0)
+        {
+            std::cout << "SDL TTF Initialization Error: " << TTF_GetError() << std::endl;
+            SDL_Quit();
+            system("pause");
+        }
+
+        // Mixer allows sound and music:
+        if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) == -1)
+        {
+            std::cout << "SDL Mixer Initialization Error: " << Mix_GetError() << std::endl;
+            SDL_Quit();
+            system("pause");
+        }
+
         // Creates window and prints out success message if completed or error if not: 
         window = SDL_CreateWindow(title, xpos, ypos, width, height, flag);
         if (window)
@@ -70,11 +97,13 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
         } 
         else
         {
-            std::cout << "Window could not be created due to: " << SDL_GetError() << std::endl;
+            std::cout << "SDL Window Error: " << SDL_GetError() << std::endl;
+            SDL_Quit();
+            system("pause");
         }
 
         // Creates renderer and prints out success message if completed or error if not: 
-        renderer = SDL_CreateRenderer(window, -1, 0);
+        renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
         if (renderer)
         {
             LoadScreen::loadScreen("assets/farmviewOpen.bmp", 3000);
@@ -82,7 +111,9 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
         }
         else
         {
-            std::cout << "Renderer could not be created due to: " << SDL_GetError() << std::endl;
+            std::cout << "SDL Renderer Error: " << SDL_GetError() << std::endl;
+            SDL_Quit();
+            system("pause");
         }
     } 
     else
@@ -90,8 +121,9 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
         // If SDL initializes incorrectly then isRunning is set to false:
         isRunning = false;
 
-        std::cout << "SDL could not initialize due to: " << SDL_GetError() << std::endl;
-        
+        std::cout << "SDL Error: " << SDL_GetError() << std::endl;
+        SDL_Quit();
+        system("pause");
     }
 
     map = new Map("assets/farmviewStartingMapTileSet.png", 2, 16);
@@ -99,9 +131,8 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
     //ECS Implementation:
     map->loadMap("assets/farmviewStartingMapTileMap.map", 100, 55);
 
-
     player.addComponent<TransformComponent>();
-    player.addComponent<SpriteComponent>("assets/farmer_animations2.png", true, 64, 64, "Farmer");
+    player.addComponent<SpriteComponent>("assets/farmer_animations2.png", true, 64, 64);
     player.addComponent<KeyboardController>();
     player.addComponent<ColliderComponent>("player");
     player.addGroup(groupPlayers);
@@ -249,45 +280,8 @@ void Game::update()
     inventory = new Inventory(0, 660,"assets/farmviewInventory.png");
     inventory->update();
 
-    for (auto& tile : tiles)
-        /* Loops through tiles and draw each tile on screen first */
-    {
 
-        auto plant = tile->getComponent<TileComponent>().destinationRect;
-
-        auto plantSource = tile->getComponent<TileComponent>().sourceRect;
-
-        switch (event.type)
-        {
-            int x;
-            int y;
-
-        case SDL_MOUSEBUTTONDOWN:
-            x = event.button.x;
-            y = event.button.y;
-            if (x > plant.x && x < plant.x + plant.w && y > plant.y && plant.y + plant.h)
-            {
-                std::cout << "Button Clicked" << std::endl;
-
-
-                seed = new Item("Seed", plant.x, plant.y, "assets/seed1.png");
-                seed->update();
-                seed->draw();
-
-
-                //auto Tile = tile->getComponent<TileComponent>();
-                //Tile = TileComponent(plantSource.x, plantSource.y, plant.x, plant.y, 16, 2, "assets/seed1.png");
-                //Tile.update();
-                //Tile.draw();
-
-
-            }
-            break;
-        default:
-            break;
-        }
-
-    }
+ 
 
 }
 
@@ -320,6 +314,57 @@ void Game::render()
     {
         player->draw();
     }
+
+    for (auto& tile : tiles)
+        //Loops through tiles and draw each tile on screen first
+    {
+        switch (event.type)
+        {
+            int x;
+            int y;
+
+        case SDL_MOUSEBUTTONDOWN:
+            x = event.button.x;
+            y = event.button.y;
+
+
+            auto plant = tile->getComponent<TileComponent>().destinationRect;
+            auto plantSource = tile->getComponent<TileComponent>().sourceRect;
+
+
+
+            if (x >= plant.x && x <= plant.x + plant.w && y >= plant.y && plant.y + plant.h)
+            {
+                std::cout << "Button Clicked" << std::endl;
+
+                auto tile = new TileComponent(plantSource.x, plantSource.y, plant.x, plant.y, 16, 2, "assets/seed1.png");
+                map->addTile(plantSource.x, plantSource.y, plant.x, plant.y);
+                //SDL_RenderClear(renderer);
+                //tile->update();
+                //tile->draw();
+                //SDL_RenderPresent(renderer);
+
+                //auto newTile = seeds.getComponent<TileComponent>();
+                //newTile = TileComponent(plantSource.x, plantSource.y, plant.x, plant.y, 16, 2, "assets/seed1.png");
+                //newTile.update();
+                //newTile.draw();
+
+                //seed = new Item("Seed", plant.x, plant.y, "assets/seed1.png");
+                //seed->update();
+                //seed->draw();
+
+                //auto Tile = tile->getComponent<TileComponent>();
+                //Tile = TileComponent(plantSource.x, plantSource.y, plant.x, plant.y, 16, 2, "assets/seed1.png");
+                //Tile.update();
+                //Tile.draw();
+            }
+            break;
+        default:
+            break;
+        }
+
+    }
+
 
     // Add items to render:
     SDL_RenderPresent(renderer);

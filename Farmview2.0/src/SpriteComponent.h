@@ -27,7 +27,7 @@ public:
     int sizeWidth;
     int sizeHeight;
 
-    std::string name;
+    SDL_Rect sourceRectangle, destinationRectangle;
 
     ~SpriteComponent()
     /* Destructor that destroys the sprite */
@@ -53,7 +53,7 @@ public:
         ypos = y;
     }
 
-    SpriteComponent(const char* filePath, bool isAnimated, int sizeW, int sizeH, std::string n)
+    SpriteComponent(const char* filePath, bool isAnimated, int sizeW, int sizeH)
     /*
         Constructor that takes in a filepath to render the sprite on screen, 
         isAnimated will allow the sprite to animate, int sizeW and sizeH for size of the
@@ -89,8 +89,6 @@ public:
 
         sizeWidth = sizeW;
         sizeHeight = sizeH;
-
-        name = n;
 
     }
 
@@ -158,16 +156,11 @@ public:
         speed = animations[animationName].speed;
     }
 
-    std::string getName()
-    {
-        return name;
-    }
-
 private:
     // Creates "TransformComponent" object:
     TransformComponent* transform;
     SDL_Texture* texture;
-    SDL_Rect sourceRectangle, destinationRectangle;
+
 
     bool animated = false;
     int frames = 0;

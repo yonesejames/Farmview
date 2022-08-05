@@ -6,6 +6,7 @@
 #include "Components.h"
 #include "Item.h"
 
+
 class KeyboardController : public Component
 /* 
     KeyboardController has inherited Component class public parts and 
@@ -96,7 +97,9 @@ public:
                 break;
             }
         }
-     }
+
+    }
+
 };
 
 
