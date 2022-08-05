@@ -77,6 +77,14 @@ public:
         TextureManager::draw(texture, sourceRect, destinationRect, SDL_FLIP_NONE);
     }
 
+    SDL_Rect getTile(int xpos, int ypos)
+    {
+        position.x = xpos;
+        position.y = ypos;
+
+        return destinationRect;
+    }
+
 };
 
 

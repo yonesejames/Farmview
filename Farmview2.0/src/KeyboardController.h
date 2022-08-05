@@ -98,6 +98,20 @@ public:
             }
         }
 
+        if (Game::event.type == SDL_MOUSEBUTTONDOWN)
+        {
+            int x = Game::event.button.x;
+            int y = Game::event.button.y;
+            auto spriteRect = sprite->destinationRectangle;            
+
+            if (x >= spriteRect.x && x <= spriteRect.x + spriteRect.w && y >= spriteRect.y && spriteRect.y + spriteRect.h)
+            {
+                std::cout << "Farmer Clicked" << std::endl;
+            }
+
+
+        }
+
     }
 
 };

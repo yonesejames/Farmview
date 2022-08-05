@@ -36,7 +36,6 @@ void PlayerComponent::cleanupInventory()
     std::for_each(toRemove, Inventory.end(), [](Item* i) { delete i; });
 
     Inventory.erase(toRemove, Inventory.end());
-
 }
 
 EquipmentDelegate* PlayerComponent::getEquippedTool(unsigned long long index)

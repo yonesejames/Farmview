@@ -82,6 +82,7 @@ public:
         animations.emplace("walkRight", walkRight);
         animations.emplace("walkLeft", walkLeft);
 
+
         // When game starts the sprite will show up like this:
         Play("idleForward");
 
@@ -126,6 +127,11 @@ public:
         true and updated sprite by movement using transform.
     */
     {
+
+        if (animated)
+        {
+            sourceRectangle.x = sourceRectangle.w * static_cast<int>((SDL_GetTicks() / speed) % frames);
+        }
 
         if (animated)
         {

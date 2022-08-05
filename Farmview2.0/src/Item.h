@@ -90,8 +90,6 @@ private:
     SDL_Rect sourceRect, destinationRect;
 };
 
-
-
 class EquipmentDelegate : public ItemDelegate
 {
 public:

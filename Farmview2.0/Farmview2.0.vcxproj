@@ -141,6 +141,7 @@
     <ClCompile Include="src\ECS.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\GameObject.cpp" />
+    <ClCompile Include="src\InfoBox.cpp" />
     <ClCompile Include="src\Item.cpp" />
     <ClCompile Include="src\LoadScreen.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="src\Components.h" />
     <ClInclude Include="src\Datatypes.h" />
     <ClInclude Include="src\ECS.h" />
+    <ClInclude Include="src\InfoBox.h" />
     <ClInclude Include="src\Item.h" />
     <ClInclude Include="src\ItemManager.h" />
     <ClInclude Include="src\KeyboardController.h" />

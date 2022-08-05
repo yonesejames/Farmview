@@ -29,9 +29,9 @@ public:
         return tempItem;
     }
 
-    static Item* createItem(std::string n, int x, int y, const char* filePath)
+    static Item* createItem(std::string n, int x, int y, const char* filePath, int16 quantity = 1u)
     {
-        Item* tempItem = new Item(n, x, y, filePath);
+        Item* tempItem = new Item(n, x, y, filePath, (quantity == 0) ? 1 : quantity);
         return tempItem;
     }
 
@@ -184,6 +184,23 @@ public:
         return true;
     }
 
+
+    static bool checkItem(Item* item, Entity* player)
+    {
+        auto inventory = player->getComponent<PlayerComponent>().getInventory();
+        for (int i = 0; i < inventory.size(); i++)
+        {
+            if (!"Seed")
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+    }
 };
 
 

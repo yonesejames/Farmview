@@ -16,11 +16,16 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include <cstdlib>
+#include "InfoBox.h"
 
 Map* map;
+Map* mapTile;
+Map* mapGrass;
 Manager manager;
 Inventory* inventory;
+InfoBox* infobox;
 Item* seed;
+//Item* seed2;
 
 SDL_Renderer* Game::renderer = { nullptr };
 SDL_Event Game::event;
@@ -29,6 +34,7 @@ SDL_Rect Game::camera = { 0, 0, 1600, 880 };
 
 auto& player(manager.addEntity());
 auto& seeds(manager.addEntity());
+auto& crop(manager.addEntity());
 
 bool Game::isRunning = true;
 
@@ -131,12 +137,24 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
     //ECS Implementation:
     map->loadMap("assets/farmviewStartingMapTileMap.map", 100, 55);
 
+    mapTile = new Map("assets/seed.png", 1, 16);
+
+    mapGrass = new Map("assets/grass.png", 1, 16);
+
+    // Setup info box:
+    infobox = new InfoBox();
+
+
     player.addComponent<TransformComponent>();
     player.addComponent<SpriteComponent>("assets/farmer_animations2.png", true, 64, 64);
     player.addComponent<KeyboardController>();
     player.addComponent<ColliderComponent>("player");
     player.addGroup(groupPlayers);
-    player.addComponent<PlayerComponent>(); 
+    player.addComponent<PlayerComponent>();
+
+    crop.addComponent<TransformComponent>(500, 500, 16, 16, 1);
+    crop.addComponent<SpriteComponent>("assets/seed1.png");
+    crop.addGroup(groupItems);
 
     player.addComponent<ItemManager>();
 
@@ -162,20 +180,24 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 
     seed = ItemManager::createCrop("Seed", 0, 0, "assets/seed1.png");
 
-    //seed = ItemManager::createItem("Seed", 0, 0, "assets/seed1.png");
+    //seed2 = ItemManager::createItem("Seed2", 0, 0, "assets/seed1.png");
 
  
     ItemManager::moveToInventory(seed, &player);
+    //ItemManager::moveToInventory(seed2, &player);
     //ItemManager::moveToInventory(ItemManager::createItem("Seed", 0, 0, "assets/seed1.png"), &player);
 
     
-    auto playerInventory = player.getComponent<PlayerComponent>().getInventory();;
-    std::cout << "Inventory: ";
-    for (auto i : playerInventory)
+
+
+    /*
+    for (auto& i : playerInventory)
     {
         std::cout << i->getData()->name << std::endl;
+        std::cout << i->getData() << std::endl;
     }
-
+    */
+    std::cout << "Are there seeds? " << ItemManager::checkItem(seed, &player) << std::endl;;
 }
 
 
@@ -184,6 +206,8 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 auto& tiles(manager.getGroup(Game::groupMap));
 auto& colliders(manager.getGroup(Game::groupColliders));
 auto& players(manager.getGroup(Game::groupPlayers));
+auto& items(manager.getGroup(Game::groupItems));
+
 
 
 void Game::handleEvents()
@@ -204,25 +228,19 @@ void Game::handleEvents()
         break;
     }
 
-
-    /*
-    // While loop that handles events in the queue, so if there are events in queue:
-    while (isRunning)
+    if (event.type == SDL_KEYDOWN)
     {
-
-        switch (event.type)
+        switch (event.key.keysym.scancode)
         {
-        // User requests to quit:
-        case SDL_QUIT:
-            LoadScreen::loadScreen("assets/farmviewExit.bmp", 1000);
-            isRunning = false;
+        case SDL_SCANCODE_ESCAPE:
+            infobox->visible = false;
             break;
         default:
             break;
         }
 
     }
-    */
+
 
 
 }
@@ -280,9 +298,69 @@ void Game::update()
     inventory = new Inventory(0, 660,"assets/farmviewInventory.png");
     inventory->update();
 
+    crop.update();
 
- 
+    auto playerInventory = player.getComponent<PlayerComponent>().getInventory();
+    for (auto i : playerInventory)
+    {
+        if (ItemManager::checkItem(seed, &player) == true)
+        {
 
+            for (auto& tile : tiles)
+            {
+                if (event.type == SDL_MOUSEBUTTONDOWN)
+                {
+
+                    int x = event.button.x;
+                    int y = event.button.y;
+                    auto tileRect = tile->getComponent<TileComponent>().destinationRect;
+                    auto tileRectSource = tile->getComponent<TileComponent>().sourceRect;
+
+                    if (x > tileRect.x && x < tileRect.x + tileRect.w && y > tileRect.y && tileRect.y + tileRect.h)
+                    {
+                        mapTile->loadTile("assets/seed.png", x, y);
+                        std::cout << "Plant Seed" << std::endl;
+
+                        ItemManager::use(seed, &player);
+                    }
+                }
+                else if (event.type == SDL_MOUSEBUTTONUP)
+                {
+
+                }
+            }
+
+        }
+
+        else
+        {
+            if (event.type == SDL_MOUSEBUTTONDOWN)
+            {
+                for (auto& tile : tiles)
+                {
+                    if (event.type == SDL_MOUSEBUTTONDOWN)
+                    {
+                        ItemManager::use(seed, &player);
+                        int x = event.button.x;
+                        int y = event.button.y;
+                        auto tileRect = tile->getComponent<TileComponent>().destinationRect;
+                        auto tileRectSource = tile->getComponent<TileComponent>().sourceRect;
+
+                        if (x > tileRect.x && x < tileRect.x + tileRect.w && y > tileRect.y && tileRect.y + tileRect.h)
+                        {
+                            mapGrass->loadTile("assets/grass.png", x, y);
+                            std::cout << "Cannot plant seed" << std::endl;
+
+                        }
+                    }
+                }
+
+
+            }
+        }
+
+
+    }
 }
 
 
@@ -315,56 +393,16 @@ void Game::render()
         player->draw();
     }
 
-    for (auto& tile : tiles)
-        //Loops through tiles and draw each tile on screen first
+    for (auto& item : items)
+        /* Loops through player and draw each player on screen last */
     {
-        switch (event.type)
-        {
-            int x;
-            int y;
-
-        case SDL_MOUSEBUTTONDOWN:
-            x = event.button.x;
-            y = event.button.y;
-
-
-            auto plant = tile->getComponent<TileComponent>().destinationRect;
-            auto plantSource = tile->getComponent<TileComponent>().sourceRect;
-
-
-
-            if (x >= plant.x && x <= plant.x + plant.w && y >= plant.y && plant.y + plant.h)
-            {
-                std::cout << "Button Clicked" << std::endl;
-
-                auto tile = new TileComponent(plantSource.x, plantSource.y, plant.x, plant.y, 16, 2, "assets/seed1.png");
-                map->addTile(plantSource.x, plantSource.y, plant.x, plant.y);
-                //SDL_RenderClear(renderer);
-                //tile->update();
-                //tile->draw();
-                //SDL_RenderPresent(renderer);
-
-                //auto newTile = seeds.getComponent<TileComponent>();
-                //newTile = TileComponent(plantSource.x, plantSource.y, plant.x, plant.y, 16, 2, "assets/seed1.png");
-                //newTile.update();
-                //newTile.draw();
-
-                //seed = new Item("Seed", plant.x, plant.y, "assets/seed1.png");
-                //seed->update();
-                //seed->draw();
-
-                //auto Tile = tile->getComponent<TileComponent>();
-                //Tile = TileComponent(plantSource.x, plantSource.y, plant.x, plant.y, 16, 2, "assets/seed1.png");
-                //Tile.update();
-                //Tile.draw();
-            }
-            break;
-        default:
-            break;
-        }
-
+        item->draw();
     }
 
+    infobox->setup(Game::renderer);
+    infobox->setText("Welcome to Farmview!");
+
+    infobox->draw();  
 
     // Add items to render:
     SDL_RenderPresent(renderer);

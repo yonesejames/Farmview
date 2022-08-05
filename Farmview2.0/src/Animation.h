@@ -23,6 +23,13 @@ struct Animation
         frames = f;
         speed = s;
     }
+
+    Animation(int i, int f)
+        /* Takes in index, frame, and seconds to show movement */
+    {
+        index = i;
+        frames = f;
+    }
 };
 
 

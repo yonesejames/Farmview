@@ -1,6 +1,13 @@
 #ifndef MAP_H
 #define MAP_H
 
+#include <iostream>
+#include <string>
+#include <fstream>
+#include "Game.h"
+#include "ECS.h"
+#include "Components.h"
+#include "KeyboardController.h"
 
 class Map
 /* Map creates a tiled system for game */
@@ -18,6 +25,8 @@ public:
     // Add tiles on map by taking in the source of the tiles and positioning 
     // them on the x and y axis:
     void addTile(int sourceX, int sourceY, int xpos, int ypos);
+
+    void loadTile(std::string filePath, int xpos, int ypos);
 
 private:
     const char* mapFilePath;

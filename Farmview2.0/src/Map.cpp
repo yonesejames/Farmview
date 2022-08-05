@@ -1,11 +1,4 @@
-#include <iostream>
-#include <string>
-#include <fstream>
 #include "Map.h"
-#include "Game.h"
-#include "ECS.h"
-#include "Components.h"
-#include "KeyboardController.h"
 
 
 // Manager object that is defined elsewhere:
@@ -59,8 +52,7 @@ void Map::loadMap(std::string filePath, int sizeX, int sizeY)
 
             // Calls the addTile function: 
             addTile(sourceX, sourceY, x * scaledSize, y * scaledSize);
-            mapFile.ignore();         
-            
+            mapFile.ignore(); 
 
         }
     }
@@ -86,6 +78,7 @@ void Map::loadMap(std::string filePath, int sizeX, int sizeY)
     }
 
     mapFile.close();
+
     
 }
 
@@ -104,5 +97,13 @@ void Map::addTile(int sourceX, int sourceY, int xpos, int ypos)
     
     // Add tile to the groupMap group:
     tile.addGroup(Game::groupMap);
+
 }
 
+
+void Map::loadTile(std::string filePath, int xpos, int ypos)
+/* Function that takes in file and sizes of the tiles on the x and y axis */
+{
+    addTile(0, 0, xpos, ypos);   
+
+}
