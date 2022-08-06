@@ -28,6 +28,8 @@ public:
 
     void loadTile(std::string filePath, int xpos, int ypos);
 
+    void itemFound();
+
 private:
     const char* mapFilePath;
     int mapScale;

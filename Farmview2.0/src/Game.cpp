@@ -17,12 +17,14 @@
 #include <SDL_ttf.h>
 #include <cstdlib>
 #include "InfoBox.h"
+#include "ItemMenu.h"
+#include "InventoryButton.h"
 
 Map* map;
 Map* mapTile;
 Map* mapGrass;
 Manager manager;
-Inventory* inventory;
+//Inventory* inventory;
 InfoBox* infobox;
 Item* seed;
 //Item* seed2;
@@ -37,6 +39,13 @@ auto& seeds(manager.addEntity());
 auto& crop(manager.addEntity());
 
 bool Game::isRunning = true;
+
+InventoryButton inventoryButton;
+ItemMenu itemMenu;
+
+// Items array: 0 = no item and 1 = seed:
+auto& playerItems = itemMenu.Inventory;
+
 
 
 Game::~Game()
@@ -145,6 +154,18 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
     infobox = new InfoBox();
 
 
+    for (int i = 0; i <= 9; i++)
+    {
+        playerItems[i] = 0;
+    }
+
+    playerItems[0] = 1;
+
+
+    itemMenu.setup(renderer, playerItems, 0, 0);
+    inventoryButton.setup(renderer, {0, 750, 400, 125}, "Inventory");
+    inventoryButton.selected = true;
+
     player.addComponent<TransformComponent>();
     player.addComponent<SpriteComponent>("assets/farmer_animations2.png", true, 64, 64);
     player.addComponent<KeyboardController>();
@@ -187,19 +208,31 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
     //ItemManager::moveToInventory(seed2, &player);
     //ItemManager::moveToInventory(ItemManager::createItem("Seed", 0, 0, "assets/seed1.png"), &player);
 
-    
-
-
-    /*
+   /*
     for (auto& i : playerInventory)
     {
         std::cout << i->getData()->name << std::endl;
         std::cout << i->getData() << std::endl;
     }
     */
-    std::cout << "Are there seeds? " << ItemManager::checkItem(seed, &player) << std::endl;;
+    std::cout << "Are there seeds? " << ItemManager::checkItem(seed, &player) << std::endl;
+
 }
 
+
+void Game::useItem()
+{
+    if (playerItems[itemMenu.selectedItemIndex] == 1)
+    {
+        auto playerPosition = player.getComponent<TransformComponent>().position;
+        seeds.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
+        seeds.addComponent<SpriteComponent>("assets/seed.png");
+        seeds.addGroup(groupItems);
+    }
+
+    playerItems[itemMenu.selectedItemIndex] = 0;
+
+}
 
 
 // Grop creation for tiles, colliders, and players:
@@ -235,14 +268,60 @@ void Game::handleEvents()
         case SDL_SCANCODE_ESCAPE:
             infobox->visible = false;
             break;
+        case SDL_SCANCODE_SPACE:
+            itemMenu.visible = true;
         default:
             break;
         }
 
     }
 
+    if (event.type == SDL_MOUSEBUTTONDOWN)
+    {
+        int x = Game::event.button.x;
+        int y = Game::event.button.y;
+        auto inventoryRect = inventoryButton.buttonRect;
+        auto cancelTexture = itemMenu.cancel;
 
+        if (x >= inventoryRect.x && x <= inventoryRect.x + inventoryRect.w && y >= inventoryRect.y && inventoryRect.y + inventoryRect.h)
+        {
+            itemMenu.visible = true;
+        }
+    }
 
+    if (itemMenu.visible)
+    {
+        switch (event.key.keysym.scancode)
+        {
+        case SDL_SCANCODE_UP:
+            itemMenu.moveUp();
+            break;
+        case SDL_SCANCODE_DOWN:
+            itemMenu.moveDown();
+            break;
+        case SDL_SCANCODE_ESCAPE:
+            itemMenu.visible = false;
+            break;
+        default:
+            break;
+        }
+
+        if (itemMenu.selectedItemIndex == 10 && event.type == SDL_KEYDOWN)
+        {
+            itemMenu.visible = false;
+        }
+        else if (event.type == SDL_KEYDOWN)
+        {
+            switch (event.key.keysym.scancode)
+            {
+            case SDL_SCANCODE_RETURN:
+                useItem();
+                break;
+            default:
+                break;
+            }
+        }
+    }
 }
 
 
@@ -272,8 +351,6 @@ void Game::update()
     camera.x = player.getComponent<TransformComponent>().position.x - 800;
     camera.y = player.getComponent<TransformComponent>().position.y - 440;
 
-
-
     // If statements to ensure that camera does not keep moving outside of the map:
     if (camera.x < 0)
     {
@@ -295,8 +372,8 @@ void Game::update()
     seed = new Item("Seed", 100, 100, "assets/seed1.png");
     seed->update();
 
-    inventory = new Inventory(0, 660,"assets/farmviewInventory.png");
-    inventory->update();
+    //inventory = new Inventory(0, 660,"assets/farmviewInventory.png");
+    //inventory->update();
 
     crop.update();
 
@@ -318,10 +395,14 @@ void Game::update()
 
                     if (x > tileRect.x && x < tileRect.x + tileRect.w && y > tileRect.y && tileRect.y + tileRect.h)
                     {
-                        mapTile->loadTile("assets/seed.png", x, y);
-                        std::cout << "Plant Seed" << std::endl;
+                        //seeds.addComponent<TransformComponent>(x, y, 16, 16, 1);
+                        //seeds.addComponent<SpriteComponent>("assets/seed.png");
+                        //crop.addGroup(groupItems);
 
-                        ItemManager::use(seed, &player);
+                        //mapTile->loadTile("assets/seed.png", x, y);
+                        //std::cout << "Plant Seed" << std::endl;
+
+                        //ItemManager::use(seed, &player);
                     }
                 }
                 else if (event.type == SDL_MOUSEBUTTONUP)
@@ -355,12 +436,13 @@ void Game::update()
                     }
                 }
 
-
             }
         }
 
-
     }
+
+    seeds.update();
+
 }
 
 
@@ -385,13 +467,9 @@ void Game::render()
 
     seed->draw();
 
-    inventory->draw();
+    seeds.draw();
 
-    for (auto& player : players)
-    /* Loops through player and draw each player on screen last */
-    {
-        player->draw();
-    }
+    //inventory->draw();
 
     for (auto& item : items)
         /* Loops through player and draw each player on screen last */
@@ -399,10 +477,21 @@ void Game::render()
         item->draw();
     }
 
+    for (auto& player : players)
+    /* Loops through player and draw each player on screen last */
+    {
+        player->draw();
+    }
+
     infobox->setup(Game::renderer);
     infobox->setText("Welcome to Farmview!");
 
     infobox->draw();  
+
+
+
+    inventoryButton.draw();
+    itemMenu.draw();
 
     // Add items to render:
     SDL_RenderPresent(renderer);

@@ -56,6 +56,8 @@ public:
 
     SDL_Texture* inventoryTexture;
 
+    void useItem();
+
 private:
     SDL_Window* window;
 };

@@ -143,6 +143,8 @@
     <ClCompile Include="src\GameObject.cpp" />
     <ClCompile Include="src\InfoBox.cpp" />
     <ClCompile Include="src\Item.cpp" />
+    <ClCompile Include="src\InventoryButton.cpp" />
+    <ClCompile Include="src\ItemMenu.cpp" />
     <ClCompile Include="src\LoadScreen.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Map.cpp" />
@@ -162,7 +164,9 @@
     <ClInclude Include="src\ECS.h" />
     <ClInclude Include="src\InfoBox.h" />
     <ClInclude Include="src\Item.h" />
+    <ClInclude Include="src\InventoryButton.h" />
     <ClInclude Include="src\ItemManager.h" />
+    <ClInclude Include="src\ItemMenu.h" />
     <ClInclude Include="src\KeyboardController.h" />
     <ClInclude Include="src\LoadScreen.h" />
     <ClInclude Include="src\Map.h" />

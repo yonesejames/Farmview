@@ -47,3 +47,4 @@ EquipmentDelegate* PlayerComponent::getEquippedTool(unsigned long long index)
 
     return (dynamic_cast<Tool*>(EquippedTools[index]->data));
 }
+

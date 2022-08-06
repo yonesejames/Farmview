@@ -77,6 +77,27 @@ void Map::loadMap(std::string filePath, int sizeX, int sizeY)
         }
     }
 
+
+    // Ignore empty line:
+    mapFile.ignore();
+
+    // Nested for loops to go through second paragraph of characters for each line of the file:
+    for (int y = 0; y < sizeY; y++)
+    {
+        for (int x = 0; x < sizeX; x++)
+        {
+            mapFile.get(c);
+            if (c == '1')
+            {
+                auto& seed(manager.addEntity());
+                seed.addComponent<TransformComponent>(x * scaledSize, y * scaledSize, 16, 16, 2);
+                seed.addComponent<SpriteComponent>("assets/chest.png");
+                seed.addGroup(Game::groupItems);
+            }
+
+        }
+    }
+
     mapFile.close();
 
     
@@ -105,5 +126,10 @@ void Map::loadTile(std::string filePath, int xpos, int ypos)
 /* Function that takes in file and sizes of the tiles on the x and y axis */
 {
     addTile(0, 0, xpos, ypos);   
+
+}
+
+void Map::itemFound()
+{
 
 }
