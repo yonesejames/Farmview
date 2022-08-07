@@ -1,11 +1,12 @@
-#ifndef INFOBOX_H
-#define INFOBOX_H
+#ifndef CLOCK_H
+#define CLOCK_H
 
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <string>
+#include <sstream>
 
-class InfoBox
+class Clock
 {
 public:
     SDL_Renderer* renderer;
@@ -17,20 +18,15 @@ public:
 
     bool visible = true;
 
-    InfoBox();
-    ~InfoBox();
+    Clock();
+    ~Clock();
 
     void setup(SDL_Renderer* renderer);
     void setText(std::string text);
 
     void draw();
-
 };
 
 
-
 #endif 
-
-
-
 

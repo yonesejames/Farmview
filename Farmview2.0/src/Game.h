@@ -4,6 +4,8 @@
 #include <SDL.h>
 #include <iostream>
 #include <vector>
+#include <set>
+
 
 // Forward declaration of "ColliderComponent" component:
 class ColliderComponent;
@@ -60,6 +62,13 @@ public:
     void useItem();
 
     void itemFound();
+
+    SDL_TimerID addTimer(Uint32 delay, SDL_TimerCallback callback, void* param);
+    SDL_TimerID addRecurringTimer(Uint32 interval, SDL_TimerCallback callback, void* param);
+    void removeTimer(SDL_TimerID id);
+    std::set<SDL_TimerID> timers;
+
+    std::string time();
 
 
 private:

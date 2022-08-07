@@ -1,7 +1,6 @@
 #include <SDL.h>
 #include "Game.h"
 
-
 Game* game = { nullptr };
 
 int main(int argc, char* argv[])
@@ -18,8 +17,8 @@ int main(int argc, char* argv[])
 
     while (game->running())
     {
-        frameStart = SDL_GetTicks();
-
+        frameStart = SDL_GetTicks();        
+        game->time();
         game->handleEvents();
         game->update();
         game->render();
@@ -30,6 +29,7 @@ int main(int argc, char* argv[])
         {
             SDL_Delay(frameDelay - frameTime);
         }
+
     }
 
     game->close();

@@ -19,6 +19,9 @@
 #include "InfoBox.h"
 #include "ItemMenu.h"
 #include "InventoryButton.h"
+#include "Clock.h"
+#include <sstream>
+#include <iomanip>
 
 Map* map;
 Map* mapTile;
@@ -28,6 +31,7 @@ Manager manager;
 InfoBox* infobox;
 Item* seed;
 //Item* seed2;
+Clock* clockTime;
 
 SDL_Renderer* Game::renderer = { nullptr };
 SDL_Event Game::event;
@@ -61,6 +65,62 @@ Game::Game()
     
 }
 
+SDL_TimerID Game::addTimer(Uint32 delay, SDL_TimerCallback callback, void* param)
+{
+    SDL_TimerID id = SDL_AddTimer(delay, callback, param);
+    timers.insert(id);
+    return id;
+}
+
+SDL_TimerID Game::addRecurringTimer(Uint32 interval, SDL_TimerCallback callback, void* param)
+{
+    SDL_TimerID id = SDL_AddTimer(interval, callback, param);
+    timers.insert(id);
+    
+
+    SDL_Event event;
+    SDL_UserEvent userEvent;
+
+    userEvent.type = SDL_USEREVENT;
+    userEvent.code = 0;
+    userEvent.data1 = NULL;
+    userEvent.data2 = NULL;
+
+    event.type = SDL_USEREVENT;
+    event.user = userEvent;
+
+    SDL_PushEvent(&event);
+    return(interval);
+
+}
+
+std::string Game::time()
+{
+    SDL_Color textColor = { 255, 255, 255, 255 };
+
+    std::stringstream ss;
+
+    int time = SDL_GetTicks();
+    const int seconds = time / 1000;
+    const int minutes = (time / 600) % 600;
+    const int hours = time / 6000;
+
+
+
+    ss.str("");
+    ss << std::setfill('0');
+    ss << std::setw(2) << hours << ':'
+        << std::setw(2) << minutes << ':'
+        << std::setw(2) << seconds;
+
+
+    clockTime->setup(renderer);
+    clockTime->setText(ss.str());
+    clockTime->draw();
+
+    return ss.str();
+
+}
 
 void Game::init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen)
 /* 
@@ -141,6 +201,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
         system("pause");
     }
 
+
     map = new Map("assets/farmviewStartingMapTileSet.png", 2, 16);
 
     //ECS Implementation:
@@ -156,8 +217,9 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
     infobox->setText("Welcome to Farmview!");
     infobox->draw();
 
+    clockTime = new Clock();
 
-    for (int i = 0; i <= 9; i++)
+    for (int i = 0; i < 10; i++)
     {
         playerItems[i] = 0;
     }
@@ -176,12 +238,13 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
     player.addGroup(groupPlayers);
     player.addComponent<PlayerComponent>();
 
+    
     crop.addComponent<TransformComponent>(500, 500, 16, 16, 1);
     crop.addComponent<SpriteComponent>("assets/seed1.png");
     crop.addGroup(groupItems);
 
     player.addComponent<ItemManager>();
-
+    /*
     std::cout << "Player: " << std::endl;
 
     Item* wateringcan = ItemManager::createTool("Watering Can", ToolSlot::RIGHTHAND);
@@ -211,16 +274,18 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
     //ItemManager::moveToInventory(seed2, &player);
     //ItemManager::moveToInventory(ItemManager::createItem("Seed", 0, 0, "assets/seed1.png"), &player);
 
-   /*
+
     for (auto& i : playerInventory)
     {
         std::cout << i->getData()->name << std::endl;
         std::cout << i->getData() << std::endl;
     }
-    */
+
     std::cout << "Are there seeds? " << ItemManager::checkItem(seed, &player) << std::endl;
+   */
 
 }
+
 
 void Game::itemFound()
 {
@@ -395,10 +460,7 @@ void Game::handleEvents()
                 break;
             }
         }
-    }
-
-
-    
+    }   
 
 }
 
@@ -455,6 +517,7 @@ void Game::update()
 
     crop.update();
 
+    /*
     auto playerInventory = player.getComponent<PlayerComponent>().getInventory();
     for (auto i : playerInventory)
     {
@@ -518,7 +581,7 @@ void Game::update()
         }
 
     }
-
+    */
     seeds.update();
 
 }
@@ -570,6 +633,9 @@ void Game::render()
     infobox->setup(renderer);
     infobox->draw();  
 
+    clockTime->setup(renderer);
+    clockTime->draw();
+
     inventoryButton.draw();
     itemMenu.draw();
 
@@ -577,6 +643,18 @@ void Game::render()
     SDL_RenderPresent(renderer);
 }
 
+
+void Game::removeTimer(SDL_TimerID id)
+{
+    if (SDL_RemoveTimer(id) == SDL_FALSE)
+    {
+        std::cout << "Error, timer not removed" << std::endl;
+    }
+    else
+    {
+        timers.erase(id);
+    }
+}
 
 void Game::close()
 /* Function that cleans up any pointers by returning it to memory and quits game */
