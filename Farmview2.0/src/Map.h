@@ -8,11 +8,15 @@
 #include "ECS.h"
 #include "Components.h"
 #include "KeyboardController.h"
+#include "ItemMenu.h"
+#include "InfoBox.h"
+#include <time.h>
 
 class Map
 /* Map creates a tiled system for game */
 {
 public:
+    bool active = true;
     // Destructor destroys map:
     ~Map();
 
@@ -27,8 +31,6 @@ public:
     void addTile(int sourceX, int sourceY, int xpos, int ypos);
 
     void loadTile(std::string filePath, int xpos, int ypos);
-
-    void itemFound();
 
 private:
     const char* mapFilePath;

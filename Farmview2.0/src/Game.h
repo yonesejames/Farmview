@@ -46,7 +46,8 @@ public:
         groupMap,
         groupPlayers,
         groupItems,
-        groupColliders
+        groupColliders,
+        groupChests
     };
 
     enum groupItemLabels : std::size_t
@@ -57,6 +58,9 @@ public:
     SDL_Texture* inventoryTexture;
 
     void useItem();
+
+    void itemFound();
+
 
 private:
     SDL_Window* window;

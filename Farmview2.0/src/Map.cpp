@@ -5,6 +5,7 @@
 extern Manager manager;
 
 
+
 Map::~Map()
 /* Destructor that destroys the map */
 {
@@ -89,10 +90,11 @@ void Map::loadMap(std::string filePath, int sizeX, int sizeY)
             mapFile.get(c);
             if (c == '1')
             {
-                auto& seed(manager.addEntity());
-                seed.addComponent<TransformComponent>(x * scaledSize, y * scaledSize, 16, 16, 2);
-                seed.addComponent<SpriteComponent>("assets/chest.png");
-                seed.addGroup(Game::groupItems);
+                auto& chest(manager.addEntity());
+                chest.addComponent<TransformComponent>(x * scaledSize, y * scaledSize, 16, 16, 2);
+                chest.addComponent<SpriteComponent>("assets/chest.png");
+                chest.addGroup(Game::groupChests);              
+              
             }
 
         }
@@ -129,7 +131,3 @@ void Map::loadTile(std::string filePath, int xpos, int ypos)
 
 }
 
-void Map::itemFound()
-{
-
-}

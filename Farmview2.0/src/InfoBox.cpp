@@ -54,7 +54,6 @@ void InfoBox::setText(std::string text)
         boxRectangle.y = textRectangle.y - 4; // Add 4 pixels of padding
         boxRectangle.w = textRectangle.w + 8; // Add 8 pixels of padding
         boxRectangle.h = textRectangle.h + 8; // Add 8 pixels of padding
-
     }
 }
 

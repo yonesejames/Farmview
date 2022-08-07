@@ -144,7 +144,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
     map = new Map("assets/farmviewStartingMapTileSet.png", 2, 16);
 
     //ECS Implementation:
-    map->loadMap("assets/farmviewStartingMapTileMap.map", 100, 55);
+    map->loadMap("assets/farmviewStartingMapTileMap.map", 100, 55);    
 
     mapTile = new Map("assets/seed.png", 1, 16);
 
@@ -152,6 +152,9 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 
     // Setup info box:
     infobox = new InfoBox();
+    infobox->setup(renderer);
+    infobox->setText("Welcome to Farmview!");
+    infobox->draw();
 
 
     for (int i = 0; i <= 9; i++)
@@ -219,6 +222,40 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 
 }
 
+void Game::itemFound()
+{
+    bool freeSlotFound = false;
+
+    int item = 1;
+
+    for (int i = 0; i < 10; i++)
+    {
+        if (playerItems[i] == 0)
+        {
+            freeSlotFound = true;
+            playerItems[i] = item;
+            break;
+        }
+    }
+
+    if (freeSlotFound)
+    {
+        if (item == 1)
+        {
+            infobox->setup(renderer);
+            infobox->setText("Found Seed!");
+            infobox->draw();
+        }
+    }
+    else
+    {
+        infobox->setup(renderer);
+        infobox->setText("Your bag is full!");
+        infobox->draw();
+    }
+
+    infobox->visible = true;
+}
 
 void Game::useItem()
 {
@@ -228,6 +265,11 @@ void Game::useItem()
         seeds.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
         seeds.addComponent<SpriteComponent>("assets/seed.png");
         seeds.addGroup(groupItems);
+
+        //infobox->setup(renderer);
+        //infobox->setText("Seed has been planted!");
+        //infobox->draw();
+        //SDL_RenderPresent(renderer);
     }
 
     playerItems[itemMenu.selectedItemIndex] = 0;
@@ -240,6 +282,7 @@ auto& tiles(manager.getGroup(Game::groupMap));
 auto& colliders(manager.getGroup(Game::groupColliders));
 auto& players(manager.getGroup(Game::groupPlayers));
 auto& items(manager.getGroup(Game::groupItems));
+auto& chests(manager.getGroup(Game::groupChests));
 
 
 
@@ -278,14 +321,45 @@ void Game::handleEvents()
 
     if (event.type == SDL_MOUSEBUTTONDOWN)
     {
-        int x = Game::event.button.x;
-        int y = Game::event.button.y;
+        int x = event.button.x;
+        int y = event.button.y;
         auto inventoryRect = inventoryButton.buttonRect;
         auto cancelTexture = itemMenu.cancel;
 
         if (x >= inventoryRect.x && x <= inventoryRect.x + inventoryRect.w && y >= inventoryRect.y && inventoryRect.y + inventoryRect.h)
         {
             itemMenu.visible = true;
+        }
+
+        for (auto& chest : chests)
+        {
+                bool active = true;
+                if (active)
+                {
+                    auto& chestRect = chest->getComponent<SpriteComponent>().destinationRectangle;
+                    int j = event.button.x;
+                    int k = event.button.y;
+
+                    if (j >= chestRect.x && j <= chestRect.x + chestRect.w && k >= chestRect.y && k <= chestRect.y + chestRect.h)
+                    {
+                        active = false;
+                        itemFound();
+                        //std::cout << "Seed found!" << std::endl;
+                    }
+                }
+                else
+                {
+                    auto& chestRect = chest->getComponent<SpriteComponent>().destinationRectangle;
+                    int j = event.button.x;
+                    int k = event.button.y;
+
+                    if (j >= chestRect.x && j <= chestRect.x + chestRect.w && k >= chestRect.y && k <= chestRect.y + chestRect.h)
+                    {
+                        std::cout << "Chest is not active!" << std::endl;
+                    }
+
+                }
+
         }
     }
 
@@ -322,6 +396,10 @@ void Game::handleEvents()
             }
         }
     }
+
+
+    
+
 }
 
 
@@ -429,8 +507,8 @@ void Game::update()
 
                         if (x > tileRect.x && x < tileRect.x + tileRect.w && y > tileRect.y && tileRect.y + tileRect.h)
                         {
-                            mapGrass->loadTile("assets/grass.png", x, y);
-                            std::cout << "Cannot plant seed" << std::endl;
+                            //mapGrass->loadTile("assets/grass.png", x, y);
+                            //std::cout << "Cannot plant seed" << std::endl;
 
                         }
                     }
@@ -477,18 +555,20 @@ void Game::render()
         item->draw();
     }
 
+    for (auto& chest : chests)
+        /* Loops through player and draw each player on screen last */
+    {
+        chest->draw();
+    }
+
     for (auto& player : players)
     /* Loops through player and draw each player on screen last */
     {
         player->draw();
     }
 
-    infobox->setup(Game::renderer);
-    infobox->setText("Welcome to Farmview!");
-
+    infobox->setup(renderer);
     infobox->draw();  
-
-
 
     inventoryButton.draw();
     itemMenu.draw();
