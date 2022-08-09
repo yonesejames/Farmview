@@ -175,6 +175,7 @@
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\GameObject.h" />
     <ClInclude Include="src\Menu.h" />
+    <ClInclude Include="src\PlantKeyboardController.h" />
     <ClInclude Include="src\PlayerCharacter.h" />
     <ClInclude Include="src\PlayerComponent.h" />
     <ClInclude Include="src\Pointwell.h" />

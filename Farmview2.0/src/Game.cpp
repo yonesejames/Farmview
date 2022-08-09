@@ -100,11 +100,10 @@ std::string Game::time()
 
     std::stringstream ss;
 
-    int time = SDL_GetTicks();
-    const int seconds = time / 1000;
-    const int minutes = (time / 600) % 600;
-    const int hours = time / 6000;
-
+    int time = SDL_GetTicks() / 500;
+    const int seconds = time % 60;               
+    const int minutes = (time / 60) % 60;
+    const int hours = (time / (60 * 60)) % 24;                                   
 
 
     ss.str("");
@@ -228,7 +227,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 
 
     itemMenu.setup(renderer, playerItems, 0, 0);
-    inventoryButton.setup(renderer, {0, 750, 400, 125}, "Inventory");
+    inventoryButton.setup(renderer, {0, 800, 200, 75}, "Inventory");
     inventoryButton.selected = true;
 
     player.addComponent<TransformComponent>();
@@ -240,7 +239,8 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 
     
     crop.addComponent<TransformComponent>(500, 500, 16, 16, 1);
-    crop.addComponent<SpriteComponent>("assets/seed1.png");
+    crop.addComponent<SpriteComponent>("assets/seedProgression1.png", true);
+    crop.addComponent<PlantKeyboardController>(1, &itemMenu);
     crop.addGroup(groupItems);
 
     player.addComponent<ItemManager>();
@@ -426,6 +426,7 @@ void Game::handleEvents()
                 }
 
         }
+
     }
 
     if (itemMenu.visible)

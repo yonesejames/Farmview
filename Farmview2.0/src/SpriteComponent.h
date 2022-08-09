@@ -14,12 +14,14 @@ class SpriteComponent : public Component
 {
 public:
     int animationIndex = 0;
+    int growthIndex = 0;
 
     // Sorted associative container that contains key-value pairs with unique keys.
     // Implemented by red–black trees (self-balancing binary search tree. 
     // Each node stores an extra bit representing "color" ("red" or "black"), 
     // used to ensure that the tree remains balanced during insertions and deletions):
     std::map<const char*, Animation> animations;
+    std::map<const char*, Animation> growth;
 
     // Flips image:
     SDL_RendererFlip spriteFlip = SDL_FLIP_NONE;
@@ -82,7 +84,6 @@ public:
         animations.emplace("walkRight", walkRight);
         animations.emplace("walkLeft", walkLeft);
 
-
         // When game starts the sprite will show up like this:
         Play("idleForward");
 
@@ -90,6 +91,42 @@ public:
 
         sizeWidth = sizeW;
         sizeHeight = sizeH;
+
+    }
+
+    SpriteComponent(const char* filePath, bool isGrowing)
+        /*
+            Constructor that takes in a filepath to render the sprite on screen,
+            isAnimated will allow the sprite to animate, int sizeW and sizeH for size of the
+            sprite.
+        */
+    {
+        grow = isGrowing;
+
+        /*
+        Animation growing1 = Animation(0, 1, 500);
+        Animation growing2= Animation(1, 1, 500);
+        Animation growing3 = Animation(2, 1, 500);
+        Animation growing4 = Animation(3, 1, 500);
+        Animation growing5 = Animation(4, 1, 500);
+        Animation growing6 = Animation(5, 1, 500);
+
+        growth.emplace("growing1", growing1);
+        growth.emplace("growing2", growing2);
+        growth.emplace("growing3", growing3);
+        growth.emplace("growing4", growing4);
+        growth.emplace("growing5", growing5);
+        growth.emplace("growing6", growing6);
+        */
+
+        Animation growing1 = Animation(0, 6, 500);
+        
+        growth.emplace("growing1", growing1);
+
+        // When game starts the sprite will show up like this:
+        playGrowth("growing1");
+
+        setTexture(filePath);
 
     }
 
@@ -138,6 +175,16 @@ public:
             sourceRectangle.x = sourceRectangle.w * static_cast<int>((SDL_GetTicks() / speed) % frames);
         }
 
+        if (grow)
+        {
+            sourceRectangle.x = sourceRectangle.w * static_cast<int>((SDL_GetTicks() / speed) % frames);
+        }
+
+        if (grow)
+        {
+            sourceRectangle.x = sourceRectangle.w * static_cast<int>((SDL_GetTicks() / speed) % frames);
+        }
+
         sourceRectangle.y = animationIndex * transform->height;
 
         destinationRectangle.x = static_cast<int>(transform->position.x) - Game::camera.x;
@@ -162,13 +209,22 @@ public:
         speed = animations[animationName].speed;
     }
 
+    void playGrowth(const char* growthName)
+        /* Function that plays the animation based on frames, index, and speed */
+    {
+        frames = growth[growthName].frames;
+        growthIndex = growth[growthName].index;
+        speed = growth[growthName].speed;
+    }
+
+
 private:
     // Creates "TransformComponent" object:
     TransformComponent* transform;
     SDL_Texture* texture;
 
-
     bool animated = false;
+    bool grow = false;
     int frames = 0;
     // Delay between frames in milliseconds:
     int speed = 100;

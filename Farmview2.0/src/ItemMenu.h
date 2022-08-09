@@ -21,6 +21,7 @@ public:
 
     bool visible = false;
 
+    ItemMenu(){};
     ~ItemMenu();
 
     void setup(SDL_Renderer* renderer, int* items, int x, int y);

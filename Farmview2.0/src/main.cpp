@@ -10,18 +10,22 @@ int main(int argc, char* argv[])
 
     Uint32 frameStart;
     int frameTime;
+
+    Uint32 delay = (33 / 10) * 10;
     
     game = new Game();
 
     game->init("Farmview", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1600, 880, false);
 
     while (game->running())
-    {
-        frameStart = SDL_GetTicks();        
+    {        
+        frameStart = SDL_GetTicks(); 
         game->time();
+
         game->handleEvents();
         game->update();
         game->render();
+
 
         // Capping frame rate:
         frameTime = SDL_GetTicks() - frameStart;
