@@ -73,7 +73,7 @@ public:
             int y = Game::event.button.y;
             auto spriteRect = sprite->destinationRectangle;
 
-            if (x > spriteRect.x && x < spriteRect.x + spriteRect.w && y > spriteRect.y && spriteRect.y + spriteRect.h)
+            if (x >= spriteRect.x && x <= spriteRect.x + spriteRect.w && y >= spriteRect.y && spriteRect.y + spriteRect.h)
             {
                 std::cout << "Plant clicked" << std::endl;
 
@@ -90,6 +90,8 @@ public:
                 }
 
             }
+
+            sprite->~SpriteComponent();
 
         }
 

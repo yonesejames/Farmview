@@ -141,7 +141,6 @@
     <ClCompile Include="src\Collision.cpp" />
     <ClCompile Include="src\ECS.cpp" />
     <ClCompile Include="src\Game.cpp" />
-    <ClCompile Include="src\GameObject.cpp" />
     <ClCompile Include="src\InfoBox.cpp" />
     <ClCompile Include="src\Item.cpp" />
     <ClCompile Include="src\InventoryButton.cpp" />
@@ -173,12 +172,12 @@
     <ClInclude Include="src\LoadScreen.h" />
     <ClInclude Include="src\Map.h" />
     <ClInclude Include="src\Game.h" />
-    <ClInclude Include="src\GameObject.h" />
     <ClInclude Include="src\Menu.h" />
     <ClInclude Include="src\PlantKeyboardController.h" />
     <ClInclude Include="src\PlayerCharacter.h" />
     <ClInclude Include="src\PlayerComponent.h" />
     <ClInclude Include="src\Pointwell.h" />
+    <ClInclude Include="src\StartScreen.h" />
     <ClInclude Include="src\Statblock.h" />
     <ClInclude Include="src\TileComponent.h" />
     <ClInclude Include="src\TransformComponent.h" />

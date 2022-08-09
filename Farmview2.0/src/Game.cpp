@@ -7,11 +7,9 @@
 #include "Vector.h"
 #include "Collision.h"
 #include <iostream>
-#include "ItemManager.h"
 #include <iostream>
 #include "PlayerCharacter.h"
 #include "PlayerComponent.h"
-#include "Item.h"
 #include <SDL_mixer.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
@@ -27,10 +25,7 @@ Map* map;
 Map* mapTile;
 Map* mapGrass;
 Manager manager;
-//Inventory* inventory;
 InfoBox* infobox;
-Item* seed;
-//Item* seed2;
 Clock* clockTime;
 
 SDL_Renderer* Game::renderer = { nullptr };
@@ -39,7 +34,6 @@ SDL_Event Game::event;
 SDL_Rect Game::camera = { 0, 0, 1600, 880 };
 
 auto& player(manager.addEntity());
-auto& seeds(manager.addEntity());
 auto& crop(manager.addEntity());
 
 bool Game::isRunning = true;
@@ -242,48 +236,6 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
     crop.addComponent<SpriteComponent>("assets/seedProgression1.png", true);
     crop.addComponent<PlantKeyboardController>(1, &itemMenu);
     crop.addGroup(groupItems);
-
-    player.addComponent<ItemManager>();
-    /*
-    std::cout << "Player: " << std::endl;
-
-    Item* wateringcan = ItemManager::createTool("Watering Can", ToolSlot::RIGHTHAND);
-    Item* hoe = ItemManager::createTool("Hoe", ToolSlot::LEFTHAND);
-    Item* upgradedWateringcan = ItemManager::createTool("Upgrade Watering Can", ToolSlot::RIGHTHAND);
-
-    ItemManager::equip(wateringcan, &player);
-    ItemManager::equip(hoe, &player);
-    ItemManager::equip(upgradedWateringcan, &player);
-
-    std::cout << "Tool: " << std::endl;
-    for (int i = 0; i < (int)ToolSlot::NUM_SLOTS; i++)
-    {
-        const Tool* tmp = dynamic_cast<Tool*>(player.getComponent<PlayerComponent>().getEquippedTool(i));
-        if (tmp)
-        {
-            std::cout << tmp->name << std::endl;
-        }
-    }
-
-    seed = ItemManager::createCrop("Seed", 0, 0, "assets/seed1.png");
-
-    //seed2 = ItemManager::createItem("Seed2", 0, 0, "assets/seed1.png");
-
- 
-    ItemManager::moveToInventory(seed, &player);
-    //ItemManager::moveToInventory(seed2, &player);
-    //ItemManager::moveToInventory(ItemManager::createItem("Seed", 0, 0, "assets/seed1.png"), &player);
-
-
-    for (auto& i : playerInventory)
-    {
-        std::cout << i->getData()->name << std::endl;
-        std::cout << i->getData() << std::endl;
-    }
-
-    std::cout << "Are there seeds? " << ItemManager::checkItem(seed, &player) << std::endl;
-   */
-
 }
 
 
@@ -326,15 +278,16 @@ void Game::useItem()
 {
     if (playerItems[itemMenu.selectedItemIndex] == 1)
     {
+        auto& seeds(manager.addEntity());
         auto playerPosition = player.getComponent<TransformComponent>().position;
         seeds.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
-        seeds.addComponent<SpriteComponent>("assets/seed.png");
+        seeds.addComponent<SpriteComponent>("assets/seedProgression1.png", true);
+        seeds.addComponent<PlantKeyboardController>(1, &itemMenu);
         seeds.addGroup(groupItems);
 
-        //infobox->setup(renderer);
-        //infobox->setText("Seed has been planted!");
-        //infobox->draw();
-        //SDL_RenderPresent(renderer);
+        seeds.update();
+        seeds.draw();
+        SDL_RenderPresent(renderer);
     }
 
     playerItems[itemMenu.selectedItemIndex] = 0;
@@ -409,22 +362,9 @@ void Game::handleEvents()
                     {
                         active = false;
                         itemFound();
-                        //std::cout << "Seed found!" << std::endl;
+                        chest->getComponent<SpriteComponent>().~SpriteComponent();
                     }
                 }
-                else
-                {
-                    auto& chestRect = chest->getComponent<SpriteComponent>().destinationRectangle;
-                    int j = event.button.x;
-                    int k = event.button.y;
-
-                    if (j >= chestRect.x && j <= chestRect.x + chestRect.w && k >= chestRect.y && k <= chestRect.y + chestRect.h)
-                    {
-                        std::cout << "Chest is not active!" << std::endl;
-                    }
-
-                }
-
         }
 
     }
@@ -472,7 +412,6 @@ void Game::update()
     // Retrives components for player:
     SDL_Rect playerCollider = player.getComponent<ColliderComponent>().collider;
     Vector playerPosition = player.getComponent<TransformComponent>().position;
-    //Vector itemPosition = item.getComponent<TransformComponent>().position;
 
     // ECS delete dead entities and updates them:
     manager.refresh();
@@ -510,80 +449,9 @@ void Game::update()
         camera.y = camera.h;
     }
 
-    seed = new Item("Seed", 100, 100, "assets/seed1.png");
-    seed->update();
-
-    //inventory = new Inventory(0, 660,"assets/farmviewInventory.png");
-    //inventory->update();
-
     crop.update();
 
-    /*
-    auto playerInventory = player.getComponent<PlayerComponent>().getInventory();
-    for (auto i : playerInventory)
-    {
-        if (ItemManager::checkItem(seed, &player) == true)
-        {
 
-            for (auto& tile : tiles)
-            {
-                if (event.type == SDL_MOUSEBUTTONDOWN)
-                {
-
-                    int x = event.button.x;
-                    int y = event.button.y;
-                    auto tileRect = tile->getComponent<TileComponent>().destinationRect;
-                    auto tileRectSource = tile->getComponent<TileComponent>().sourceRect;
-
-                    if (x > tileRect.x && x < tileRect.x + tileRect.w && y > tileRect.y && tileRect.y + tileRect.h)
-                    {
-                        //seeds.addComponent<TransformComponent>(x, y, 16, 16, 1);
-                        //seeds.addComponent<SpriteComponent>("assets/seed.png");
-                        //crop.addGroup(groupItems);
-
-                        //mapTile->loadTile("assets/seed.png", x, y);
-                        //std::cout << "Plant Seed" << std::endl;
-
-                        //ItemManager::use(seed, &player);
-                    }
-                }
-                else if (event.type == SDL_MOUSEBUTTONUP)
-                {
-
-                }
-            }
-
-        }
-
-        else
-        {
-            if (event.type == SDL_MOUSEBUTTONDOWN)
-            {
-                for (auto& tile : tiles)
-                {
-                    if (event.type == SDL_MOUSEBUTTONDOWN)
-                    {
-                        ItemManager::use(seed, &player);
-                        int x = event.button.x;
-                        int y = event.button.y;
-                        auto tileRect = tile->getComponent<TileComponent>().destinationRect;
-                        auto tileRectSource = tile->getComponent<TileComponent>().sourceRect;
-
-                        if (x > tileRect.x && x < tileRect.x + tileRect.w && y > tileRect.y && tileRect.y + tileRect.h)
-                        {
-                            //mapGrass->loadTile("assets/grass.png", x, y);
-                            //std::cout << "Cannot plant seed" << std::endl;
-
-                        }
-                    }
-                }
-
-            }
-        }
-
-    }
-    */
-    seeds.update();
 
 }
 
@@ -606,10 +474,6 @@ void Game::render()
     {
         collider->draw();
     }
-
-    seed->draw();
-
-    seeds.draw();
 
     //inventory->draw();
 

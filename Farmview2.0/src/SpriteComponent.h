@@ -210,7 +210,7 @@ public:
     }
 
     void playGrowth(const char* growthName)
-        /* Function that plays the animation based on frames, index, and speed */
+    /* Function that plays the animation based on frames, index, and speed */
     {
         frames = growth[growthName].frames;
         growthIndex = growth[growthName].index;
