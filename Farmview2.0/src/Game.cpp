@@ -20,6 +20,8 @@
 #include "Clock.h"
 #include <sstream>
 #include <iomanip>
+#include <stdlib.h> 
+#include <time.h> 
 
 Map* map;
 Map* mapTile;
@@ -88,7 +90,7 @@ SDL_TimerID Game::addRecurringTimer(Uint32 interval, SDL_TimerCallback callback,
 
 }
 
-std::string Game::time()
+std::string Game::timer()
 {
     SDL_Color textColor = { 255, 255, 255, 255 };
 
@@ -233,8 +235,8 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 
     
     crop.addComponent<TransformComponent>(500, 500, 16, 16, 1);
-    crop.addComponent<SpriteComponent>("assets/seedProgression1.png", true);
-    crop.addComponent<PlantKeyboardController>(1, &itemMenu);
+    crop.addComponent<SpriteComponent>("assets/tomatoGrowth.png", true, 4);
+    crop.addComponent<PlantKeyboardController>(4, &itemMenu);
     crop.addGroup(groupItems);
 }
 
@@ -242,8 +244,9 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 void Game::itemFound()
 {
     bool freeSlotFound = false;
+    srand(time(NULL));
 
-    int item = 1;
+    int item = rand() % 22 + 1;
 
     for (int i = 0; i < 10; i++)
     {
@@ -257,10 +260,16 @@ void Game::itemFound()
 
     if (freeSlotFound)
     {
-        if (item == 1)
+        if (item % 2 == 0)
         {
             infobox->setup(renderer);
             infobox->setText("Found Seed!");
+            infobox->draw();
+        }
+        if (item % 2 != 0)
+        {
+            infobox->setup(renderer);
+            infobox->setText("Found Crop!");
             infobox->draw();
         }
     }
@@ -278,17 +287,332 @@ void Game::useItem()
 {
     if (playerItems[itemMenu.selectedItemIndex] == 1)
     {
-        auto& seeds(manager.addEntity());
+        auto& carrot(manager.addEntity());
 
         auto playerPosition = player.getComponent<TransformComponent>().position;
 
-        seeds.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
-        seeds.addComponent<SpriteComponent>("assets/seedProgression1.png", true);
-        seeds.addComponent<PlantKeyboardController>(1, &itemMenu);
-        seeds.addGroup(groupItems);
+        carrot.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
+        carrot.addComponent<SpriteComponent>("assets/carrot.png");
+        carrot.addComponent<PlantKeyboardController>(1, &itemMenu);
+        carrot.addGroup(groupItems);
 
-        seeds.update();
-        seeds.draw();
+        carrot.update();
+        carrot.draw();
+        SDL_RenderPresent(renderer);
+    }
+    if (playerItems[itemMenu.selectedItemIndex] == 2)
+    {
+        auto& carrotSeed(manager.addEntity());
+
+        auto playerPosition = player.getComponent<TransformComponent>().position;
+
+        carrotSeed.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
+        carrotSeed.addComponent<SpriteComponent>("assets/carrotGrowth.png", true, 2);
+        carrotSeed.addComponent<PlantKeyboardController>(1, &itemMenu);
+        carrotSeed.addGroup(groupItems);
+
+        carrotSeed.update();
+        carrotSeed.draw();
+        SDL_RenderPresent(renderer);
+    }
+    if (playerItems[itemMenu.selectedItemIndex] == 3)
+    {
+        auto& tomato(manager.addEntity());
+
+        auto playerPosition = player.getComponent<TransformComponent>().position;
+
+        tomato.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
+        tomato.addComponent<SpriteComponent>("assets/tomato.png");
+        tomato.addComponent<PlantKeyboardController>(1, &itemMenu);
+        tomato.addGroup(groupItems);
+
+        tomato.update();
+        tomato.draw();
+        SDL_RenderPresent(renderer);
+    }
+    if (playerItems[itemMenu.selectedItemIndex] == 4)
+    {
+        auto& tomatoSeed(manager.addEntity());
+
+        auto playerPosition = player.getComponent<TransformComponent>().position;
+
+        tomatoSeed.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
+        tomatoSeed.addComponent<SpriteComponent>("assets/tomatoGrowth.png", true, 2);
+        tomatoSeed.addComponent<PlantKeyboardController>(1, &itemMenu);
+        tomatoSeed.addGroup(groupItems);
+
+        tomatoSeed.update();
+        tomatoSeed.draw();
+        SDL_RenderPresent(renderer);
+    }
+    if (playerItems[itemMenu.selectedItemIndex] == 5)
+    {
+        auto& strawberry(manager.addEntity());
+
+        auto playerPosition = player.getComponent<TransformComponent>().position;
+
+        strawberry.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
+        strawberry.addComponent<SpriteComponent>("assets/strawberry.png");
+        strawberry.addComponent<PlantKeyboardController>(1, &itemMenu);
+        strawberry.addGroup(groupItems);
+
+        strawberry.update();
+        strawberry.draw();
+        SDL_RenderPresent(renderer);
+    }
+    if (playerItems[itemMenu.selectedItemIndex] == 6)
+    {
+        auto& strawberrySeed(manager.addEntity());
+
+        auto playerPosition = player.getComponent<TransformComponent>().position;
+
+        strawberrySeed.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
+        strawberrySeed.addComponent<SpriteComponent>("assets/carrotGrowth.png", true, 2);
+        strawberrySeed.addComponent<PlantKeyboardController>(1, &itemMenu);
+        strawberrySeed.addGroup(groupItems);
+
+        strawberrySeed.update();
+        strawberrySeed.draw();
+        SDL_RenderPresent(renderer);
+    }
+    if (playerItems[itemMenu.selectedItemIndex] == 7)
+    {
+        auto& pumpkin(manager.addEntity());
+
+        auto playerPosition = player.getComponent<TransformComponent>().position;
+
+        pumpkin.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
+        pumpkin.addComponent<SpriteComponent>("assets/pumpkin.png");
+        pumpkin.addComponent<PlantKeyboardController>(1, &itemMenu);
+        pumpkin.addGroup(groupItems);
+
+        pumpkin.update();
+        pumpkin.draw();
+        SDL_RenderPresent(renderer);
+    }
+    if (playerItems[itemMenu.selectedItemIndex] == 8)
+    {
+        auto& pumpkinSeed(manager.addEntity());
+
+        auto playerPosition = player.getComponent<TransformComponent>().position;
+
+        pumpkinSeed.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
+        pumpkinSeed.addComponent<SpriteComponent>("assets/pumpkinGrowth.png", true, 2);
+        pumpkinSeed.addComponent<PlantKeyboardController>(1, &itemMenu);
+        pumpkinSeed.addGroup(groupItems);
+
+        pumpkinSeed.update();
+        pumpkinSeed.draw();
+        SDL_RenderPresent(renderer);
+    }
+    if (playerItems[itemMenu.selectedItemIndex] == 9)
+    {
+        auto& corn(manager.addEntity());
+
+        auto playerPosition = player.getComponent<TransformComponent>().position;
+
+        corn.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
+        corn.addComponent<SpriteComponent>("assets/corn.png");
+        corn.addComponent<PlantKeyboardController>(1, &itemMenu);
+        corn.addGroup(groupItems);
+
+        corn.update();
+        corn.draw();
+        SDL_RenderPresent(renderer);
+    }
+    if (playerItems[itemMenu.selectedItemIndex] == 10)
+    {
+        auto& cornSeed(manager.addEntity());
+
+        auto playerPosition = player.getComponent<TransformComponent>().position;
+
+        cornSeed.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
+        cornSeed.addComponent<SpriteComponent>("assets/cornGrowth.png", true, 2);
+        cornSeed.addComponent<PlantKeyboardController>(1, &itemMenu);
+        cornSeed.addGroup(groupItems);
+
+        cornSeed.update();
+        cornSeed.draw();
+        SDL_RenderPresent(renderer);
+    }
+    if (playerItems[itemMenu.selectedItemIndex] == 11)
+    {
+        auto& potato(manager.addEntity());
+
+        auto playerPosition = player.getComponent<TransformComponent>().position;
+
+        potato.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
+        potato.addComponent<SpriteComponent>("assets/potato.png");
+        potato.addComponent<PlantKeyboardController>(1, &itemMenu);
+        potato.addGroup(groupItems);
+
+        potato.update();
+        potato.draw();
+        SDL_RenderPresent(renderer);
+    }
+    if (playerItems[itemMenu.selectedItemIndex] == 12)
+    {
+        auto& potatoSeed(manager.addEntity());
+
+        auto playerPosition = player.getComponent<TransformComponent>().position;
+
+        potatoSeed.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
+        potatoSeed.addComponent<SpriteComponent>("assets/potatoGrowth.png", true, 2);
+        potatoSeed.addComponent<PlantKeyboardController>(1, &itemMenu);
+        potatoSeed.addGroup(groupItems);
+
+        potatoSeed.update();
+        potatoSeed.draw();
+        SDL_RenderPresent(renderer);
+    }
+    if (playerItems[itemMenu.selectedItemIndex] == 13)
+    {
+        auto& watermelon(manager.addEntity());
+
+        auto playerPosition = player.getComponent<TransformComponent>().position;
+
+        watermelon.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
+        watermelon.addComponent<SpriteComponent>("assets/watermelon.png");
+        watermelon.addComponent<PlantKeyboardController>(1, &itemMenu);
+        watermelon.addGroup(groupItems);
+
+        watermelon.update();
+        watermelon.draw();
+        SDL_RenderPresent(renderer);
+    }
+    if (playerItems[itemMenu.selectedItemIndex] == 14)
+    {
+        auto& watermelonSeed(manager.addEntity());
+
+        auto playerPosition = player.getComponent<TransformComponent>().position;
+
+        watermelonSeed.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
+        watermelonSeed.addComponent<SpriteComponent>("assets/watermelonGrowth.png", true, 2);
+        watermelonSeed.addComponent<PlantKeyboardController>(1, &itemMenu);
+        watermelonSeed.addGroup(groupItems);
+
+        watermelonSeed.update();
+        watermelonSeed.draw();
+        SDL_RenderPresent(renderer);
+    }
+    if (playerItems[itemMenu.selectedItemIndex] == 15)
+    {
+        auto& radish(manager.addEntity());
+
+        auto playerPosition = player.getComponent<TransformComponent>().position;
+
+        radish.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
+        radish.addComponent<SpriteComponent>("assets/radish.png");
+        radish.addComponent<PlantKeyboardController>(1, &itemMenu);
+        radish.addGroup(groupItems);
+
+        radish.update();
+        radish.draw();
+        SDL_RenderPresent(renderer);
+    }
+    if (playerItems[itemMenu.selectedItemIndex] == 16)
+    {
+        auto& radishSeed(manager.addEntity());
+
+        auto playerPosition = player.getComponent<TransformComponent>().position;
+
+        radishSeed.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
+        radishSeed.addComponent<SpriteComponent>("assets/radishGrowth.png", true, 2);
+        radishSeed.addComponent<PlantKeyboardController>(1, &itemMenu);
+        radishSeed.addGroup(groupItems);
+
+        radishSeed.update();
+        radishSeed.draw();
+        SDL_RenderPresent(renderer);
+    }
+    if (playerItems[itemMenu.selectedItemIndex] == 17)
+    {
+        auto& lettuce(manager.addEntity());
+
+        auto playerPosition = player.getComponent<TransformComponent>().position;
+
+        lettuce.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
+        lettuce.addComponent<SpriteComponent>("assets/lettuce.png");
+        lettuce.addComponent<PlantKeyboardController>(1, &itemMenu);
+        lettuce.addGroup(groupItems);
+
+        lettuce.update();
+        lettuce.draw();
+        SDL_RenderPresent(renderer);
+    }
+    if (playerItems[itemMenu.selectedItemIndex] == 18)
+    {
+        auto& lettuceSeed(manager.addEntity());
+
+        auto playerPosition = player.getComponent<TransformComponent>().position;
+
+        lettuceSeed.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
+        lettuceSeed.addComponent<SpriteComponent>("assets/lettuceGrowth.png", true, 2);
+        lettuceSeed.addComponent<PlantKeyboardController>(1, &itemMenu);
+        lettuceSeed.addGroup(groupItems);
+
+        lettuceSeed.update();
+        lettuceSeed.draw();
+        SDL_RenderPresent(renderer);
+    }
+    if (playerItems[itemMenu.selectedItemIndex] == 19)
+    {
+        auto& wheat(manager.addEntity());
+
+        auto playerPosition = player.getComponent<TransformComponent>().position;
+
+        wheat.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
+        wheat.addComponent<SpriteComponent>("assets/wheat.png");
+        wheat.addComponent<PlantKeyboardController>(1, &itemMenu);
+        wheat.addGroup(groupItems);
+
+        wheat.update();
+        wheat.draw();
+        SDL_RenderPresent(renderer);
+    }
+    if (playerItems[itemMenu.selectedItemIndex] == 20)
+    {
+        auto& wheatSeed(manager.addEntity());
+
+        auto playerPosition = player.getComponent<TransformComponent>().position;
+
+        wheatSeed.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
+        wheatSeed.addComponent<SpriteComponent>("assets/wheatGrowth.png", true, 2);
+        wheatSeed.addComponent<PlantKeyboardController>(1, &itemMenu);
+        wheatSeed.addGroup(groupItems);
+
+        wheatSeed.update();
+        wheatSeed.draw();
+        SDL_RenderPresent(renderer);
+    }
+    if (playerItems[itemMenu.selectedItemIndex] == 21)
+    {
+        auto& plum(manager.addEntity());
+
+        auto playerPosition = player.getComponent<TransformComponent>().position;
+
+        plum.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
+        plum.addComponent<SpriteComponent>("assets/plum.png");
+        plum.addComponent<PlantKeyboardController>(1, &itemMenu);
+        plum.addGroup(groupItems);
+
+        plum.update();
+        plum.draw();
+        SDL_RenderPresent(renderer);
+    }
+    if (playerItems[itemMenu.selectedItemIndex] == 22)
+    {
+        auto& plumSeed(manager.addEntity());
+
+        auto playerPosition = player.getComponent<TransformComponent>().position;
+
+        plumSeed.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
+        plumSeed.addComponent<SpriteComponent>("assets/plumGrowth.png", true, 2);
+        plumSeed.addComponent<PlantKeyboardController>(1, &itemMenu);
+        plumSeed.addGroup(groupItems);
+
+        plumSeed.update();
+        plumSeed.draw();
         SDL_RenderPresent(renderer);
     }
 

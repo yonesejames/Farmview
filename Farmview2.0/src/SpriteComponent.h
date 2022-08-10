@@ -15,6 +15,7 @@ class SpriteComponent : public Component
 public:
     int animationIndex = 0;
     int growthIndex = 0;
+    int item = 0;
 
     // Sorted associative container that contains key-value pairs with unique keys.
     // Implemented by red–black trees (self-balancing binary search tree. 
@@ -94,7 +95,7 @@ public:
 
     }
 
-    SpriteComponent(const char* filePath, bool isGrowing)
+    SpriteComponent(const char* filePath, bool isGrowing, int i)
     /*
         Constructor that takes in a filepath to render the sprite on screen,
         isAnimated will allow the sprite to animate, int sizeW and sizeH for size of the
@@ -103,14 +104,130 @@ public:
     {
         grow = isGrowing;
 
-        Animation growing1 = Animation(0, 6, 500);
-        
-        growth.emplace("growing1", growing1);
+        if (i == 2)
+        {
+            Animation carrotGrowth = Animation(0, 6, 500);
 
-        // When game starts the sprite will show up like this:
-        playGrowth("growing1");
+            growth.emplace("carrotGrowth", carrotGrowth);
 
-        setTexture(filePath);
+            // When game starts the sprite will show up like this:
+            playGrowth("carrotGrowth");
+
+            setTexture(filePath);
+            
+        }
+        if (i == 4)
+        {
+            Animation tomatoGrowth = Animation(0, 6, 500);
+
+            growth.emplace("tomatoGrowth", tomatoGrowth);
+
+            // When game starts the sprite will show up like this:
+            playGrowth("tomatoGrowth");
+
+            setTexture(filePath);
+
+        }
+        if (i == 6)
+        {
+            Animation strawberryGrowth = Animation(0, 6, 500);
+
+            growth.emplace("strawberryGrowth", strawberryGrowth);
+
+            // When game starts the sprite will show up like this:
+            playGrowth("strawberryGrowth");
+
+            setTexture(filePath);
+
+        }
+        if (i == 8)
+        {
+            Animation pumpkinGrowth = Animation(0, 6, 500);
+
+            growth.emplace("pumpkinGrowth", pumpkinGrowth);
+
+            // When game starts the sprite will show up like this:
+            playGrowth("pumpkinGrowth");
+
+            setTexture(filePath);
+        }
+        if (i == 10)
+        {
+            Animation cornGrowth = Animation(0, 6, 500);
+
+            growth.emplace("cornGrowth", cornGrowth);
+
+            // When game starts the sprite will show up like this:
+            playGrowth("cornGrowth");
+
+            setTexture(filePath);
+        }
+        if (i == 12)
+        {
+            Animation potatoGrowth = Animation(0, 6, 500);
+
+            growth.emplace("potatoGrowth", potatoGrowth);
+
+            // When game starts the sprite will show up like this:
+            playGrowth("potatoGrowth");
+
+            setTexture(filePath);
+        }
+        if (i == 14)
+        {
+            Animation watermelonGrowth = Animation(0, 6, 500);
+
+            growth.emplace("watermelonGrowth", watermelonGrowth);
+
+            // When game starts the sprite will show up like this:
+            playGrowth("watermelonGrowth");
+
+            setTexture(filePath);
+        }
+        if (i == 16)
+        {
+            Animation radishGrowth = Animation(0, 6, 500);
+
+            growth.emplace("radishGrowth", radishGrowth);
+
+            // When game starts the sprite will show up like this:
+            playGrowth("radishGrowth");
+
+            setTexture(filePath);
+        }
+        if (i == 18)
+        {
+            Animation lettuceGrowth = Animation(0, 6, 500);
+
+            growth.emplace("lettuceGrowth", lettuceGrowth);
+
+            // When game starts the sprite will show up like this:
+            playGrowth("lettuceGrowth");
+
+            setTexture(filePath);
+        }
+        if (i == 20)
+        {
+            Animation wheatGrowth = Animation(0, 6, 500);
+
+            growth.emplace("wheatGrowth", wheatGrowth);
+
+            // When game starts the sprite will show up like this:
+            playGrowth("wheatGrowth");
+
+            setTexture(filePath);
+        }
+        if (i == 22)
+        {
+            Animation plumGrowth = Animation(0, 6, 500);
+
+            growth.emplace("plumGrowth", plumGrowth);
+
+            // When game starts the sprite will show up like this:
+            playGrowth("plumGrowth");
+
+            setTexture(filePath);
+        }
 
     }
 

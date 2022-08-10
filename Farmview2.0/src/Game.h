@@ -68,7 +68,7 @@ public:
     void removeTimer(SDL_TimerID id);
     std::set<SDL_TimerID> timers;
 
-    std::string time();
+    std::string timer();
 
 
 private:

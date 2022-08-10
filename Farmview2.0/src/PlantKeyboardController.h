@@ -38,7 +38,7 @@ public:
          
     }
 
-    PlantKeyboardController(int x, int y, int w, int h, int s, int i)
+    PlantKeyboardController(int x, int y, int w, int h, int s, int i, ItemMenu* im)
     {
         transform->position.x = x;
         transform->position.y = y;
@@ -47,6 +47,7 @@ public:
         transform->scale = s;
 
         item = i;
+        itemMenu = im;
 
     }
 
