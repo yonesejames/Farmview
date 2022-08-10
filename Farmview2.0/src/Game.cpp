@@ -367,7 +367,7 @@ void Game::useItem()
         auto playerPosition = player.getComponent<TransformComponent>().position;
 
         strawberrySeed.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
-        strawberrySeed.addComponent<SpriteComponent>("assets/carrotGrowth.png", true, 2);
+        strawberrySeed.addComponent<SpriteComponent>("assets/strawberryGrowth.png", true, 2);
         strawberrySeed.addComponent<PlantKeyboardController>(1, &itemMenu);
         strawberrySeed.addGroup(groupItems);
 
@@ -735,6 +735,7 @@ void Game::handleEvents()
 void Game::update()
 /* Function that updates based on any changes (updates continously) */
 {
+    std::cout << SDL_GetTicks() << std::endl;
     // Retrives components for player:
     SDL_Rect playerCollider = player.getComponent<ColliderComponent>().collider;
     Vector playerPosition = player.getComponent<TransformComponent>().position;
@@ -776,8 +777,6 @@ void Game::update()
     }
 
     crop.update();
-
-
 
 }
 

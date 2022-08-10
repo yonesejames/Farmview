@@ -79,27 +79,35 @@ public:
                 std::cout << "Plant clicked" << std::endl;
 
                 bool freeSlotFound = false;
+
                 for (int i = 0; i < 10; i++)
                 {
                     if (itemMenu->Inventory[i] == 0)
                     {
-                        freeSlotFound = true;
-                        itemMenu->Inventory[i] = item;
-                        std::cout << "Inside for loop" << std::endl;
-                        break;
+                        if (sprite->readyToPick == true && item % 2 == 0)
+                        {
+                            int& newItem = item;
+                            newItem = newItem - 1;
+                            freeSlotFound = true;
+                            itemMenu->Inventory[i] = item;
+                            std::cout << "Inside for loop" << std::endl;
+                            break;
+                        }
+                        else
+                        {
+                            freeSlotFound = true;
+                            itemMenu->Inventory[i] = item;
+                            std::cout << "Inside for loop" << std::endl;
+                            break;
+                        }
+
                     }
                 }
 
                 sprite->~SpriteComponent();
-
             }
-
-
-
         }
-
     }
-
 };
 
 

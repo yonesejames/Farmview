@@ -16,6 +16,9 @@ public:
     int animationIndex = 0;
     int growthIndex = 0;
     int item = 0;
+    bool readyToPick = false;
+    //PlantKeyboardController* pKC;
+    //ItemMenu* itemMenu;
 
     // Sorted associative container that contains key-value pairs with unique keys.
     // Implemented by red–black trees (self-balancing binary search tree. 
@@ -232,21 +235,21 @@ public:
     }
 
     void setTexture(const char* filePath)
-    /* Function that creates a texture from filePath */
+        /* Function that creates a texture from filePath */
     {
         texture = TextureManager::loadTexture(filePath);
     }
 
     void init() override
-    /*
-        Function that overrides the "init" function by creating a transform object, 
-        initializing the source's size and position of the sprite and the size of 
-        the destination.
-    */
+        /*
+            Function that overrides the "init" function by creating a transform object,
+            initializing the source's size and position of the sprite and the size of
+            the destination.
+        */
     {
         // Transform assigns a referenced entity to the TransformComponent:
         transform = &entity->getComponent<TransformComponent>();
-    
+
         // Initializing source size:
         sourceRectangle.x = 0;
         sourceRectangle.y = 0;
@@ -260,30 +263,64 @@ public:
     }
 
     void update() override
-    /*
-        Function that overrides the "update" function by animating sprite if animated is
-        true and updated sprite by movement using transform.
-    */
+        /*
+            Function that overrides the "update" function by animating sprite if animated is
+            true and updated sprite by movement using transform.
+        */
     {
 
         if (animated)
         {
             sourceRectangle.x = sourceRectangle.w * static_cast<int>((SDL_GetTicks() / speed) % frames);
-        }
-
-        if (animated)
-        {
-            sourceRectangle.x = sourceRectangle.w * static_cast<int>((SDL_GetTicks() / speed) % frames);
+            
         }
 
         if (grow)
         {
-            sourceRectangle.x = sourceRectangle.w * static_cast<int>((SDL_GetTicks() / speed) % frames);
-        }
+            auto currentTime = SDL_GetTicks();
+            auto firstGrowth = SDL_GetTicks() + 10000;
+            auto secondGrowth = SDL_GetTicks() + 20000;
+            auto thirdGrowth = SDL_GetTicks() + 30000;
+            auto fourthGrowth = SDL_GetTicks() + 40000;
+            auto fifthGrowth = SDL_GetTicks() + 50000;
+            auto sixthGrowth = SDL_GetTicks() + 60000;
 
-        if (grow)
-        {
-            sourceRectangle.x = sourceRectangle.w * static_cast<int>((SDL_GetTicks() / speed) % frames);
+            if (currentTime > 0)
+            {
+                sourceRectangle.x = sourceRectangle.w * 0;
+            }
+            if (currentTime > 6000)
+            {
+                sourceRectangle.x = sourceRectangle.w * 1;
+            }
+            if (currentTime > 8000)
+            {
+                sourceRectangle.x = sourceRectangle.w * 2;
+            }
+            if (currentTime > 10000)
+            {
+                sourceRectangle.x = sourceRectangle.w * 3;
+            }
+            if (currentTime > 12000)
+            {
+                sourceRectangle.x = sourceRectangle.w * 4;
+            }
+            if (currentTime > 14000)
+            {
+                sourceRectangle.x = sourceRectangle.w * 5;
+
+                readyToPick = true;
+                
+            }
+
+            //sourceRectangle.x = sourceRectangle.w * static_cast<int>((SDL_GetTicks() / speed) % frames);
+            
+            sourceRectangle.y = animationIndex * transform->height;
+
+            destinationRectangle.x = static_cast<int>(transform->position.x) - Game::camera.x;
+            destinationRectangle.y = static_cast<int>(transform->position.y) - Game::camera.y;
+            destinationRectangle.w = transform->width * transform->scale;
+            destinationRectangle.h = transform->height * transform->scale;
         }
 
         sourceRectangle.y = animationIndex * transform->height;
@@ -292,6 +329,7 @@ public:
         destinationRectangle.y = static_cast<int>(transform->position.y) - Game::camera.y;
         destinationRectangle.w = transform->width * transform->scale;
         destinationRectangle.h = transform->height * transform->scale;
+
     }
 
     void draw() override
@@ -317,7 +355,6 @@ public:
         growthIndex = growth[growthName].index;
         speed = growth[growthName].speed;
     }
-
 
 private:
     // Creates "TransformComponent" object:
