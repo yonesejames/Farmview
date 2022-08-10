@@ -95,29 +95,13 @@ public:
     }
 
     SpriteComponent(const char* filePath, bool isGrowing)
-        /*
-            Constructor that takes in a filepath to render the sprite on screen,
-            isAnimated will allow the sprite to animate, int sizeW and sizeH for size of the
-            sprite.
-        */
+    /*
+        Constructor that takes in a filepath to render the sprite on screen,
+        isAnimated will allow the sprite to animate, int sizeW and sizeH for size of the
+        sprite.
+    */
     {
         grow = isGrowing;
-
-        /*
-        Animation growing1 = Animation(0, 1, 500);
-        Animation growing2= Animation(1, 1, 500);
-        Animation growing3 = Animation(2, 1, 500);
-        Animation growing4 = Animation(3, 1, 500);
-        Animation growing5 = Animation(4, 1, 500);
-        Animation growing6 = Animation(5, 1, 500);
-
-        growth.emplace("growing1", growing1);
-        growth.emplace("growing2", growing2);
-        growth.emplace("growing3", growing3);
-        growth.emplace("growing4", growing4);
-        growth.emplace("growing5", growing5);
-        growth.emplace("growing6", growing6);
-        */
 
         Animation growing1 = Animation(0, 6, 500);
         

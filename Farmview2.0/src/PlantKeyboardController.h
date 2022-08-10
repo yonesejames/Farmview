@@ -89,9 +89,11 @@ public:
                     }
                 }
 
+                sprite->~SpriteComponent();
+
             }
 
-            sprite->~SpriteComponent();
+
 
         }
 

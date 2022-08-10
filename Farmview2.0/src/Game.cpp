@@ -279,7 +279,9 @@ void Game::useItem()
     if (playerItems[itemMenu.selectedItemIndex] == 1)
     {
         auto& seeds(manager.addEntity());
+
         auto playerPosition = player.getComponent<TransformComponent>().position;
+
         seeds.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
         seeds.addComponent<SpriteComponent>("assets/seedProgression1.png", true);
         seeds.addComponent<PlantKeyboardController>(1, &itemMenu);
