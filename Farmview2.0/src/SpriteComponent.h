@@ -17,6 +17,14 @@ public:
     int growthIndex = 0;
     int item = 0;
     bool readyToPick = false;
+
+    int firstGrowth = SDL_GetTicks() + 10000;
+    int secondGrowth = SDL_GetTicks() + 20000;
+    int thirdGrowth = SDL_GetTicks() + 30000;
+    int fourthGrowth = SDL_GetTicks() + 40000;
+    int fifthGrowth = SDL_GetTicks() + 50000;
+    int sixthGrowth = SDL_GetTicks() + 60000;
+
     //PlantKeyboardController* pKC;
     //ItemMenu* itemMenu;
 
@@ -278,38 +286,36 @@ public:
         if (grow)
         {
             auto currentTime = SDL_GetTicks();
-            auto firstGrowth = SDL_GetTicks() + 10000;
-            auto secondGrowth = SDL_GetTicks() + 20000;
-            auto thirdGrowth = SDL_GetTicks() + 30000;
-            auto fourthGrowth = SDL_GetTicks() + 40000;
-            auto fifthGrowth = SDL_GetTicks() + 50000;
-            auto sixthGrowth = SDL_GetTicks() + 60000;
 
-            if (currentTime > 0)
+            if (currentTime > firstGrowth)
             {
                 sourceRectangle.x = sourceRectangle.w * 0;
+                readyToPick = false;
             }
-            if (currentTime > 6000)
+            if (currentTime > secondGrowth)
             {
                 sourceRectangle.x = sourceRectangle.w * 1;
+                readyToPick = false;
             }
-            if (currentTime > 8000)
+            if (currentTime > thirdGrowth)
             {
                 sourceRectangle.x = sourceRectangle.w * 2;
+                readyToPick = false;
             }
-            if (currentTime > 10000)
+            if (currentTime > fourthGrowth)
             {
                 sourceRectangle.x = sourceRectangle.w * 3;
+                readyToPick = false;
             }
-            if (currentTime > 12000)
+            if (currentTime > fifthGrowth)
             {
                 sourceRectangle.x = sourceRectangle.w * 4;
+                readyToPick = false;
             }
-            if (currentTime > 14000)
+            if (currentTime > sixthGrowth)
             {
                 sourceRectangle.x = sourceRectangle.w * 5;
-
-                readyToPick = true;
+                checkReady();
                 
             }
 
@@ -354,6 +360,14 @@ public:
         frames = growth[growthName].frames;
         growthIndex = growth[growthName].index;
         speed = growth[growthName].speed;
+    }
+
+    void checkReady()
+    {
+        if (sourceRectangle.x == sourceRectangle.w * 5)
+        {
+            readyToPick = true;
+        }
     }
 
 private:

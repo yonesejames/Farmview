@@ -22,6 +22,7 @@
 #include <iomanip>
 #include <stdlib.h> 
 #include <time.h> 
+#include "LifeBar.h"
 
 Map* map;
 Map* mapTile;
@@ -29,6 +30,8 @@ Map* mapGrass;
 Manager manager;
 InfoBox* infobox;
 Clock* clockTime;
+
+LifeBar farmerLifeBar;
 
 SDL_Renderer* Game::renderer = { nullptr };
 SDL_Event Game::event;
@@ -212,6 +215,8 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
     infobox->setText("Welcome to Farmview!");
     infobox->draw();
 
+    farmerLifeBar.setup(renderer, 300, 810, 700, 810);
+
     clockTime = new Clock();
 
     for (int i = 0; i < 10; i++)
@@ -220,6 +225,9 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
     }
 
     playerItems[0] = 1;
+    playerItems[1] = 3;
+    playerItems[2] = 5;
+    playerItems[3] = 7;
 
 
     itemMenu.setup(renderer, playerItems, 0, 0);
@@ -238,6 +246,9 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
     crop.addComponent<SpriteComponent>("assets/tomatoGrowth.png", true, 4);
     crop.addComponent<PlantKeyboardController>(4, &itemMenu);
     crop.addGroup(groupItems);
+
+    player.getComponent<PlayerComponent>().takeDamageHunger(10);
+
 }
 
 
@@ -247,6 +258,140 @@ void Game::itemFound()
     srand(time(NULL));
 
     int item = rand() % 22 + 1;
+    /*
+    if (item == 1)
+    {
+        auto& carrot(manager.addEntity());        
+        carrot.addComponent<PlantKeyboardController>();
+        carrot.getComponent<PlantKeyboardController>().item = 1;
+    }
+    if (item == 2)
+    {
+        auto& carrotSeed(manager.addEntity());
+        carrotSeed.addComponent<PlantKeyboardController>();
+        carrotSeed.getComponent<PlantKeyboardController>().item = 2;
+    }
+    if (item == 3)
+    {
+        auto& tomato(manager.addEntity());
+        tomato.addComponent<PlantKeyboardController>();
+        tomato.getComponent<PlantKeyboardController>().item = 3;
+    }
+    if (item == 4)
+    {
+        auto& tomatoSeed(manager.addEntity());
+        tomatoSeed.addComponent<PlantKeyboardController>(); 
+        tomatoSeed.getComponent<PlantKeyboardController>().item = 4;
+    }
+    if (item == 5)
+    {
+        auto& strawberry(manager.addEntity());
+        strawberry.addComponent<PlantKeyboardController>();
+        strawberry.getComponent<PlantKeyboardController>().item = 5;
+    }
+    if (item == 6)
+    {
+        auto& strawberrySeed(manager.addEntity());
+        strawberrySeed.addComponent<PlantKeyboardController>(); 
+        strawberrySeed.getComponent<PlantKeyboardController>().item = 6;
+    }
+    if (item == 7)
+    {
+        auto& pumpkin(manager.addEntity());
+        pumpkin.addComponent<PlantKeyboardController>();
+        pumpkin.getComponent<PlantKeyboardController>().item = 7;
+    }
+    if (item == 8)
+    {
+        auto& pumpkinSeed(manager.addEntity());
+        pumpkinSeed.addComponent<PlantKeyboardController>();
+        pumpkinSeed.getComponent<PlantKeyboardController>().item = 8;
+    }
+    if (item == 9)
+    {
+        auto& corn(manager.addEntity());
+        corn.addComponent<PlantKeyboardController>();
+        corn.getComponent<PlantKeyboardController>().item = 9;
+    }
+    if (item == 10)
+    {
+        auto& cornSeed(manager.addEntity());
+        cornSeed.addComponent<PlantKeyboardController>();
+        cornSeed.getComponent<PlantKeyboardController>().item = 10;
+    }
+    if (item == 11)
+    {
+        auto& potato(manager.addEntity());
+        potato.addComponent<PlantKeyboardController>();
+        potato.getComponent<PlantKeyboardController>().item = 11;
+    }
+    if (item == 12)
+    {
+        auto& potatoSeed(manager.addEntity());
+        potatoSeed.addComponent<PlantKeyboardController>();
+        potatoSeed.getComponent<PlantKeyboardController>().item = 12;
+    }
+    if (item == 13)
+    {
+        auto& watermelon(manager.addEntity());
+        watermelon.addComponent<PlantKeyboardController>();
+        watermelon.getComponent<PlantKeyboardController>().item = 13;
+    }
+    if (item == 14)
+    {
+        auto& watermelonSeed(manager.addEntity());
+        watermelonSeed.addComponent<PlantKeyboardController>(); 
+        watermelonSeed.getComponent<PlantKeyboardController>().item = 14;
+    }
+    if (item == 15)
+    {
+        auto& radish(manager.addEntity());
+        radish.addComponent<PlantKeyboardController>();
+        radish.getComponent<PlantKeyboardController>().item = 15;
+    }
+    if (item == 16)
+    {
+        auto& radishSeed(manager.addEntity());
+        radishSeed.addComponent<PlantKeyboardController>();
+        radishSeed.getComponent<PlantKeyboardController>().item = 16;
+    }
+    if (item == 17)
+    {
+        auto& lettuce(manager.addEntity());
+        lettuce.addComponent<PlantKeyboardController>();
+        lettuce.getComponent<PlantKeyboardController>().item = 17;
+    }
+    if (item == 18)
+    {
+        auto& lettuceSeed(manager.addEntity());
+        lettuceSeed.addComponent<PlantKeyboardController>();
+        lettuceSeed.getComponent<PlantKeyboardController>().item = 18;
+    }
+    if (item == 19)
+    {
+        auto& wheat(manager.addEntity());
+        wheat.addComponent<PlantKeyboardController>();
+        wheat.getComponent<PlantKeyboardController>().item = 19;
+    }
+    if (item == 20)
+    {
+        auto& wheatSeed(manager.addEntity());
+        wheatSeed.addComponent<PlantKeyboardController>();
+        wheatSeed.getComponent<PlantKeyboardController>().item = 20;
+    }
+    if (item == 21)
+    {
+        auto& plum(manager.addEntity());
+        plum.addComponent<PlantKeyboardController>();
+        plum.getComponent<PlantKeyboardController>().item = 21;
+    }
+    if (item == 22)
+    {
+        auto& plumSeed(manager.addEntity());
+        plumSeed.addComponent<PlantKeyboardController>();
+        plumSeed.getComponent<PlantKeyboardController>().item = 22;
+    }
+    */
 
     for (int i = 0; i < 10; i++)
     {
@@ -308,7 +453,7 @@ void Game::useItem()
 
         carrotSeed.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
         carrotSeed.addComponent<SpriteComponent>("assets/carrotGrowth.png", true, 2);
-        carrotSeed.addComponent<PlantKeyboardController>(1, &itemMenu);
+        carrotSeed.addComponent<PlantKeyboardController>(2, &itemMenu);
         carrotSeed.addGroup(groupItems);
 
         carrotSeed.update();
@@ -323,12 +468,13 @@ void Game::useItem()
 
         tomato.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
         tomato.addComponent<SpriteComponent>("assets/tomato.png");
-        tomato.addComponent<PlantKeyboardController>(1, &itemMenu);
+        tomato.addComponent<PlantKeyboardController>(3, &itemMenu);
         tomato.addGroup(groupItems);
 
         tomato.update();
         tomato.draw();
         SDL_RenderPresent(renderer);
+
     }
     if (playerItems[itemMenu.selectedItemIndex] == 4)
     {
@@ -338,7 +484,7 @@ void Game::useItem()
 
         tomatoSeed.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
         tomatoSeed.addComponent<SpriteComponent>("assets/tomatoGrowth.png", true, 2);
-        tomatoSeed.addComponent<PlantKeyboardController>(1, &itemMenu);
+        tomatoSeed.addComponent<PlantKeyboardController>(4, &itemMenu);
         tomatoSeed.addGroup(groupItems);
 
         tomatoSeed.update();
@@ -353,7 +499,7 @@ void Game::useItem()
 
         strawberry.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
         strawberry.addComponent<SpriteComponent>("assets/strawberry.png");
-        strawberry.addComponent<PlantKeyboardController>(1, &itemMenu);
+        strawberry.addComponent<PlantKeyboardController>(5, &itemMenu);
         strawberry.addGroup(groupItems);
 
         strawberry.update();
@@ -368,7 +514,7 @@ void Game::useItem()
 
         strawberrySeed.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
         strawberrySeed.addComponent<SpriteComponent>("assets/strawberryGrowth.png", true, 2);
-        strawberrySeed.addComponent<PlantKeyboardController>(1, &itemMenu);
+        strawberrySeed.addComponent<PlantKeyboardController>(6, &itemMenu);
         strawberrySeed.addGroup(groupItems);
 
         strawberrySeed.update();
@@ -383,7 +529,7 @@ void Game::useItem()
 
         pumpkin.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
         pumpkin.addComponent<SpriteComponent>("assets/pumpkin.png");
-        pumpkin.addComponent<PlantKeyboardController>(1, &itemMenu);
+        pumpkin.addComponent<PlantKeyboardController>(7, &itemMenu);
         pumpkin.addGroup(groupItems);
 
         pumpkin.update();
@@ -398,7 +544,7 @@ void Game::useItem()
 
         pumpkinSeed.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
         pumpkinSeed.addComponent<SpriteComponent>("assets/pumpkinGrowth.png", true, 2);
-        pumpkinSeed.addComponent<PlantKeyboardController>(1, &itemMenu);
+        pumpkinSeed.addComponent<PlantKeyboardController>(8, &itemMenu);
         pumpkinSeed.addGroup(groupItems);
 
         pumpkinSeed.update();
@@ -413,7 +559,7 @@ void Game::useItem()
 
         corn.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
         corn.addComponent<SpriteComponent>("assets/corn.png");
-        corn.addComponent<PlantKeyboardController>(1, &itemMenu);
+        corn.addComponent<PlantKeyboardController>(9, &itemMenu);
         corn.addGroup(groupItems);
 
         corn.update();
@@ -428,7 +574,7 @@ void Game::useItem()
 
         cornSeed.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
         cornSeed.addComponent<SpriteComponent>("assets/cornGrowth.png", true, 2);
-        cornSeed.addComponent<PlantKeyboardController>(1, &itemMenu);
+        cornSeed.addComponent<PlantKeyboardController>(10, &itemMenu);
         cornSeed.addGroup(groupItems);
 
         cornSeed.update();
@@ -443,7 +589,7 @@ void Game::useItem()
 
         potato.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
         potato.addComponent<SpriteComponent>("assets/potato.png");
-        potato.addComponent<PlantKeyboardController>(1, &itemMenu);
+        potato.addComponent<PlantKeyboardController>(11, &itemMenu);
         potato.addGroup(groupItems);
 
         potato.update();
@@ -458,7 +604,7 @@ void Game::useItem()
 
         potatoSeed.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
         potatoSeed.addComponent<SpriteComponent>("assets/potatoGrowth.png", true, 2);
-        potatoSeed.addComponent<PlantKeyboardController>(1, &itemMenu);
+        potatoSeed.addComponent<PlantKeyboardController>(12, &itemMenu);
         potatoSeed.addGroup(groupItems);
 
         potatoSeed.update();
@@ -473,7 +619,7 @@ void Game::useItem()
 
         watermelon.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
         watermelon.addComponent<SpriteComponent>("assets/watermelon.png");
-        watermelon.addComponent<PlantKeyboardController>(1, &itemMenu);
+        watermelon.addComponent<PlantKeyboardController>(13, &itemMenu);
         watermelon.addGroup(groupItems);
 
         watermelon.update();
@@ -488,7 +634,7 @@ void Game::useItem()
 
         watermelonSeed.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
         watermelonSeed.addComponent<SpriteComponent>("assets/watermelonGrowth.png", true, 2);
-        watermelonSeed.addComponent<PlantKeyboardController>(1, &itemMenu);
+        watermelonSeed.addComponent<PlantKeyboardController>(14, &itemMenu);
         watermelonSeed.addGroup(groupItems);
 
         watermelonSeed.update();
@@ -503,7 +649,7 @@ void Game::useItem()
 
         radish.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
         radish.addComponent<SpriteComponent>("assets/radish.png");
-        radish.addComponent<PlantKeyboardController>(1, &itemMenu);
+        radish.addComponent<PlantKeyboardController>(15, &itemMenu);
         radish.addGroup(groupItems);
 
         radish.update();
@@ -518,7 +664,7 @@ void Game::useItem()
 
         radishSeed.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
         radishSeed.addComponent<SpriteComponent>("assets/radishGrowth.png", true, 2);
-        radishSeed.addComponent<PlantKeyboardController>(1, &itemMenu);
+        radishSeed.addComponent<PlantKeyboardController>(16, &itemMenu);
         radishSeed.addGroup(groupItems);
 
         radishSeed.update();
@@ -533,7 +679,7 @@ void Game::useItem()
 
         lettuce.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
         lettuce.addComponent<SpriteComponent>("assets/lettuce.png");
-        lettuce.addComponent<PlantKeyboardController>(1, &itemMenu);
+        lettuce.addComponent<PlantKeyboardController>(17, &itemMenu);
         lettuce.addGroup(groupItems);
 
         lettuce.update();
@@ -548,7 +694,7 @@ void Game::useItem()
 
         lettuceSeed.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
         lettuceSeed.addComponent<SpriteComponent>("assets/lettuceGrowth.png", true, 2);
-        lettuceSeed.addComponent<PlantKeyboardController>(1, &itemMenu);
+        lettuceSeed.addComponent<PlantKeyboardController>(18, &itemMenu);
         lettuceSeed.addGroup(groupItems);
 
         lettuceSeed.update();
@@ -563,7 +709,7 @@ void Game::useItem()
 
         wheat.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
         wheat.addComponent<SpriteComponent>("assets/wheat.png");
-        wheat.addComponent<PlantKeyboardController>(1, &itemMenu);
+        wheat.addComponent<PlantKeyboardController>(19, &itemMenu);
         wheat.addGroup(groupItems);
 
         wheat.update();
@@ -578,7 +724,7 @@ void Game::useItem()
 
         wheatSeed.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
         wheatSeed.addComponent<SpriteComponent>("assets/wheatGrowth.png", true, 2);
-        wheatSeed.addComponent<PlantKeyboardController>(1, &itemMenu);
+        wheatSeed.addComponent<PlantKeyboardController>(20, &itemMenu);
         wheatSeed.addGroup(groupItems);
 
         wheatSeed.update();
@@ -593,7 +739,7 @@ void Game::useItem()
 
         plum.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
         plum.addComponent<SpriteComponent>("assets/plum.png");
-        plum.addComponent<PlantKeyboardController>(1, &itemMenu);
+        plum.addComponent<PlantKeyboardController>(21, &itemMenu);
         plum.addGroup(groupItems);
 
         plum.update();
@@ -608,7 +754,7 @@ void Game::useItem()
 
         plumSeed.addComponent<TransformComponent>(playerPosition.x, playerPosition.y, 16, 16, 1);
         plumSeed.addComponent<SpriteComponent>("assets/plumGrowth.png", true, 2);
-        plumSeed.addComponent<PlantKeyboardController>(1, &itemMenu);
+        plumSeed.addComponent<PlantKeyboardController>(22, &itemMenu);
         plumSeed.addGroup(groupItems);
 
         plumSeed.update();
@@ -620,6 +766,27 @@ void Game::useItem()
 
 }
 
+void Game::eatCrop(int item)
+{
+    int hunger = player.getComponent<PlayerComponent>().getHunger();
+    bool freeSlotFound = false;
+
+    if (hunger < 100)
+    {
+        player.getComponent<PlayerComponent>().eat(10);
+    }
+    else if (hunger == 100)
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            freeSlotFound = true;
+            playerItems[i] = item;
+            std::cout << "Inside for loop" << std::endl;
+            break;
+        }
+    }
+    
+}
 
 // Grop creation for tiles, colliders, and players:
 auto& tiles(manager.getGroup(Game::groupMap));
@@ -692,6 +859,36 @@ void Game::handleEvents()
                     }
                 }
         }
+        /*
+        for (auto& item : items)
+        {
+            auto plantRect = item->getComponent<SpriteComponent>().destinationRectangle;
+            auto itemNumber = item->getComponent<PlantKeyboardController>().item;
+
+            if (x >= plantRect.x && x <= plantRect.x + plantRect.w && y >= plantRect.y && plantRect.y + plantRect.h)
+            {
+                std::cout << "Plant clicked" << std::endl;
+
+                bool freeSlotFound = false;
+
+                for (int i = 0; i < 10; i++)
+                {
+                    if (playerItems[i] == 0)
+                    {
+                        freeSlotFound = true;
+                        playerItems[i] = itemNumber;
+                        std::cout << itemNumber << std::endl;
+                        break;
+                    }
+
+                }
+
+                item->getComponent<SpriteComponent>().~SpriteComponent();
+            }
+
+        }
+        */       
+
 
     }
 
@@ -735,7 +932,6 @@ void Game::handleEvents()
 void Game::update()
 /* Function that updates based on any changes (updates continously) */
 {
-    std::cout << SDL_GetTicks() << std::endl;
     // Retrives components for player:
     SDL_Rect playerCollider = player.getComponent<ColliderComponent>().collider;
     Vector playerPosition = player.getComponent<TransformComponent>().position;
@@ -778,6 +974,8 @@ void Game::update()
 
     crop.update();
 
+    farmerLifeBar.hunger = player.getComponent<PlayerComponent>().getHunger();
+    farmerLifeBar.sleepy = player.getComponent<PlayerComponent>().getSleep();
 }
 
 
@@ -828,6 +1026,8 @@ void Game::render()
 
     inventoryButton.draw();
     itemMenu.draw();
+
+    farmerLifeBar.draw();
 
     // Add items to render:
     SDL_RenderPresent(renderer);

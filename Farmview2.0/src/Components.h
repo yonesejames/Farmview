@@ -9,6 +9,7 @@
 #include "ColliderComponent.h"
 #include "TileComponent.h"
 #include "PlantKeyboardController.h"
+#include "PlayerComponent.h"
 
 
 #endif

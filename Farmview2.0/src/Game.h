@@ -70,6 +70,8 @@ public:
 
     std::string timer();
 
+    void eatCrop(int item);
+
 
 private:
     SDL_Window* window;

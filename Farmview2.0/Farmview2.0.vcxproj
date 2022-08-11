@@ -145,6 +145,7 @@
     <ClCompile Include="src\Item.cpp" />
     <ClCompile Include="src\InventoryButton.cpp" />
     <ClCompile Include="src\ItemMenu.cpp" />
+    <ClCompile Include="src\LifeBar.cpp" />
     <ClCompile Include="src\LoadScreen.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Map.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="src\ItemManager.h" />
     <ClInclude Include="src\ItemMenu.h" />
     <ClInclude Include="src\KeyboardController.h" />
+    <ClInclude Include="src\LifeBar.h" />
     <ClInclude Include="src\LoadScreen.h" />
     <ClInclude Include="src\Map.h" />
     <ClInclude Include="src\Game.h" />

@@ -2,6 +2,7 @@
 #define PLAYERCOMPONENT_H
 
 
+#include "Game.h"
 #include <SDL.h>
 #include "Components.h"
 #include "Datatypes.h"
@@ -30,6 +31,11 @@ public:
 
     std::string name;
 
+    int hunger = 100;
+    int hungerMax = 100;
+    int sleepy = 100;
+    int sleepyMax = 100;
+
     void init() override
     {
 
@@ -53,6 +59,44 @@ public:
     std::string getName()
     {
         return name;
+    }
+    
+    int getHunger()
+    {
+        return hunger;
+    }
+
+    int getSleep()
+    {
+        return sleepy;
+    }
+
+    int takeDamageHunger(int damage)
+    {
+        return hunger = hunger - damage;
+    }
+
+    int takeDamageSleepy(int damage)
+    {
+        return sleepy = sleepy - damage;
+    }
+
+    void eat(int amount)
+    {
+        hunger += amount;
+        if (hunger > hungerMax)
+        {
+            hunger = hungerMax;
+        }
+    }
+
+    void sleep(int amount)
+    {
+        sleepy += amount;
+        if (sleepy > sleepyMax)
+        {
+            sleepy = sleepyMax;
+        }
     }
 
 

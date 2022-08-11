@@ -6,18 +6,17 @@
 #include "Components.h"
 #include "ItemMenu.h"
 
-
 class PlantKeyboardController : public Component
-    /*
-        KeyboardController has inherited Component class public parts and
-        controls what happens when a key is selected on keyboard.
-    */
+/*
+    PlantKeyboardController has inherited Component class public parts and
+    controls what happens when a key is selected on keyboard.
+*/
 {
 public:
-    // Creates "TransformComponent" object:
     TransformComponent* transform;
     SpriteComponent* sprite;
     ItemMenu* itemMenu;
+    Game* game;
 
     int xpos;
     int ypos;
@@ -52,21 +51,21 @@ public:
     }
 
     void init() override
-        /*
-            Function that overrides "init" function by grabbing the entity components
-            from both transform and sprite.
-        */
+    /*
+        Function that overrides "init" function by grabbing the entity components
+        from both transform and sprite.
+    */
     {
         transform = &entity->getComponent<TransformComponent>();
         sprite = &entity->getComponent<SpriteComponent>();
     }
 
     void update() override
-        /*
-            Function that overrides the "update" function by transforming sprite to
-            a direction by changing velocity when selecting az key and
-            showing an image to the screen based on position.
-        */
+    /*
+        Function that overrides the "update" function by transforming sprite to
+        a direction by changing velocity when selecting az key and
+        showing an image to the screen based on position.
+    */
     {        
         if (Game::event.type == SDL_MOUSEBUTTONDOWN)
         {
@@ -81,7 +80,7 @@ public:
                 bool freeSlotFound = false;
 
                 for (int i = 0; i < 10; i++)
-                {
+                { 
                     if (itemMenu->Inventory[i] == 0)
                     {
                         if (sprite->readyToPick == true && item % 2 == 0)
@@ -102,6 +101,7 @@ public:
                         }
 
                     }
+                
                 }
 
                 sprite->~SpriteComponent();
