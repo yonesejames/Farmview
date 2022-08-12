@@ -1,9 +1,11 @@
 #include "Clock.h"
 
-Clock::Clock()
+Clock::Clock(int x, int y)
 /* Constructor that loads font in 16 size */
 {
     font = TTF_OpenFont("assets/Walkway_SemiBold.ttf", 48);
+    this->x = x;
+    this->y = y;
 }
 
 Clock::~Clock()
@@ -46,8 +48,8 @@ void Clock::setText(std::string text)
         SDL_QueryTexture(textTexture, NULL, NULL, &textRectangle.w, &textRectangle.h);
 
         // Work out how to center the text on the screen:
-        textRectangle.x = 1400 - textRectangle.w / 2; // Half screen - half width
-        textRectangle.y = 50  - textRectangle.h / 2; // Half screen - half height
+        textRectangle.x = x - textRectangle.w / 2; // Half screen - half width
+        textRectangle.y = y  - textRectangle.h / 2; // Half screen - half height
 
         // Work out box rectangle with some padding:
         boxRectangle.x = textRectangle.x - 4; // Add 4 pixels of padding

@@ -15,10 +15,12 @@ public:
     SDL_Texture* textTexture = { nullptr };
     SDL_Rect textRectangle;
     SDL_Rect boxRectangle;
+    int x;
+    int y;
 
     bool visible = true;
 
-    Clock();
+    Clock(int x, int y);
     ~Clock();
 
     void setup(SDL_Renderer* renderer);

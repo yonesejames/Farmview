@@ -23,6 +23,7 @@
 #include <stdlib.h> 
 #include <time.h> 
 #include "LifeBar.h"
+#include <chrono>
 
 Map* map;
 Map* mapTile;
@@ -30,6 +31,7 @@ Map* mapGrass;
 Manager manager;
 InfoBox* infobox;
 Clock* clockTime;
+Clock* day;
 
 LifeBar farmerLifeBar;
 
@@ -115,6 +117,17 @@ std::string Game::timer()
     clockTime->setup(renderer);
     clockTime->setText(ss.str());
     clockTime->draw();
+
+    std::stringstream ss2;
+
+    ss2.str("");
+
+    ss2 << "Day " << (time / (60 * 60)) + 1;
+
+    day->setup(renderer);
+    day->setText(ss2.str());
+    day->draw();
+
 
     return ss.str();
 
@@ -217,7 +230,8 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 
     farmerLifeBar.setup(renderer, 300, 810, 700, 810);
 
-    clockTime = new Clock();
+    clockTime = new Clock(1400, 50);
+    day = new Clock(1400, 115);
 
     for (int i = 0; i < 10; i++)
     {
@@ -1003,6 +1017,9 @@ void Game::render()
 
     clockTime->setup(renderer);
     clockTime->draw();
+
+    day->setup(renderer);
+    day->draw();
 
     inventoryButton.draw();
     itemMenu.draw();
