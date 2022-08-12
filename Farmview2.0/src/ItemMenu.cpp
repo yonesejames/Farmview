@@ -99,23 +99,6 @@ void ItemMenu::moveDown()
 
 void ItemMenu::draw()
 {
-
-    /*
-    SDL_Texture* drop;
-    SDL_Rect dropButtonRect;
-    SDL_Texture* dropTextTexture;
-    SDL_Rect dropTextRect;
-    drop = generateTextTexture(font, textColor, "Drop");
-
-    SDL_Texture* plant;
-    SDL_Rect plantButtonRect;
-    SDL_Texture* plantTextTexture;
-    SDL_Rect plantTextRect;
-    plant = generateTextTexture(font, textColor, "Plant");
-
-    TTF_CloseFont(font);
-    */
-
     if (!visible)
     {
         return;
@@ -235,93 +218,134 @@ void ItemMenu::draw()
 
         SDL_RenderCopy(renderer, tempTexture, NULL, &textRect);
 
-        if (buttonVisible == true && selectedItemIndex == 1 || selectedItemIndex == 3 || selectedItemIndex == 5 
-            || selectedItemIndex == 7 || selectedItemIndex == 9 || selectedItemIndex == 11 || selectedItemIndex == 13 
-            || selectedItemIndex == 15 || selectedItemIndex == 17 || selectedItemIndex == 19 || selectedItemIndex == 21)
+        if (buttonVisible == true)
         {
-            TTF_Font* font = TTF_OpenFont("assets/Walkway_SemiBold.ttf", 48);
-            SDL_Color textColor = { 255, 255, 255, 255 };
-            SDL_Texture* eat;
-            SDL_Rect eatTextRect;
-            eat = generateTextTexture(font, textColor, "Eat");
-            SDL_Rect eatButton = { x + 700, y, 200, 50 };
+            if (items[i] == 1 || items[i] == 3 || items[i] == 5
+                || items[i] == 7 || items[i] == 9 || items[i] == 11 || items[i] == 13
+                || items[i] == 15 || items[i] == 17 || items[i] == 19 || items[i] == 21)
+            {
+                TTF_Font* font = TTF_OpenFont("assets/Walkway_SemiBold.ttf", 48);
+                SDL_Color textColor = { 255, 255, 255, 255 };
+                SDL_Texture* eat;
+                SDL_Rect eatTextRect;
+                eat = generateTextTexture(font, textColor, "Eat");
+                SDL_Rect eatButton = { x + 700, y, 200, 50 };
 
-            eatTextRect.x = eatButton.x + 2;
-            eatTextRect.y = eatButton.y + 2;
+                eatTextRect.x = eatButton.x + 2;
+                eatTextRect.y = eatButton.y + 2;
 
-            SDL_QueryTexture(eat, NULL, NULL, &eatTextRect.w, &eatTextRect.h);
+                SDL_QueryTexture(eat, NULL, NULL, &eatTextRect.w, &eatTextRect.h);
 
-            SDL_RenderCopy(renderer, eat, NULL, &eatTextRect);
+                SDL_RenderCopy(renderer, eat, NULL, &eatTextRect);
 
-            SDL_RenderFillRect(renderer, &eatButton);
+                SDL_RenderFillRect(renderer, &eatButton);
 
-            eatTextRect.x = eatButton.x + 2;
-            eatTextRect.y = eatButton.y + 2;
+                eatTextRect.x = eatButton.x + 2;
+                eatTextRect.y = eatButton.y + 2;
 
-            SDL_QueryTexture(eat, NULL, NULL, &eatTextRect.w, &eatTextRect.h);
+                SDL_QueryTexture(eat, NULL, NULL, &eatTextRect.w, &eatTextRect.h);
 
-            SDL_RenderCopy(renderer, eat, NULL, &eatTextRect);
-        }
+                SDL_RenderCopy(renderer, eat, NULL, &eatTextRect);
 
+                if (Game::event.type == SDL_MOUSEBUTTONDOWN)
+                {
+                    int x = Game::event.button.x;
+                    int y = Game::event.button.y;
 
-        if (buttonVisible == true && selectedItemIndex == 2 || selectedItemIndex == 4 || selectedItemIndex == 6 
-            || selectedItemIndex == 8 || selectedItemIndex == 10 || selectedItemIndex == 12 || selectedItemIndex == 14 
-            || selectedItemIndex == 16 || selectedItemIndex == 18 || selectedItemIndex == 20 || selectedItemIndex == 22)
-        {
-            TTF_Font* font = TTF_OpenFont("assets/Walkway_SemiBold.ttf", 48);
-            SDL_Color textColor = { 255, 255, 255, 255 };
-            SDL_Texture* plant;
-            SDL_Rect plantTextRect;
-            plant = generateTextTexture(font, textColor, "Plant");
-            SDL_Rect plantButton = { x + 700, y, 200, 50 };
+                    if (x >= eatButton.x && x <= eatButton.x + eatButton.w && y >= eatButton.y && eatButton.y + eatButton.h)
+                    {
+                        Game* game = new Game();
+                        game->eatCrop(items[i]);
+                    }
+                }
 
-            plantTextRect.x = plantButton.x + 2;
-            plantTextRect.y = plantButton.y + 2;
+            }
 
-            SDL_QueryTexture(plant, NULL, NULL, &plantTextRect.w, &plantTextRect.h);
+            if (items[i] == 2 || items[i] == 4 || items[i] == 6
+                || items[i] == 8 || items[i] == 10 || items[i] == 12 || items[i] == 14
+                || items[i] == 16 || items[i] == 18 || items[i] == 20 || items[i] == 22)
+            {
+                TTF_Font* font = TTF_OpenFont("assets/Walkway_SemiBold.ttf", 48);
+                SDL_Color textColor = { 255, 255, 255, 255 };
+                SDL_Texture* plant;
+                SDL_Rect plantTextRect;
+                plant = generateTextTexture(font, textColor, "Plant");
+                SDL_Rect plantButton = { x + 700, y, 200, 50 };
 
-            SDL_RenderCopy(renderer, plant, NULL, &plantTextRect);
+                plantTextRect.x = plantButton.x + 2;
+                plantTextRect.y = plantButton.y + 2;
 
-            SDL_RenderFillRect(renderer, &plantButton);
+                SDL_QueryTexture(plant, NULL, NULL, &plantTextRect.w, &plantTextRect.h);
 
-            plantTextRect.x = plantButton.x + 2;
-            plantTextRect.y = plantButton.y + 2;
+                SDL_RenderCopy(renderer, plant, NULL, &plantTextRect);
 
-            SDL_QueryTexture(plant, NULL, NULL, &plantTextRect.w, &plantTextRect.h);
+                SDL_RenderFillRect(renderer, &plantButton);
 
-            SDL_RenderCopy(renderer, plant, NULL, &plantTextRect);
-        }
+                plantTextRect.x = plantButton.x + 2;
+                plantTextRect.y = plantButton.y + 2;
 
-        if (buttonVisible == true && selectedItemIndex == 1 || selectedItemIndex == 3 || selectedItemIndex == 5
-            || selectedItemIndex == 7 || selectedItemIndex == 9 || selectedItemIndex == 11 || selectedItemIndex == 13
-            || selectedItemIndex == 15 || selectedItemIndex == 17 || selectedItemIndex == 19 || selectedItemIndex == 21
-            || selectedItemIndex == 2 || selectedItemIndex == 4 || selectedItemIndex == 6
-            || selectedItemIndex == 8 || selectedItemIndex == 10 || selectedItemIndex == 12 || selectedItemIndex == 14
-            || selectedItemIndex == 16 || selectedItemIndex == 18 || selectedItemIndex == 20 || selectedItemIndex == 22)
-        {
-            TTF_Font* font = TTF_OpenFont("assets/Walkway_SemiBold.ttf", 48);
-            SDL_Color textColor = { 255, 255, 255, 255 };
-            SDL_Texture* drop;
-            SDL_Rect dropTextRect;
-            drop = generateTextTexture(font, textColor, "Drop");
-            SDL_Rect dropButton = { x + 900, y + 50, 200, 50 };
+                SDL_QueryTexture(plant, NULL, NULL, &plantTextRect.w, &plantTextRect.h);
 
-            dropTextRect.x = dropButton.x + 2;
-            dropTextRect.y = dropButton.y + 2;
+                SDL_RenderCopy(renderer, plant, NULL, &plantTextRect);
 
-            SDL_QueryTexture(drop, NULL, NULL, &dropTextRect.w, &dropTextRect.h);
+                if (Game::event.type == SDL_MOUSEBUTTONDOWN)
+                {
+                    int x = Game::event.button.x;
+                    int y = Game::event.button.y;
 
-            SDL_RenderCopy(renderer, drop, NULL, &dropTextRect);
+                    if (x >= plantButton.x && x <= plantButton.x + plantButton.w && y >= plantButton.y && plantButton.y + plantButton.h)
+                    {
+                        Game* game = new Game();
+                        game->useItem();
+                    }
+                }
+            }
 
-            SDL_RenderFillRect(renderer, &dropButton);
+            if (items[i] == 1 || items[i] == 3 || items[i] == 5
+                || items[i] == 7 || items[i] == 9 || items[i] == 11 || items[i] == 13
+                || items[i] == 15 || items[i] == 17 || items[i] == 19 || items[i] == 21
+                || items[i] == 2 || items[i] == 4 || items[i] == 6
+                || items[i] == 8 || items[i] == 10 || items[i] == 12 || items[i] == 14
+                || items[i] == 16 || items[i] == 18 || items[i] == 20 || items[i] == 22)
+            {
+                TTF_Font* font = TTF_OpenFont("assets/Walkway_SemiBold.ttf", 48);
+                SDL_Color textColor = { 255, 255, 255, 255 };
+                SDL_Texture* drop;
+                SDL_Rect dropTextRect;
+                drop = generateTextTexture(font, textColor, "Drop");
+                SDL_Rect dropButton = { x + 900, y, 200, 50 };
 
-            dropTextRect.x = dropButton.x + 2;
-            dropTextRect.y = dropButton.y + 2;
+                dropTextRect.x = dropButton.x + 2;
+                dropTextRect.y = dropButton.y + 2;
 
-            SDL_QueryTexture(drop, NULL, NULL, &dropTextRect.w, &dropTextRect.h);
+                SDL_QueryTexture(drop, NULL, NULL, &dropTextRect.w, &dropTextRect.h);
 
-            SDL_RenderCopy(renderer, drop, NULL, &dropTextRect);
-        }
+                SDL_RenderCopy(renderer, drop, NULL, &dropTextRect);
+
+                SDL_RenderFillRect(renderer, &dropButton);
+
+                dropTextRect.x = dropButton.x + 2;
+                dropTextRect.y = dropButton.y + 2;
+
+                SDL_QueryTexture(drop, NULL, NULL, &dropTextRect.w, &dropTextRect.h);
+
+                SDL_RenderCopy(renderer, drop, NULL, &dropTextRect);
+
+                if (Game::event.type == SDL_MOUSEBUTTONDOWN)
+                {
+                    int x = Game::event.button.x;
+                    int y = Game::event.button.y;
+
+                    if (x >= dropButton.x && x <= dropButton.x + dropButton.w && y >= dropButton.y && dropButton.y + dropButton.h)
+                    {
+                        Game* game = new Game();
+                        game->useItem();
+
+                    }
+                }
+            }
+
+        }        
     }
 
     if (selectedItemIndex == 10)
@@ -342,9 +366,7 @@ void ItemMenu::draw()
 
     SDL_QueryTexture(cancel, NULL, NULL, &textRect.w, &textRect.h);
 
-    SDL_RenderCopy(renderer, cancel, NULL, &textRect);
-
-    
+    SDL_RenderCopy(renderer, cancel, NULL, &textRect);    
 
 }
 
@@ -356,11 +378,4 @@ SDL_Texture* ItemMenu::generateTextTexture(TTF_Font* font, SDL_Color color, std:
     SDL_FreeSurface(textSurface);
 
     return textTexture;
-}
-
-
-void ItemMenu::eatButton()
-{
-
-
 }

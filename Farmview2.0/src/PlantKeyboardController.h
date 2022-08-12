@@ -79,8 +79,6 @@ public:
             {
                 std::cout << "Plant clicked" << std::endl;
 
-
-
                 bool freeSlotFound = false;
 
                 for (int i = 0; i < 10; i++)

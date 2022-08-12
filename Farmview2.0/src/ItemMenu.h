@@ -53,8 +53,6 @@ public:
     void moveUp();
     void moveDown();
     void draw();
-    void eatButton();
-
 
 private:
     SDL_Texture* generateTextTexture(TTF_Font* font, SDL_Color color, std::string text);
