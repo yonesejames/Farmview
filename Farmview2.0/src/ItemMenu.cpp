@@ -99,6 +99,23 @@ void ItemMenu::moveDown()
 
 void ItemMenu::draw()
 {
+
+    /*
+    SDL_Texture* drop;
+    SDL_Rect dropButtonRect;
+    SDL_Texture* dropTextTexture;
+    SDL_Rect dropTextRect;
+    drop = generateTextTexture(font, textColor, "Drop");
+
+    SDL_Texture* plant;
+    SDL_Rect plantButtonRect;
+    SDL_Texture* plantTextTexture;
+    SDL_Rect plantTextRect;
+    plant = generateTextTexture(font, textColor, "Plant");
+
+    TTF_CloseFont(font);
+    */
+
     if (!visible)
     {
         return;
@@ -111,7 +128,7 @@ void ItemMenu::draw()
 
         if (selectedItemIndex == i)
         {
-            SDL_SetRenderDrawColor(renderer, 0, 80, 37, 255);
+            SDL_SetRenderDrawColor(renderer, 0, 80, 37, 255);            
         }
         else
         {
@@ -217,6 +234,94 @@ void ItemMenu::draw()
         SDL_QueryTexture(tempTexture, NULL, NULL, &textRect.w, &textRect.h);
 
         SDL_RenderCopy(renderer, tempTexture, NULL, &textRect);
+
+        if (buttonVisible == true && selectedItemIndex == 1 || selectedItemIndex == 3 || selectedItemIndex == 5 
+            || selectedItemIndex == 7 || selectedItemIndex == 9 || selectedItemIndex == 11 || selectedItemIndex == 13 
+            || selectedItemIndex == 15 || selectedItemIndex == 17 || selectedItemIndex == 19 || selectedItemIndex == 21)
+        {
+            TTF_Font* font = TTF_OpenFont("assets/Walkway_SemiBold.ttf", 48);
+            SDL_Color textColor = { 255, 255, 255, 255 };
+            SDL_Texture* eat;
+            SDL_Rect eatTextRect;
+            eat = generateTextTexture(font, textColor, "Eat");
+            SDL_Rect eatButton = { x + 700, y, 200, 50 };
+
+            eatTextRect.x = eatButton.x + 2;
+            eatTextRect.y = eatButton.y + 2;
+
+            SDL_QueryTexture(eat, NULL, NULL, &eatTextRect.w, &eatTextRect.h);
+
+            SDL_RenderCopy(renderer, eat, NULL, &eatTextRect);
+
+            SDL_RenderFillRect(renderer, &eatButton);
+
+            eatTextRect.x = eatButton.x + 2;
+            eatTextRect.y = eatButton.y + 2;
+
+            SDL_QueryTexture(eat, NULL, NULL, &eatTextRect.w, &eatTextRect.h);
+
+            SDL_RenderCopy(renderer, eat, NULL, &eatTextRect);
+        }
+
+
+        if (buttonVisible == true && selectedItemIndex == 2 || selectedItemIndex == 4 || selectedItemIndex == 6 
+            || selectedItemIndex == 8 || selectedItemIndex == 10 || selectedItemIndex == 12 || selectedItemIndex == 14 
+            || selectedItemIndex == 16 || selectedItemIndex == 18 || selectedItemIndex == 20 || selectedItemIndex == 22)
+        {
+            TTF_Font* font = TTF_OpenFont("assets/Walkway_SemiBold.ttf", 48);
+            SDL_Color textColor = { 255, 255, 255, 255 };
+            SDL_Texture* plant;
+            SDL_Rect plantTextRect;
+            plant = generateTextTexture(font, textColor, "Plant");
+            SDL_Rect plantButton = { x + 700, y, 200, 50 };
+
+            plantTextRect.x = plantButton.x + 2;
+            plantTextRect.y = plantButton.y + 2;
+
+            SDL_QueryTexture(plant, NULL, NULL, &plantTextRect.w, &plantTextRect.h);
+
+            SDL_RenderCopy(renderer, plant, NULL, &plantTextRect);
+
+            SDL_RenderFillRect(renderer, &plantButton);
+
+            plantTextRect.x = plantButton.x + 2;
+            plantTextRect.y = plantButton.y + 2;
+
+            SDL_QueryTexture(plant, NULL, NULL, &plantTextRect.w, &plantTextRect.h);
+
+            SDL_RenderCopy(renderer, plant, NULL, &plantTextRect);
+        }
+
+        if (buttonVisible == true && selectedItemIndex == 1 || selectedItemIndex == 3 || selectedItemIndex == 5
+            || selectedItemIndex == 7 || selectedItemIndex == 9 || selectedItemIndex == 11 || selectedItemIndex == 13
+            || selectedItemIndex == 15 || selectedItemIndex == 17 || selectedItemIndex == 19 || selectedItemIndex == 21
+            || selectedItemIndex == 2 || selectedItemIndex == 4 || selectedItemIndex == 6
+            || selectedItemIndex == 8 || selectedItemIndex == 10 || selectedItemIndex == 12 || selectedItemIndex == 14
+            || selectedItemIndex == 16 || selectedItemIndex == 18 || selectedItemIndex == 20 || selectedItemIndex == 22)
+        {
+            TTF_Font* font = TTF_OpenFont("assets/Walkway_SemiBold.ttf", 48);
+            SDL_Color textColor = { 255, 255, 255, 255 };
+            SDL_Texture* drop;
+            SDL_Rect dropTextRect;
+            drop = generateTextTexture(font, textColor, "Drop");
+            SDL_Rect dropButton = { x + 900, y + 50, 200, 50 };
+
+            dropTextRect.x = dropButton.x + 2;
+            dropTextRect.y = dropButton.y + 2;
+
+            SDL_QueryTexture(drop, NULL, NULL, &dropTextRect.w, &dropTextRect.h);
+
+            SDL_RenderCopy(renderer, drop, NULL, &dropTextRect);
+
+            SDL_RenderFillRect(renderer, &dropButton);
+
+            dropTextRect.x = dropButton.x + 2;
+            dropTextRect.y = dropButton.y + 2;
+
+            SDL_QueryTexture(drop, NULL, NULL, &dropTextRect.w, &dropTextRect.h);
+
+            SDL_RenderCopy(renderer, drop, NULL, &dropTextRect);
+        }
     }
 
     if (selectedItemIndex == 10)
@@ -239,14 +344,23 @@ void ItemMenu::draw()
 
     SDL_RenderCopy(renderer, cancel, NULL, &textRect);
 
+    
+
 }
 
 
-SDL_Texture* ItemMenu::generateTextTexture(TTF_Font* font, SDL_Color color, std::string text)
+SDL_Texture* ItemMenu::generateTextTexture(TTF_Font* font, SDL_Color color, std::string t)
 {
-    SDL_Surface* textSurface = TTF_RenderText_Blended(font, text.c_str(), color);
+    SDL_Surface* textSurface = TTF_RenderText_Blended(font, t.c_str(), color);
     SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
     SDL_FreeSurface(textSurface);
 
     return textTexture;
+}
+
+
+void ItemMenu::eatButton()
+{
+
+
 }

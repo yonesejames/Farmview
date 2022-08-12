@@ -5,6 +5,7 @@
 #include <string>
 #include <SDL.h>
 #include <SDL_ttf.h>
+#include "Game.h"
 
 class ItemMenu
 {
@@ -38,9 +39,12 @@ public:
     int x;
     int y;
     int selectedItemIndex;
+    std::string text;
+
     int Inventory[10];
 
     bool visible = false;
+    bool buttonVisible = false;
 
     ItemMenu(){};
     ~ItemMenu();
@@ -49,6 +53,7 @@ public:
     void moveUp();
     void moveDown();
     void draw();
+    void eatButton();
 
 
 private:

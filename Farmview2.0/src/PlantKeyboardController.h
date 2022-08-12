@@ -18,6 +18,8 @@ public:
     ItemMenu* itemMenu;
     Game* game;
 
+    bool selected;
+
     int xpos;
     int ypos;
     int width;
@@ -76,6 +78,8 @@ public:
             if (x >= spriteRect.x && x <= spriteRect.x + spriteRect.w && y >= spriteRect.y && spriteRect.y + spriteRect.h)
             {
                 std::cout << "Plant clicked" << std::endl;
+
+
 
                 bool freeSlotFound = false;
 

@@ -824,11 +824,20 @@ void Game::handleEvents()
             break;
         case SDL_SCANCODE_SPACE:
             itemMenu.visible = true;
+            break;
+        case SDL_SCANCODE_1:
+            itemMenu.buttonVisible = true;
+            break;
+        case SDL_SCANCODE_TAB: 
+            itemMenu.buttonVisible = false;
+            break;
         default:
             break;
         }
 
     }
+
+ 
 
     if (event.type == SDL_MOUSEBUTTONDOWN)
     {
@@ -858,36 +867,7 @@ void Game::handleEvents()
                         chest->getComponent<SpriteComponent>().~SpriteComponent();
                     }
                 }
-        }
-        /*
-        for (auto& item : items)
-        {
-            auto plantRect = item->getComponent<SpriteComponent>().destinationRectangle;
-            auto itemNumber = item->getComponent<PlantKeyboardController>().item;
-
-            if (x >= plantRect.x && x <= plantRect.x + plantRect.w && y >= plantRect.y && plantRect.y + plantRect.h)
-            {
-                std::cout << "Plant clicked" << std::endl;
-
-                bool freeSlotFound = false;
-
-                for (int i = 0; i < 10; i++)
-                {
-                    if (playerItems[i] == 0)
-                    {
-                        freeSlotFound = true;
-                        playerItems[i] = itemNumber;
-                        std::cout << itemNumber << std::endl;
-                        break;
-                    }
-
-                }
-
-                item->getComponent<SpriteComponent>().~SpriteComponent();
-            }
-
-        }
-        */       
+        } 
 
 
     }
