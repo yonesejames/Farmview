@@ -14,7 +14,7 @@ void LifeBar::setup(SDL_Renderer* renderer, int xHunger, int yHunger, int xSleep
     this->xSleepy = xSleepy;
     this->ySleepy = ySleepy;
 
-    std::string sleepyText = "Sleep";
+    std::string sleepyText = "Energy";
     std::string hungerText = "Hunger";
 
     TTF_Font* font1 = TTF_OpenFont("assets/Walkway_SemiBold.ttf", 48);

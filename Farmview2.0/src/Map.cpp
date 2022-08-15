@@ -93,7 +93,7 @@ void Map::loadMap(std::string filePath, int sizeX, int sizeY)
                 auto& chest(manager.addEntity());
                 chest.addComponent<TransformComponent>(x * scaledSize, y * scaledSize, 16, 16, 2);
                 chest.addComponent<SpriteComponent>("assets/chest.png");
-                chest.addGroup(Game::groupChests);              
+                chest.addGroup(Game::groupChests);  
               
             }
 

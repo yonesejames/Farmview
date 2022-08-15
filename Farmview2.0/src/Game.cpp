@@ -23,6 +23,8 @@
 #include <stdlib.h> 
 #include <time.h> 
 #include "LifeBar.h"
+#include <fstream>
+#include <array>
 #include <chrono>
 
 Map* map;
@@ -46,11 +48,11 @@ auto& crop(manager.addEntity());
 bool Game::isRunning = true;
 
 InventoryButton inventoryButton;
+InventoryButton sleepButton;
 ItemMenu itemMenu;
 
 // Items array: 0 = no item and 1 = seed:
 auto& playerItems = itemMenu.Inventory;
-
 
 
 Game::~Game()
@@ -104,10 +106,14 @@ std::string Game::timer()
 
     std::stringstream ss;
 
-    int time = SDL_GetTicks() / 500;
+    int time = SDL_GetTicks();
     const int seconds = time % 60;               
     const int minutes = (time / 60) % 60;
-    const int hours = (time / (60 * 60)) % 24;                                   
+    const int hours = (time / (60 * 60)) % 24;   
+    const int days = (time / (60 * 60 * 24));
+    int tempHour = 0;
+    int firstHour = 0;
+    std::array<int, 24> hour = { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23 };
 
 
     ss.str("");
@@ -125,14 +131,20 @@ std::string Game::timer()
 
     ss2.str("");
 
-    ss2 << "Day " << (time / (60 * 60)) + 1;
+    ss2 << "Day " << days;
 
     day->setup(renderer);
     day->setText(ss2.str());
-    day->draw();
+    day->draw(); 
 
-
-    return ss.str();
+    for (int i = 0; i < hour.size(); i++)
+    {
+        if (hour[i] == tempHour)
+        {
+            player.getComponent<PlayerComponent>().takeDamageHunger(5);
+            player.getComponent<PlayerComponent>().takeDamageSleepy(5);
+        }
+    }
 
 }
 
@@ -251,9 +263,11 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
     itemMenu.setup(renderer, playerItems, 0, 0);
     inventoryButton.setup(renderer, {0, 800, 200, 75}, "Inventory");
     inventoryButton.selected = true;
+    sleepButton.setup(renderer, { 0, 710, 200, 75 }, "Sleep");
+    sleepButton.selected = false;
 
     player.addComponent<TransformComponent>();
-    player.addComponent<SpriteComponent>("assets/farmer_animations2.png", true, 64, 64);
+    player.addComponent<SpriteComponent>("assets/farmerAnimations3.png", true, 64, 64);
     player.addComponent<KeyboardController>();
     player.addComponent<ColliderComponent>("player");
     player.addGroup(groupPlayers);
@@ -265,8 +279,8 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
     crop.addComponent<PlantKeyboardController>(4, &itemMenu);
     crop.addGroup(groupItems);
 
-    player.getComponent<PlayerComponent>().takeDamageHunger(10);
-
+    player.getComponent<PlayerComponent>().takeDamageHunger(5);
+    player.getComponent<PlayerComponent>().takeDamageSleepy(5);
 }
 
 
@@ -1054,21 +1068,48 @@ void Game::handleEvents()
         default:
             break;
         }
-
     }
- 
+
+    if (event.key.keysym.scancode == SDL_SCANCODE_UP)
+    {
+        sleepButton.selected = true;
+        inventoryButton.selected = false;
+    }
+
+    if (event.key.keysym.scancode == SDL_SCANCODE_DOWN)
+    {
+        sleepButton.selected = false;
+        inventoryButton.selected = true;
+    } 
 
     if (event.type == SDL_MOUSEBUTTONDOWN)
     {
         int x = event.button.x;
         int y = event.button.y;
         auto inventoryRect = inventoryButton.buttonRect;
+        auto sleepRect = sleepButton.buttonRect;
         auto cancelTexture = itemMenu.cancel;
 
-        if (x >= inventoryRect.x && x <= inventoryRect.x + inventoryRect.w && y >= inventoryRect.y && inventoryRect.y + inventoryRect.h)
+        if (sleepButton.selected == true)
         {
-            itemMenu.visible = true;
+            if (x > sleepRect.x && x < sleepRect.x + sleepRect.w && y > sleepRect.y && sleepRect.y + sleepRect.h)
+            {
+                LoadScreen::loadScreen("assets/sleep.bmp", 3000);
+                player.getComponent<PlayerComponent>().sleep(100);
+                player.getComponent<PlayerComponent>().eat(100);
+                infobox->setup(renderer);
+                infobox->setText("You are now well rested!");
+                infobox->draw();
+            }
         }
+
+        if (inventoryButton.selected == true)
+        {
+            if (x > inventoryRect.x && x < inventoryRect.x + inventoryRect.w && y > inventoryRect.y && inventoryRect.y + inventoryRect.h)
+            {
+                itemMenu.visible = true;
+            }
+        }            
 
         for (auto& chest : chests)
         {
@@ -1087,7 +1128,6 @@ void Game::handleEvents()
                     }
                 }
         } 
-
 
     }
 
@@ -1237,6 +1277,7 @@ void Game::render()
     day->draw();
 
     inventoryButton.draw();
+    sleepButton.draw();
     itemMenu.draw();
 
     farmerLifeBar.draw();
@@ -1256,6 +1297,20 @@ void Game::removeTimer(SDL_TimerID id)
     {
         timers.erase(id);
     }
+}
+
+
+void Game::saveGame()
+{
+         
+
+}
+
+
+void Game::loadGame()
+{
+    
+
 }
 
 

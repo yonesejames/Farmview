@@ -152,6 +152,7 @@
     <ClCompile Include="src\PlayerCharacter.cpp" />
     <ClCompile Include="src\PlayerComponent.cpp" />
     <ClCompile Include="src\Pointwell.cpp" />
+    <ClCompile Include="src\StartScreen.cpp" />
     <ClCompile Include="src\Statblock.cpp" />
     <ClCompile Include="src\TextureManager.cpp" />
     <ClCompile Include="src\Vector.cpp" />

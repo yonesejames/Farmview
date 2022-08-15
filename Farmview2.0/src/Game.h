@@ -72,7 +72,8 @@ public:
 
     void eatCrop(int item);
     void dropItem(int item);
-
+    void saveGame();
+    void loadGame();
 
 private:
     SDL_Window* window;

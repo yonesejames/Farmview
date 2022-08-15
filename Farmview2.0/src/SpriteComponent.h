@@ -15,6 +15,7 @@ class SpriteComponent : public Component
 public:
     int animationIndex = 0;
     int growthIndex = 0;
+    int wateringIndex = 0;
     int item = 0;
     bool readyToPick = false;
 
@@ -95,6 +96,16 @@ public:
         animations.emplace("walkBackward", walkBackward);
         animations.emplace("walkRight", walkRight);
         animations.emplace("walkLeft", walkLeft);
+
+        Animation wateringForward = Animation(8, 2, 300);
+        Animation wateringBackward = Animation(9, 2, 300);
+        Animation wateringRight = Animation(10, 2, 300);
+        Animation wateringLeft = Animation(11, 2, 300);
+
+        animations.emplace("wateringForward", wateringForward);
+        animations.emplace("wateringBackward", wateringBackward);
+        animations.emplace("wateringRight", wateringRight);
+        animations.emplace("wateringLeft", wateringLeft);
 
         // When game starts the sprite will show up like this:
         Play("idleForward");
@@ -242,6 +253,7 @@ public:
 
     }
 
+
     void setTexture(const char* filePath)
         /* Function that creates a texture from filePath */
     {
@@ -281,7 +293,8 @@ public:
         {
             sourceRectangle.x = sourceRectangle.w * static_cast<int>((SDL_GetTicks() / speed) % frames);
             
-        }
+        }     
+
 
         if (grow)
         {

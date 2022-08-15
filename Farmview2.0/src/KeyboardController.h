@@ -5,6 +5,7 @@
 #include "ECS.h"
 #include "Components.h"
 #include "Item.h"
+#include "InfoBox.h"
 
 
 class KeyboardController : public Component
@@ -61,6 +62,9 @@ public:
                 // Optional if you have one image facing one way, you can flip the image:
                 //sprite->spriteFlip = SDL_FLIP_HORIZONTAL;
                 break;
+            case SDLK_e:
+                sprite->Play("wateringForward");
+                break;
             default:
                 break;
             }
@@ -93,11 +97,48 @@ public:
                 // flipped the image:
                 //sprite->spriteFlip = SDL_FLIP_NONE;
                 break;
+            case SDLK_e:
+                sprite->Play("idleForward");
+                break;
             default:
                 break;
             }
         }
 
+        if (Game::event.type == SDL_KEYDOWN)
+        {
+            if (Game::event.key.keysym.scancode == SDLK_w)
+            {
+                if (Game::event.key.keysym.scancode == SDLK_e)
+                {
+                    sprite->Play("wateringBackward");
+                }
+            }
+
+            if (Game::event.key.keysym.scancode == SDLK_s)
+            {
+                if (Game::event.key.keysym.scancode == SDLK_e)
+                {
+                    sprite->Play("wateringForward");
+                }
+            }
+
+            if (Game::event.key.keysym.scancode == SDLK_a)
+            {
+                if (Game::event.key.keysym.scancode == SDLK_e)
+                {
+                    sprite->Play("wateringLeft");
+                }
+            }
+
+            if (Game::event.key.keysym.scancode == SDLK_d)
+            {
+                if (Game::event.key.keysym.scancode == SDLK_e)
+                {
+                    sprite->Play("wateringRight");
+                }
+            }
+        }
 
 
 
