@@ -255,7 +255,7 @@ void ItemMenu::draw()
                     if (x >= eatButton.x && x <= eatButton.x + eatButton.w && y >= eatButton.y && eatButton.y + eatButton.h)
                     {
                         Game* game = new Game();
-                        game->eatCrop(items[i]);
+                        game->eatCrop(items[i]);                        
                     }
                 }
 
@@ -339,7 +339,7 @@ void ItemMenu::draw()
                     if (x >= dropButton.x && x <= dropButton.x + dropButton.w && y >= dropButton.y && dropButton.y + dropButton.h)
                     {
                         Game* game = new Game();
-                        game->useItem();
+                        game->dropItem();
 
                     }
                 }

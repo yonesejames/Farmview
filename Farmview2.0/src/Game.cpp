@@ -106,7 +106,7 @@ std::string Game::timer()
 
     std::stringstream ss;
 
-    int time = SDL_GetTicks();
+    int time = SDL_GetTicks() / 500;
     const int seconds = time % 60;               
     const int minutes = (time / 60) % 60;
     const int hours = (time / (60 * 60)) % 24;   
@@ -131,12 +131,13 @@ std::string Game::timer()
 
     ss2.str("");
 
-    ss2 << "Day " << days;
+    ss2 << "Day " << days + 1;
 
     day->setup(renderer);
     day->setText(ss2.str());
     day->draw(); 
 
+    /*
     for (int i = 0; i < hour.size(); i++)
     {
         if (hour[i] == tempHour)
@@ -145,6 +146,8 @@ std::string Game::timer()
             player.getComponent<PlayerComponent>().takeDamageSleepy(5);
         }
     }
+    */
+    return ss.str();
 
 }
 
@@ -674,6 +677,7 @@ void Game::eatCrop(int item)
     if (hunger < 100)
     {
         player.getComponent<PlayerComponent>().eat(10);
+        
     }
     else
     {
@@ -685,7 +689,7 @@ void Game::eatCrop(int item)
 }
 
 
-void Game::dropItem(int item)
+void Game::dropItem()
 {
     if (playerItems[itemMenu.selectedItemIndex] == 1)
     {
@@ -701,6 +705,7 @@ void Game::dropItem(int item)
         carrot.update();
         carrot.draw();
         SDL_RenderPresent(renderer);
+        carrot.getComponent<SpriteComponent>().~SpriteComponent();
     }
     if (playerItems[itemMenu.selectedItemIndex] == 2)
     {
@@ -716,6 +721,8 @@ void Game::dropItem(int item)
         carrotSeed.update();
         carrotSeed.draw();
         SDL_RenderPresent(renderer);
+
+        carrotSeed.getComponent<SpriteComponent>().~SpriteComponent();
     }
     if (playerItems[itemMenu.selectedItemIndex] == 3)
     {
@@ -732,6 +739,7 @@ void Game::dropItem(int item)
         tomato.draw();
         SDL_RenderPresent(renderer);
 
+        tomato.getComponent<SpriteComponent>().~SpriteComponent();
     }
     if (playerItems[itemMenu.selectedItemIndex] == 4)
     {
@@ -747,6 +755,8 @@ void Game::dropItem(int item)
         tomatoSeed.update();
         tomatoSeed.draw();
         SDL_RenderPresent(renderer);
+
+        tomatoSeed.getComponent<SpriteComponent>().~SpriteComponent();
     }
     if (playerItems[itemMenu.selectedItemIndex] == 5)
     {
@@ -762,6 +772,8 @@ void Game::dropItem(int item)
         strawberry.update();
         strawberry.draw();
         SDL_RenderPresent(renderer);
+
+        strawberry.getComponent<SpriteComponent>().~SpriteComponent();
     }
     if (playerItems[itemMenu.selectedItemIndex] == 6)
     {
@@ -777,6 +789,8 @@ void Game::dropItem(int item)
         strawberrySeed.update();
         strawberrySeed.draw();
         SDL_RenderPresent(renderer);
+
+        strawberrySeed.getComponent<SpriteComponent>().~SpriteComponent();
     }
     if (playerItems[itemMenu.selectedItemIndex] == 7)
     {
@@ -792,6 +806,8 @@ void Game::dropItem(int item)
         pumpkin.update();
         pumpkin.draw();
         SDL_RenderPresent(renderer);
+
+        pumpkin.getComponent<SpriteComponent>().~SpriteComponent();
     }
     if (playerItems[itemMenu.selectedItemIndex] == 8)
     {
@@ -807,6 +823,8 @@ void Game::dropItem(int item)
         pumpkinSeed.update();
         pumpkinSeed.draw();
         SDL_RenderPresent(renderer);
+
+        pumpkinSeed.getComponent<SpriteComponent>().~SpriteComponent();
     }
     if (playerItems[itemMenu.selectedItemIndex] == 9)
     {
@@ -822,6 +840,8 @@ void Game::dropItem(int item)
         corn.update();
         corn.draw();
         SDL_RenderPresent(renderer);
+
+        corn.getComponent<SpriteComponent>().~SpriteComponent();
     }
     if (playerItems[itemMenu.selectedItemIndex] == 10)
     {
@@ -837,6 +857,8 @@ void Game::dropItem(int item)
         cornSeed.update();
         cornSeed.draw();
         SDL_RenderPresent(renderer);
+
+        cornSeed.getComponent<SpriteComponent>().~SpriteComponent();
     }
     if (playerItems[itemMenu.selectedItemIndex] == 11)
     {
@@ -852,6 +874,8 @@ void Game::dropItem(int item)
         potato.update();
         potato.draw();
         SDL_RenderPresent(renderer);
+
+        potato.getComponent<SpriteComponent>().~SpriteComponent();
     }
     if (playerItems[itemMenu.selectedItemIndex] == 12)
     {
@@ -867,6 +891,8 @@ void Game::dropItem(int item)
         potatoSeed.update();
         potatoSeed.draw();
         SDL_RenderPresent(renderer);
+
+        potatoSeed.getComponent<SpriteComponent>().~SpriteComponent();
     }
     if (playerItems[itemMenu.selectedItemIndex] == 13)
     {
@@ -882,6 +908,8 @@ void Game::dropItem(int item)
         watermelon.update();
         watermelon.draw();
         SDL_RenderPresent(renderer);
+
+        watermelon.getComponent<SpriteComponent>().~SpriteComponent();
     }
     if (playerItems[itemMenu.selectedItemIndex] == 14)
     {
@@ -897,6 +925,8 @@ void Game::dropItem(int item)
         watermelonSeed.update();
         watermelonSeed.draw();
         SDL_RenderPresent(renderer);
+
+        watermelonSeed.getComponent<SpriteComponent>().~SpriteComponent();
     }
     if (playerItems[itemMenu.selectedItemIndex] == 15)
     {
@@ -912,6 +942,8 @@ void Game::dropItem(int item)
         radish.update();
         radish.draw();
         SDL_RenderPresent(renderer);
+
+        radish.getComponent<SpriteComponent>().~SpriteComponent();
     }
     if (playerItems[itemMenu.selectedItemIndex] == 16)
     {
@@ -927,6 +959,8 @@ void Game::dropItem(int item)
         radishSeed.update();
         radishSeed.draw();
         SDL_RenderPresent(renderer);
+
+        radishSeed.getComponent<SpriteComponent>().~SpriteComponent();
     }
     if (playerItems[itemMenu.selectedItemIndex] == 17)
     {
@@ -942,6 +976,8 @@ void Game::dropItem(int item)
         lettuce.update();
         lettuce.draw();
         SDL_RenderPresent(renderer);
+
+        lettuce.getComponent<SpriteComponent>().~SpriteComponent();
     }
     if (playerItems[itemMenu.selectedItemIndex] == 18)
     {
@@ -957,6 +993,8 @@ void Game::dropItem(int item)
         lettuceSeed.update();
         lettuceSeed.draw();
         SDL_RenderPresent(renderer);
+
+        lettuceSeed.getComponent<SpriteComponent>().~SpriteComponent();
     }
     if (playerItems[itemMenu.selectedItemIndex] == 19)
     {
@@ -972,6 +1010,8 @@ void Game::dropItem(int item)
         wheat.update();
         wheat.draw();
         SDL_RenderPresent(renderer);
+
+        wheat.getComponent<SpriteComponent>().~SpriteComponent();
     }
     if (playerItems[itemMenu.selectedItemIndex] == 20)
     {
@@ -987,6 +1027,8 @@ void Game::dropItem(int item)
         wheatSeed.update();
         wheatSeed.draw();
         SDL_RenderPresent(renderer);
+
+        wheatSeed.getComponent<SpriteComponent>().~SpriteComponent();
     }
     if (playerItems[itemMenu.selectedItemIndex] == 21)
     {
@@ -1002,6 +1044,8 @@ void Game::dropItem(int item)
         plum.update();
         plum.draw();
         SDL_RenderPresent(renderer);
+
+        plum.getComponent<SpriteComponent>().~SpriteComponent();
     }
     if (playerItems[itemMenu.selectedItemIndex] == 22)
     {
@@ -1017,6 +1061,8 @@ void Game::dropItem(int item)
         plumSeed.update();
         plumSeed.draw();
         SDL_RenderPresent(renderer);
+
+        plumSeed.getComponent<SpriteComponent>().~SpriteComponent();
     }
 
     playerItems[itemMenu.selectedItemIndex] = 0;
@@ -1096,7 +1142,6 @@ void Game::handleEvents()
             {
                 LoadScreen::loadScreen("assets/sleep.bmp", 3000);
                 player.getComponent<PlayerComponent>().sleep(100);
-                player.getComponent<PlayerComponent>().eat(100);
                 infobox->setup(renderer);
                 infobox->setText("You are now well rested!");
                 infobox->draw();

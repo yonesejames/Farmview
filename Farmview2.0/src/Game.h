@@ -71,7 +71,7 @@ public:
     std::string timer();
 
     void eatCrop(int item);
-    void dropItem(int item);
+    void dropItem();
     void saveGame();
     void loadGame();
 
