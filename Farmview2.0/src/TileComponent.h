@@ -5,7 +5,7 @@
 #include "ECS.h"
 #include "TransformComponent.h"
 #include "SpriteComponent.h"
-#include <SDL.h>
+#include <SDL2/SDL.h>
 
 class TileComponent : public Component
 /*

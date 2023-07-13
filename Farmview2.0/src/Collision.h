@@ -2,7 +2,7 @@
 #define COLLISION_H
 
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include <iostream>
 
 // Forward declaration of "ColliderComponent" component:

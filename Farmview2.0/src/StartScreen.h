@@ -1,7 +1,7 @@
 #ifndef STARTSCREEN_H
 #define STARTSCREEN_H
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 
 class StartScreen {
 public:

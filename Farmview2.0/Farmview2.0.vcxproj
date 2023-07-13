@@ -71,12 +71,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\Yone%27se\CppProjects\SDL2\include;C:\Users\Yone%27se\CppProjects\SDL2_image\include;C:\Users\Yone%27se\CppProjects\SDL2_ttf\include;C:\Users\Yone%27se\CppProjects\SDL2_mixer\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Yone%27se\CppProjects\SDL2\lib\x64;C:\Users\Yone%27se\CppProjects\SDL2_image\lib\x64;C:\Users\Yone%27se\CppProjects\SDL2_ttf\lib\x64;C:\Users\Yone%27se\CppProjects\SDL2_mixer\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Dependencies/include/;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Dependencies/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Users\Yone%27se\CppProjects\SDL2\include;C:\Users\Yone%27se\CppProjects\SDL2_image\include;C:\Users\Yone%27se\CppProjects\SDL2_ttf\include;C:\Users\Yone%27se\CppProjects\SDL2_mixer\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Yone%27se\CppProjects\SDL2\lib\x64;C:\Users\Yone%27se\CppProjects\SDL2_image\lib\x64;C:\Users\Yone%27se\CppProjects\SDL2_ttf\lib\x64;C:\Users\Yone%27se\CppProjects\SDL2_mixer\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Dependencies/include/;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Dependencies/lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

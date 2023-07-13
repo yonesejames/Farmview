@@ -1,5 +1,5 @@
 #include "TextureManager.h"
-#include <SDL_image.h>
+#include <SDL2_image/SDL_image.h>
 
 SDL_Texture* TextureManager::loadTexture(const char* filePath)
 /* Function that returns a texture when given a filepath. */

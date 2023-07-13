@@ -3,7 +3,7 @@
 
 
 #include "Game.h"
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include "Components.h"
 #include "Datatypes.h"
 #include "Statblock.h"

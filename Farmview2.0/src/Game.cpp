@@ -10,9 +10,9 @@
 #include <iostream>
 #include "PlayerCharacter.h"
 #include "PlayerComponent.h"
-#include <SDL_mixer.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
+#include <SDL2_mixer/SDL_mixer.h>
+#include <SDL2_image/SDL_image.h>
+#include <SDL2_ttf/SDL_ttf.h>
 #include <cstdlib>
 #include "InfoBox.h"
 #include "ItemMenu.h"
